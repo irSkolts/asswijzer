@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Emmer — ASSwijzer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E4E7E3; --paper-panel:#EFF1EE; --ink:#262B27; --ink-soft:#5B655E;
+    --line:#4B564F; --line-faint:#C7CEC5; --danger:#8C4B3C;
+    --eigen:#1F6F5C; --eigen-ink:#F3F5F1;
+    --geboden:#A6772E; --geboden-ink:#2B1F0E;
+
+    --ton-hout:#AD8D64; --ton-hout-rand:#C6A87E; --ton-binnen:#343A34;
+    --ton-band:#7C8880; --ton-band-licht:#A8B2A8; --ton-lijn:#4B564F;
+    --ton-pijp:#8A958C; --ton-grond:rgba(38,43,39,0.26);
+    --water-top:rgba(74,140,175,0.86); --water-mid:rgba(46,108,145,0.89);
+    --water-diep:rgba(20,58,84,0.94);
+    --water-opp:#7FB4D1; --water-opp-lijn:#A9D2E8;
+    --rood-top:rgba(170,72,54,0.88); --rood-mid:rgba(142,54,40,0.90);
+    --rood-diep:rgba(88,26,18,0.94);
+    --rood-opp:#BE6A54; --rood-opp-lijn:#E2A491; --rood-bubbel:#F0C3B2;
+    --oranje-top:rgba(196,124,52,0.88); --oranje-mid:rgba(170,100,40,0.90);
+    --oranje-diep:rgba(110,60,20,0.94);
+    --oranje-opp:#D08A4E; --oranje-opp-lijn:#EEC08C;
+    --gezicht:#2E3630; --gezicht-halo:#EFF1EE;
+
+    --cat-prikkels:#8A6E52;
+    --cat-contact:#5C7A6D;
+    --cat-veranderingen:#5B6E8C;
+    --cat-anders:#8C5B6E;
+
+    --radius-s:6px; --radius-m:10px;
+    --font-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#1B1F1D; --paper-panel:#20241F; --ink:#E7EAE5; --ink-soft:#9AA69C;
+      --line:#8A9A8E; --line-faint:#33392F; --danger:#D08A76;
+      --ton-hout:#7E6647; --ton-hout-rand:#9C8059; --ton-binnen:#15180F;
+      --ton-band:#6F7B73; --ton-band-licht:#96A197; --ton-lijn:#8A9A8E;
+      --ton-pijp:#6C766D; --ton-grond:rgba(0,0,0,0.45);
+      --water-top:rgba(60,120,156,0.90); --water-mid:rgba(40,94,127,0.92);
+      --water-diep:rgba(17,46,68,0.95);
+      --water-opp:#6FA8C8; --water-opp-lijn:#A7D3E9;
+      --rood-top:rgba(178,86,64,0.90); --rood-mid:rgba(148,64,46,0.92);
+      --rood-diep:rgba(80,26,18,0.95);
+      --rood-opp:#CB7A61; --rood-opp-lijn:#EBB19C; --rood-bubbel:#F4CDBC;
+      --oranje-top:rgba(202,136,66,0.90); --oranje-mid:rgba(176,110,48,0.92);
+      --oranje-diep:rgba(104,58,22,0.95);
+      --oranje-opp:#D9975E; --oranje-opp-lijn:#F0C99A;
+      --gezicht:#EDF0EA; --gezicht-halo:#1B1F1D;
+      --eigen:#4FA98D; --eigen-ink:#12211C; --geboden:#D9A85C; --geboden-ink:#2B1F0E;
+      --cat-prikkels:#C7A87E; --cat-contact:#8FB39F; --cat-veranderingen:#8FA3C7; --cat-anders:#C79AB0;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#1B1F1D; --paper-panel:#20241F; --ink:#E7EAE5; --ink-soft:#9AA69C;
+    --line:#8A9A8E; --line-faint:#33392F; --danger:#D08A76;
+    --ton-hout:#7E6647; --ton-hout-rand:#9C8059; --ton-binnen:#15180F;
+    --ton-band:#6F7B73; --ton-band-licht:#96A197; --ton-lijn:#8A9A8E;
+    --ton-pijp:#6C766D; --ton-grond:rgba(0,0,0,0.45);
+    --water-top:rgba(60,120,156,0.90); --water-mid:rgba(40,94,127,0.92);
+    --water-diep:rgba(17,46,68,0.95);
+    --water-opp:#6FA8C8; --water-opp-lijn:#A7D3E9;
+    --rood-top:rgba(178,86,64,0.90); --rood-mid:rgba(148,64,46,0.92);
+    --rood-diep:rgba(80,26,18,0.95);
+    --rood-opp:#CB7A61; --rood-opp-lijn:#EBB19C; --rood-bubbel:#F4CDBC;
+    --oranje-top:rgba(202,136,66,0.90); --oranje-mid:rgba(176,110,48,0.92);
+    --oranje-diep:rgba(104,58,22,0.95);
+    --oranje-opp:#D9975E; --oranje-opp-lijn:#F0C99A;
+    --gezicht:#EDF0EA; --gezicht-halo:#1B1F1D;
+    --eigen:#4FA98D; --eigen-ink:#12211C; --geboden:#D9A85C; --geboden-ink:#2B1F0E;
+    --cat-prikkels:#C7A87E; --cat-contact:#8FB39F; --cat-veranderingen:#8FA3C7; --cat-anders:#C79AB0;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:var(--font-sans);min-height:100vh;padding:20px 16px 90px;}
+  .wrap{max-width:980px;margin:0 auto;}
+  header{margin-bottom:16px;}
+  h1{font-size:1.5rem;font-weight:600;margin:0 0 4px;letter-spacing:-0.01em;}
+  .sub{color:var(--ink-soft);font-size:0.92rem;max-width:70ch;line-height:1.5;margin:0;}
+  .credit{color:var(--ink-soft);font-size:0.74rem;margin:6px 0 0;font-family:var(--font-mono);}
+
+  .controls{display:flex;align-items:center;gap:10px;margin:16px 0;flex-wrap:wrap;}
+  button{font-family:var(--font-sans);font-size:0.86rem;cursor:pointer;border-radius:var(--radius-s);
+    border:1px solid var(--line);background:transparent;color:var(--ink);padding:8px 13px;line-height:1;}
+  button:hover{border-color:var(--eigen);color:var(--eigen);}
+  button.primary{background:var(--eigen);border-color:var(--eigen);color:var(--eigen-ink);font-weight:500;}
+  button.primary:hover{filter:brightness(1.06);color:var(--eigen-ink);}
+  button.amber{background:var(--geboden);border-color:var(--geboden);color:var(--geboden-ink);font-weight:500;}
+  button.amber:hover{filter:brightness(1.06);color:var(--geboden-ink);}
+  button.ghost{border-color:transparent;color:var(--ink-soft);padding:8px 6px;}
+  button.ghost:hover{color:var(--danger);border-color:transparent;}
+  button:focus-visible{outline:2px solid var(--eigen);outline-offset:2px;}
+
+  .panel{background:var(--paper-panel);border:1px solid var(--line-faint);border-radius:var(--radius-m);padding:16px;margin-bottom:16px;display:none;}
+  .panel.open{display:block;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:0.78rem;color:var(--ink-soft);margin-bottom:6px;font-family:var(--font-mono);letter-spacing:0.01em;}
+  .field input[type=text],.field input[type=password]{width:100%;font-family:var(--font-sans);font-size:0.95rem;padding:9px 10px;border-radius:var(--radius-s);border:1px solid var(--line-faint);background:var(--paper);color:var(--ink);}
+  .field input[type=text]:focus,.field input[type=password]:focus{outline:none;border-color:var(--eigen);}
+  .choice-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .choice{display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;border:1px solid var(--line-faint);font-size:0.85rem;cursor:pointer;background:var(--paper);color:var(--ink-soft);}
+  .choice .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .choice[aria-pressed="true"]{border-color:var(--ink);color:var(--ink);font-weight:500;}
+  .uitleg{margin:8px 0 0;font-size:0.82rem;line-height:1.45;color:var(--ink-soft);
+    padding-left:10px;border-left:2px solid var(--line-faint);}
+  .uitleg:empty{display:none;}
+  .checkbox-row{display:flex;align-items:center;gap:8px;font-size:0.86rem;color:var(--ink-soft);}
+  .checkbox-row input{accent-color:var(--eigen);width:16px;height:16px;}
+  .panel-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
+  .paneel-kop{margin:0 0 14px;font-size:0.88rem;line-height:1.5;color:var(--ink);max-width:62ch;}
+  .melding{margin:6px 0 0;font-size:0.82rem;color:var(--danger);}
+  .melding:empty{display:none;}
+  button:disabled{opacity:0.5;cursor:default;}
+  button:disabled:hover{border-color:var(--line);color:var(--ink);}
+  .voet{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+    margin-top:26px;padding-top:14px;border-top:1px solid var(--line-faint);}
+  .voet-uitleg{margin:0;font-size:0.78rem;line-height:1.45;color:var(--ink-soft);flex:1 1 240px;}
+
+  .layout{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
+  .ton-col{flex:1 1 260px;max-width:340px;}
+  .lists-col{flex:2 1 420px;min-width:0;display:flex;gap:20px;flex-wrap:wrap;}
+  .list-block{flex:1 1 260px;min-width:240px;}
+
+  .ton{position:relative;margin:0 auto;max-width:290px;}
+  .ton svg{display:block;width:100%;height:auto;max-height:min(56vh,440px);}
+  .ton .romp{fill:var(--ton-hout);}
+  .ton .duig{stroke:var(--ton-lijn);stroke-width:1;opacity:0.2;}
+  .ton .rand-buiten{fill:var(--ton-hout-rand);}
+  .ton .rand-binnen{fill:var(--ton-binnen);}
+  .ton .hoepel{fill:none;stroke:var(--ton-band);stroke-width:7;stroke-linecap:round;}
+  .ton .hoepel-hi{fill:none;stroke:var(--ton-band-licht);stroke-width:1.5;stroke-linecap:round;opacity:0.6;}
+  .ton .kraan{fill:var(--ton-band);stroke:var(--ton-lijn);stroke-width:0.9;stroke-opacity:0.45;}
+  .ton .kraan-hi{fill:var(--ton-band-licht);opacity:0.55;}
+  .ton .pijp{fill:none;stroke:var(--ton-pijp);stroke-width:11;stroke-linejoin:round;
+    stroke-linecap:butt;opacity:0.75;}
+  .ton .pijp-rand{fill:none;stroke:var(--ton-lijn);stroke-width:12.6;stroke-linejoin:round;
+    stroke-linecap:butt;opacity:0.3;}
+  .ton .pijp-hi{fill:none;stroke:var(--ton-band-licht);stroke-width:2.2;stroke-linejoin:round;
+    stroke-linecap:butt;opacity:0.4;}
+  .ton .beugel{fill:none;stroke:var(--ton-band);stroke-width:3.2;stroke-linecap:round;opacity:0.85;}
+  .ton .grond{fill:url(#grond-grad);}
+  /* In- en uitstroom: even te zien zodra het niveau verandert. */
+  .ton .instroom,.ton .uitstroom{opacity:0;}
+  .ton .instroom{fill:var(--water-opp);transform-origin:73px 33px;}
+  .ton .uitstroom{fill:var(--water-nu);transform-origin:110px 263px;}
+  .ton.stroomt-in .instroom{animation:stroom 1.1s ease-out;}
+  .ton.stroomt-uit .uitstroom{animation:stroom 1.1s ease-out;}
+  @keyframes stroom{
+    0%{opacity:0;transform:scaleY(0.15);}
+    15%{opacity:0.9;transform:scaleY(1);}
+    62%{opacity:0.9;transform:scaleY(1);}
+    100%{opacity:0;transform:scaleY(1);}
+  }
+  #ggrad-in{stop-color:var(--ton-grond);}
+  #ggrad-out{stop-color:var(--ton-grond);stop-opacity:0;}
+  .ton .contour{fill:none;stroke:var(--ton-lijn);stroke-width:1.6;opacity:0.5;
+    transition:stroke 0.5s ease,opacity 0.5s ease;}
+  .ton .water-opp{fill:var(--water-nu);fill-opacity:0.85;
+    stroke:var(--water-nu-lijn);stroke-width:1.2;stroke-opacity:0.8;
+    transition:fill 0.7s ease,stroke 0.7s ease;}
+  #water{transition:transform 0.55s cubic-bezier(0.4,0.05,0.2,1),opacity 0.4s ease;}
+  /* --spanning loopt van 0 naar 1 over het laatste stuk voor de rand: het
+     water trekt dan naar oranje en er komen alvast bubbels. Bij overlopen
+     slaat alles om naar rood. */
+  #wgrad-top{transition:stop-color 0.7s ease;
+    stop-color:color-mix(in oklab, var(--oranje-top) calc(var(--hitte) * 100%), var(--water-top));}
+  #wgrad-mid{transition:stop-color 0.7s ease;
+    stop-color:color-mix(in oklab, var(--oranje-mid) calc(var(--hitte) * 100%), var(--water-mid));}
+  #wgrad-diep{transition:stop-color 0.7s ease;
+    stop-color:color-mix(in oklab, var(--oranje-diep) calc(var(--hitte) * 100%), var(--water-diep));}
+  .ton.overflow #wgrad-top{stop-color:var(--rood-top);}
+  .ton.overflow #wgrad-mid{stop-color:var(--rood-mid);}
+  .ton.overflow #wgrad-diep{stop-color:var(--rood-diep);}
+  .ton .bubbels-vroeg{opacity:calc(var(--spanning) * 0.9);transition:opacity 0.6s ease;}
+  .ton .bubbels-laat{opacity:0;transition:opacity 0.6s ease;}
+  .ton.overflow .bubbels-vroeg,.ton.overflow .bubbels-laat{opacity:1;}
+  .ton .bubbel{fill:var(--rood-bubbel);opacity:0.55;
+    animation:bubbel 5s linear infinite;animation-play-state:paused;}
+  .ton.borrelt .bubbel{animation-play-state:running;}
+  @keyframes bubbel{
+    0%{transform:translateY(0);opacity:0;}
+    18%{opacity:0.7;}
+    82%{opacity:0.45;}
+    100%{transform:translateY(-110px);opacity:0;}
+  }
+  /* Overloop. --over loopt van 0 (net over de rand) naar 1 (ver eroverheen) en
+     bepaalt hoe hard het overloopt. Het blijft beeld: nergens een getal. */
+  .ton{--over:0;--spanning:0;--hitte:0;
+    --water-nu:color-mix(in oklab, var(--oranje-opp) calc(var(--hitte) * 100%), var(--water-opp));
+    --water-nu-lijn:color-mix(in oklab, var(--oranje-opp-lijn) calc(var(--hitte) * 100%), var(--water-opp-lijn));}
+  .ton.overflow{--water-nu:var(--rood-opp);--water-nu-lijn:var(--rood-opp-lijn);}
+  .ton .overloop{opacity:0;transition:opacity 0.5s ease;}
+  .ton.overflow .overloop{opacity:1;}
+  .ton .meniscus{fill:var(--rood-opp);opacity:0.75;}
+  .ton .stralen{transform:scaleY(0.04);transform-origin:110px 48px;
+    transition:transform 0.9s cubic-bezier(0.32,0.72,0.3,1);}
+  .ton.overflow .stralen{transform:scaleY(1);}
+  .ton .straal{fill:var(--rood-opp);stroke:var(--rood-opp-lijn);stroke-width:0.9;
+    stroke-opacity:0.5;opacity:0.82;}
+  .ton .straal-hi{fill:none;stroke:var(--rood-opp-lijn);stroke-width:1.8;
+    stroke-linecap:round;opacity:0.5;}
+  .ton .straal-2{opacity:calc(0.42 + var(--over) * 0.4);}
+  .ton .druppel{fill:var(--rood-opp);opacity:calc(0.3 + var(--over) * 0.45);}
+  .ton .plas-groep{transform:scale(calc(0.58 + var(--over) * 0.42));
+    transform-origin:112px 303px;transition:transform 0.9s ease;}
+  .ton .plas{fill:var(--rood-opp);opacity:0.34;}
+  .ton .rimpel{fill:none;stroke:var(--rood-opp-lijn);stroke-width:1.4;opacity:0.4;}
+  /* Gezicht. Staat boven het water, dus het heeft een halo nodig om zowel op
+     hout als op donker water leesbaar te blijven. */
+  .ton .halo-vlak{fill:var(--gezicht-halo);opacity:0.5;}
+  .ton .halo-lijn{fill:none;stroke:var(--gezicht-halo);stroke-width:6.5;
+    stroke-linecap:round;opacity:0.5;}
+  .ton .oog{fill:var(--gezicht);}
+  .ton .trek{fill:none;stroke:var(--gezicht);stroke-width:3;stroke-linecap:round;}
+  .ton .tranen{opacity:0;transition:opacity 0.6s ease;}
+  .ton.overflow .tranen{opacity:1;}
+  .ton .traan{fill:var(--rood-opp-lijn);opacity:0.85;}
+  .ton.overflow .contour{stroke:var(--danger);opacity:calc(0.3 + var(--over) * 0.35);}
+  .ton.overflow .contour-rand{stroke:var(--danger);stroke-width:2.2;opacity:0.9;}
+  .rim-note{position:absolute;top:0;right:0;margin:0;font-size:0.8rem;font-weight:500;
+    font-family:var(--font-mono);color:var(--danger);opacity:0;
+    transition:opacity 0.5s;pointer-events:none;}
+  .ton.overflow .rim-note{opacity:1;}
+  @media (prefers-reduced-motion:reduce){
+    #water,.ton .overloop,.ton .stralen,.ton .plas-groep,.ton .contour,
+    .ton .tranen,.balans-fill{transition:none;}
+    .ton .bubbel,.ton .instroom,.ton .uitstroom{animation:none;}
+  }
+
+  .balans{margin-top:14px;}
+  .balans-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:0.78rem;color:var(--ink-soft);}
+  .balans-track{flex:1;height:8px;border-radius:4px;background:var(--paper-panel);border:1px solid var(--line-faint);overflow:hidden;}
+  .balans-fill{height:100%;border-radius:4px 0 0 4px;transition:width 0.4s ease;}
+  .balans-fill.eigen{background:var(--eigen);}
+  .balans-fill.geboden{background:var(--geboden);}
+  .balans-lbl{width:112px;flex-shrink:0;}
+
+  .list-block h2{font-size:0.9rem;font-weight:600;margin:0 0 8px;}
+  .item-row{display:flex;align-items:center;gap:8px;padding:8px 4px;border-bottom:1px solid var(--line-faint);font-size:0.86rem;cursor:pointer;}
+  .item-row:hover{background:rgba(0,0,0,0.03);}
+  .item-row input[type=checkbox]{accent-color:var(--eigen);width:16px;height:16px;flex-shrink:0;}
+  .item-row .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .item-row .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .item-row .tag{font-family:var(--font-mono);font-size:0.70rem;color:var(--ink-soft);flex-shrink:0;white-space:nowrap;}
+  .item-row.inactief{opacity:0.45;}
+  .list-empty{color:var(--ink-soft);font-size:0.82rem;padding:10px 4px;}
+
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin:12px 2px 0;font-size:0.76rem;color:var(--ink-soft);}
+  .legend .item{display:flex;align-items:center;gap:6px;}
+  .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
+
+  .info-sheet{position:fixed;left:0;right:0;bottom:0;background:var(--paper-panel);border-top:1.5px solid var(--line);
+    padding:14px 16px calc(14px + env(safe-area-inset-bottom));display:none;align-items:center;
+    justify-content:space-between;gap:12px;z-index:20;}
+  .info-sheet.open{display:flex;}
+  .info-sheet .meta{min-width:0;}
+  .info-sheet .meta .lbl{font-weight:500;font-size:0.95rem;word-break:break-word;}
+  .info-sheet .meta .sub{font-size:0.78rem;color:var(--ink-soft);font-family:var(--font-mono);margin-top:2px;}
+  .info-sheet .acts{display:flex;gap:8px;flex-shrink:0;}
+
+  @media (min-width:700px){ h1{font-size:1.7rem;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Emmer</h1>
+    <p class="sub">Je emmer vult van prikkels, contact, veranderingen en andere dingen. Hij wordt geleegd door <strong>ordening</strong>: wat je zelf doet (eigen ordening) en wat je omgeving je biedt (geboden ordening). Een volle of overlopende emmer betekent dat die twee samen tekortschieten.</p>
+    <p class="credit">Gebaseerd op de ASSwijzer-methodiek (Werkboek ASSwijzer, EvenZicht)</p>
+  </header>
+
+  <div class="controls">
+    <button class="primary" id="btn-add-vulling">+ Wat je emmer vult</button>
+    <button class="amber" id="btn-add-ordening">+ Ordening</button>
+    <button class="ghost" id="btn-reset">Alles legen</button>
+  </div>
+
+  <div class="panel" id="panel-vulling">
+    <div class="field">
+      <label for="vul-label">Waar loopt je emmer van vol?</label>
+      <input type="text" id="vul-label" placeholder="bijv. drukte op kantoor" maxlength="60">
+    </div>
+    <div class="field">
+      <label>Categorie</label>
+      <div class="choice-row" id="vul-cat-row">
+        <div class="choice" data-cat="prikkels" aria-pressed="true"><span class="dot" style="background:var(--cat-prikkels)"></span>Prikkels</div>
+        <div class="choice" data-cat="contact" aria-pressed="false"><span class="dot" style="background:var(--cat-contact)"></span>Contact &amp; communicatie</div>
+        <div class="choice" data-cat="veranderingen" aria-pressed="false"><span class="dot" style="background:var(--cat-veranderingen)"></span>Veranderingen &amp; overzicht</div>
+        <div class="choice" data-cat="anders" aria-pressed="false"><span class="dot" style="background:var(--cat-anders)"></span>Anders</div>
+      </div>
+      <p class="uitleg" id="vul-cat-row-uitleg"></p>
+    </div>
+    <div class="field">
+      <label>Omvang</label>
+      <div class="choice-row" id="vul-size-row">
+        <div class="choice" data-w="1" aria-pressed="false">Klein</div>
+        <div class="choice" data-w="2" aria-pressed="true">Gemiddeld</div>
+        <div class="choice" data-w="3" aria-pressed="false">Groot</div>
+      </div>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="vul-vast">
+      <label for="vul-vast" style="margin:0;font-family:var(--font-sans);">Terugkerend probleem (steeds weer aanwezig)</label>
+    </div>
+    <div class="panel-actions">
+      <button class="ghost" data-cancel>Annuleren</button>
+      <button class="primary" id="btn-confirm-vulling">Toevoegen</button>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-ordening">
+    <div class="field">
+      <label for="ord-label">Wat helpt om te legen?</label>
+      <input type="text" id="ord-label" placeholder="bijv. vaste planning op maandag" maxlength="60">
+    </div>
+    <div class="field">
+      <label>Bron</label>
+      <div class="choice-row" id="ord-bron-row">
+        <div class="choice" data-bron="eigen" aria-pressed="true"><span class="dot" style="background:var(--eigen)"></span>Eigen ordening</div>
+        <div class="choice" data-bron="geboden" aria-pressed="false"><span class="dot" style="background:var(--geboden)"></span>Geboden ordening</div>
+      </div>
+      <p class="uitleg" id="ord-bron-row-uitleg"></p>
+    </div>
+    <div class="field">
+      <label>Gebied</label>
+      <div class="choice-row" id="ord-gebied-row">
+        <div class="choice" data-gebied="tijd" aria-pressed="true">Tijd</div>
+        <div class="choice" data-gebied="activiteit" aria-pressed="false">Activiteit</div>
+        <div class="choice" data-gebied="ruimte" aria-pressed="false">Ruimte</div>
+        <div class="choice" data-gebied="prikkels" aria-pressed="false">Prikkels</div>
+        <div class="choice" data-gebied="persoon" aria-pressed="false">Persoon</div>
+      </div>
+      <p class="uitleg" id="ord-gebied-row-uitleg"></p>
+    </div>
+    <div class="field">
+      <label>Manier</label>
+      <div class="choice-row" id="ord-manier-row">
+        <div class="choice" data-manier="verbaal" aria-pressed="true">Verbaal</div>
+        <div class="choice" data-manier="vast" aria-pressed="false">Vast</div>
+        <div class="choice" data-manier="visueel" aria-pressed="false">Visueel</div>
+      </div>
+      <p class="uitleg" id="ord-manier-row-uitleg"></p>
+    </div>
+    <div class="field">
+      <label>Omvang</label>
+      <div class="choice-row" id="ord-size-row">
+        <div class="choice" data-w="1" aria-pressed="false">Klein</div>
+        <div class="choice" data-w="2" aria-pressed="true">Gemiddeld</div>
+        <div class="choice" data-w="3" aria-pressed="false">Groot</div>
+      </div>
+    </div>
+    <div class="panel-actions">
+      <button class="ghost" data-cancel>Annuleren</button>
+      <button class="amber" id="btn-confirm-ordening">Toevoegen</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="ton-col">
+      <figure class="ton" id="ton">
+        <svg viewBox="0 0 220 320" role="img" aria-labelledby="ton-titel">
+          <title id="ton-titel">Regenton met het huidige waterniveau</title>
+          <defs>
+            <linearGradient id="water-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="250">
+              <stop id="wgrad-top" offset="0"/>
+              <stop id="wgrad-mid" offset="0.1"/>
+              <stop id="wgrad-diep" offset="1"/>
+            </linearGradient>
+            <radialGradient id="grond-grad" cx="0.5" cy="0.5" r="0.5">
+              <stop id="ggrad-in" offset="0.3"/>
+              <stop id="ggrad-out" offset="1"/>
+            </radialGradient>
+            <linearGradient id="rond-grad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0"    stop-color="#000" stop-opacity="0.28"/>
+              <stop offset="0.16" stop-color="#000" stop-opacity="0.07"/>
+              <stop offset="0.34" stop-color="#fff" stop-opacity="0.15"/>
+              <stop offset="0.52" stop-color="#fff" stop-opacity="0.06"/>
+              <stop offset="0.78" stop-color="#000" stop-opacity="0.11"/>
+              <stop offset="1"    stop-color="#000" stop-opacity="0.30"/>
+            </linearGradient>
+            <!-- voorkant van de romp: alles onder de voorste randlijn -->
+            <clipPath id="clip-romp">
+              <path d="M32,46 A78,13 0 0 0 188,46 L178,288 A68,11.3 0 0 1 42,288 Z"/>
+            </clipPath>
+            <!-- binnenkant: loopt door tot in de opening, zodat vol water de rand raakt -->
+            <clipPath id="clip-binnen">
+              <path d="M38,46 A72,12 0 0 1 182,46 L172,288 A62,10.3 0 0 1 48,288 Z"/>
+            </clipPath>
+          </defs>
+
+          <!-- regenpijp: waar de vulling binnenkomt -->
+          <g class="pijp-groep">
+            <path class="pijp-rand" d="M30,0 L30,9 Q30,20 41,20 L62,20 Q73,20 73,31 L73,36"/>
+            <path class="pijp" d="M30,0 L30,9 Q30,20 41,20 L62,20 Q73,20 73,31 L73,36"/>
+            <path class="pijp-hi" d="M26.6,0 L26.6,9.6 Q26.6,23.4 41,23.4 L62,23.4"/>
+            <path class="beugel" d="M23,6 L37,6"/>
+          </g>
+
+          <ellipse class="grond" cx="112" cy="302" rx="92" ry="16"/>
+
+          <path class="romp" d="M32,46 A78,13 0 0 1 188,46 L178,288 A68,11.3 0 0 1 42,288 Z"/>
+          <g clip-path="url(#clip-romp)">
+            <line class="duig" x1="127.2" y1="44" x2="124.8" y2="302"/>
+            <line class="duig" x1="149.0" y1="44" x2="143.7" y2="302"/>
+            <line class="duig" x1="169.3" y1="44" x2="161.2" y2="302"/>
+            <line class="duig" x1="183.4" y1="44" x2="173.4" y2="302"/>
+            <line class="duig" x1="92.8"  y1="44" x2="95.2"  y2="302"/>
+            <line class="duig" x1="71.0"  y1="44" x2="76.3"  y2="302"/>
+            <line class="duig" x1="50.7"  y1="44" x2="58.8"  y2="302"/>
+            <line class="duig" x1="36.6"  y1="44" x2="46.6"  y2="302"/>
+          </g>
+
+          <ellipse class="rand-buiten" cx="110" cy="46" rx="78" ry="13"/>
+          <ellipse class="rand-binnen" cx="110" cy="46" rx="72" ry="12"/>
+
+          <g clip-path="url(#clip-binnen)">
+            <g id="water">
+              <rect x="30" y="0" width="160" height="320" fill="url(#water-grad)"/>
+              <!-- bubbels stijgen op in de watergroep, dus mee met het niveau -->
+              <g class="bubbels">
+                <!-- deze komen al op in het laatste stuk voor de rand -->
+                <g class="bubbels-vroeg">
+                  <circle class="bubbel" cx="72"  cy="238" r="2.2" style="animation-duration:5.4s;animation-delay:-0.2s"/>
+                  <circle class="bubbel" cx="120" cy="243" r="2.5" style="animation-duration:6.2s;animation-delay:-1.1s"/>
+                  <circle class="bubbel" cx="96"  cy="205" r="1.7" style="animation-duration:4.1s;animation-delay:-2.6s"/>
+                  <circle class="bubbel" cx="142" cy="220" r="1.9" style="animation-duration:4.7s;animation-delay:-3.4s"/>
+                </g>
+                <!-- en deze pas als hij echt overloopt -->
+                <g class="bubbels-laat">
+                  <circle class="bubbel" cx="84"  cy="178" r="1.7" style="animation-duration:3.6s;animation-delay:-1.9s"/>
+                  <circle class="bubbel" cx="132" cy="186" r="2.4" style="animation-duration:5.9s;animation-delay:-4.2s"/>
+                  <circle class="bubbel" cx="106" cy="232" r="2.0" style="animation-duration:4.4s;animation-delay:-0.8s"/>
+                  <circle class="bubbel" cx="154" cy="214" r="1.8" style="animation-duration:5.1s;animation-delay:-3.0s"/>
+                  <circle class="bubbel" cx="62"  cy="200" r="2.3" style="animation-duration:6.6s;animation-delay:-2.2s"/>
+                  <circle class="bubbel" cx="112" cy="158" r="1.6" style="animation-duration:3.9s;animation-delay:-4.8s"/>
+                </g>
+              </g>
+              <ellipse id="water-opp" class="water-opp" cx="110" cy="0" rx="72" ry="12"/>
+            </g>
+          </g>
+
+          <path d="M32,46 A78,13 0 0 0 188,46 L178,288 A68,11.3 0 0 1 42,288 Z" fill="url(#rond-grad)"/>
+
+          <path class="hoepel" d="M33.3,78 A76.7,12.8 0 0 0 186.7,78"/>
+          <path class="hoepel-hi" d="M35.3,76 A74.7,12.5 0 0 0 184.7,76"/>
+          <path class="hoepel" d="M37.0,168 A73.0,12.2 0 0 0 183.0,168"/>
+          <path class="hoepel-hi" d="M39.0,166 A71.0,11.8 0 0 0 181.0,166"/>
+          <path class="hoepel" d="M41.3,272 A68.7,11.4 0 0 0 178.7,272"/>
+          <path class="hoepel-hi" d="M43.3,270 A66.7,11.1 0 0 0 176.7,270"/>
+
+          <g class="kraan-groep">
+            <rect class="kraan" x="98"    y="224" width="24" height="7"  rx="3"/>
+            <rect class="kraan" x="106.5" y="229" width="7"  height="13"/>
+            <rect class="kraan" x="95"    y="240" width="30" height="15" rx="5"/>
+            <rect class="kraan" x="103.5" y="252" width="13" height="13" rx="3"/>
+            <rect class="kraan-hi" x="99" y="243" width="22" height="3" rx="1.5"/>
+          </g>
+
+          <!-- gezicht: staat over hout en water heen, mond en wenkbrauwen
+               worden vanuit render() gezet -->
+          <g class="gezicht-groep">
+            <circle class="halo-vlak" cx="88"  cy="118" r="7.6"/>
+            <circle class="halo-vlak" cx="132" cy="118" r="7.6"/>
+            <line class="halo-lijn" id="brauw-l-halo" x1="80" y1="102" x2="97" y2="103"/>
+            <line class="halo-lijn" id="brauw-r-halo" x1="140" y1="102" x2="123" y2="103"/>
+            <path class="halo-lijn" id="mond-halo" d="M95,150 Q110,160 125,150"/>
+            <circle class="oog" cx="88"  cy="118" r="5.5"/>
+            <circle class="oog" cx="132" cy="118" r="5.5"/>
+            <line class="trek" id="brauw-l" x1="80" y1="102" x2="97" y2="103"/>
+            <line class="trek" id="brauw-r" x1="140" y1="102" x2="123" y2="103"/>
+            <path class="trek" id="mond" d="M95,150 Q110,160 125,150"/>
+            <g class="tranen">
+              <path class="traan" d="M88,128 C83.5,136 83.5,143 88,143 C92.5,143 92.5,136 88,128 Z"/>
+              <path class="traan" d="M132,128 C127.5,136 127.5,143 132,143 C136.5,143 136.5,136 132,128 Z"/>
+            </g>
+          </g>
+
+          <path class="contour" d="M32,46 A78,13 0 0 1 188,46 L178,288 A68,11.3 0 0 1 42,288 Z"/>
+          <ellipse class="contour contour-rand" cx="110" cy="46" rx="78" ry="13"/>
+          <ellipse class="contour contour-rand" cx="110" cy="46" rx="72" ry="12"/>
+
+          <!-- water dat erbij komt valt uit de pijp, water dat weggaat
+               loopt uit de kraan -->
+          <g class="instroom">
+            <path d="M68,33 C68,42 68.5,48 69,55 L77,55 C77.5,48 78,42 78,33 Z"/>
+          </g>
+          <g class="uitstroom">
+            <path d="M105,263 C105,275 106,288 107,303 L113,303 C114,288 115,275 115,263 Z"/>
+            <ellipse cx="110" cy="303" rx="17" ry="4.2" opacity="0.55"/>
+          </g>
+
+          <g class="overloop">
+            <!-- water dat bol over de rand staat -->
+            <ellipse class="meniscus" cx="110" cy="43.5" rx="74" ry="12.6"/>
+            <!-- de stralen groeien omlaag op het moment dat het overloopt -->
+            <g class="stralen">
+              <!-- valt naar buiten weg, zodat de straal los van de romp komt -->
+              <path class="straal" d="M158,50 C157,90 160,120 165,160
+                                      C170,200 174,240 178,300 L188,300
+                                      C186,240 183,200 179,160
+                                      C175,120 172,88 172,50 Z"/>
+              <path class="straal-hi" d="M163,58 C162,94 166,124 171,164
+                                         C175,204 179,244 183,296"/>
+              <path class="straal straal-2" d="M60,52 C59,92 56,124 51,164
+                                      C46,204 42,244 38,300 L46,300
+                                      C50,244 54,204 58,164
+                                      C63,124 68,92 70,52 Z"/>
+              <path class="straal-hi straal-2" d="M65,60 C64,96 61,126 56,166
+                                         C51,206 47,246 43,296"/>
+              <ellipse class="druppel" cx="192" cy="140" rx="2.4" ry="3.2"/>
+              <ellipse class="druppel" cx="186" cy="168" rx="1.6" ry="2.2"/>
+              <ellipse class="druppel" cx="36"  cy="132" rx="1.8" ry="2.4"/>
+              <ellipse class="druppel" cx="190" cy="205" rx="1.9" ry="2.6"/>
+              <ellipse class="druppel" cx="196" cy="258" rx="2.6" ry="3.4"/>
+              <ellipse class="druppel" cx="32"  cy="170" rx="2.1" ry="2.8"/>
+              <ellipse class="druppel" cx="27"  cy="238" rx="1.7" ry="2.3"/>
+            </g>
+            <g class="plas-groep">
+              <ellipse class="plas" cx="112" cy="303" rx="98" ry="13"/>
+              <ellipse class="rimpel" cx="112" cy="303" rx="66" ry="8.8"/>
+              <ellipse class="rimpel" cx="112" cy="303" rx="38" ry="5.1"/>
+            </g>
+          </g>
+        </svg>
+        <figcaption class="rim-note">loopt over</figcaption>
+      </figure>
+      <div class="balans">
+        <div class="balans-row">
+          <span class="balans-lbl">Eigen ordening</span>
+          <div class="balans-track"><div class="balans-fill eigen" id="bar-eigen" style="width:0%"></div></div>
+        </div>
+        <div class="balans-row">
+          <span class="balans-lbl">Geboden ordening</span>
+          <div class="balans-track"><div class="balans-fill geboden" id="bar-geboden" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="legend">
+        <div class="item"><span class="dot" style="background:var(--cat-prikkels)"></span>Prikkels</div>
+        <div class="item"><span class="dot" style="background:var(--cat-contact)"></span>Contact</div>
+        <div class="item"><span class="dot" style="background:var(--cat-veranderingen)"></span>Veranderingen</div>
+        <div class="item"><span class="dot" style="background:var(--cat-anders)"></span>Anders</div>
+      </div>
+    </div>
+    <div class="lists-col">
+      <div class="list-block">
+        <h2>Wat je emmer vult</h2>
+        <div id="vulling-rows"></div>
+      </div>
+      <div class="list-block">
+        <h2>Ordening</h2>
+        <div id="ordening-rows"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="voet">
+    <button class="ghost" id="btn-export">Exporteren…</button>
+    <button class="ghost" id="btn-import">Importeren…</button>
+    <input type="file" id="import-bestand" accept=".txt,text/plain" hidden>
+    <p class="voet-uitleg" id="voet-uitleg">Om op een ander apparaat verder te kunnen.
+      Het bestand wordt versleuteld met een wachtwoord dat je zelf kiest; zonder dat
+      wachtwoord staat er niets leesbaars in.</p>
+  </div>
+
+  <div class="panel" id="panel-sleutel">
+    <p class="paneel-kop" id="sleutel-kop"></p>
+    <div class="field">
+      <label for="sleutel-1">Wachtwoord</label>
+      <input type="password" id="sleutel-1" autocomplete="new-password">
+    </div>
+    <div class="field" id="sleutel-herhaal">
+      <label for="sleutel-2">Nog een keer</label>
+      <input type="password" id="sleutel-2" autocomplete="new-password">
+    </div>
+    <p class="melding" id="sleutel-melding"></p>
+    <div class="panel-actions">
+      <button class="ghost" data-cancel>Annuleren</button>
+      <button class="primary" id="btn-sleutel-ok">Doorgaan</button>
+    </div>
+  </div>
+</div>
+
+<div class="info-sheet" id="info-sheet">
+  <div class="meta">
+    <div class="lbl" id="info-label"></div>
+    <div class="sub" id="info-sub"></div>
+  </div>
+  <div class="acts">
+    <button class="ghost" id="btn-close-info">Sluiten</button>
+    <button class="ghost" id="btn-delete" style="color:var(--danger);border-color:var(--danger);">Verwijderen</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var STORAGE_KEY = "emmer-tool-v4";
+  var CAT_VAR = { prikkels:"--cat-prikkels", contact:"--cat-contact", veranderingen:"--cat-veranderingen", anders:"--cat-anders" };
+  var CAT_LABEL = { prikkels:"Prikkels", contact:"Contact & communicatie", veranderingen:"Veranderingen & overzicht", anders:"Anders" };
+  var GEBIED_LABEL = { tijd:"Tijd", activiteit:"Activiteit", ruimte:"Ruimte", prikkels:"Prikkels", persoon:"Persoon" };
+  var MANIER_LABEL = { verbaal:"Verbaal", vast:"Vast", visueel:"Visueel" };
+  var W_LABEL = { 1:"Klein", 2:"Gemiddeld", 3:"Groot" };
+  // Maatvoering van de regenton, in de svg-coordinaten van de viewBox.
+  var UNIT = 15;                       // svg-eenheden per stap omvang
+  var RAND_Y = 46, BODEM_Y = 288;      // binnenkant: waterlijn bij vol en bij leeg
+  var DIEPTE = BODEM_Y - RAND_Y;
+  var HW_RAND = 72, HW_BODEM = 62;     // halve binnenbreedte boven en onder
+  var SPANNING_VANAF = 0.72;           // vanaf hier loopt het zichtbaar op
+  var OPP_RY = 1/6;                    // kijkhoek: ry van het oppervlak t.o.v. rx
+
+  var state = { vulling: [], ordening: [] };
+  var selected = null; // {kind:'vulling'|'ordening', id}
+
+  function uid(){ return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+
+  function load(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw){
+        var p = JSON.parse(raw);
+        if (p && Array.isArray(p.vulling) && Array.isArray(p.ordening)) state = p;
+      }
+    }catch(e){}
+  }
+  function save(){
+    try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  // Gezicht. somber loopt van 0 (lege ton) naar 1 (tegen de rand aan);
+  // wenkbrauwen en mond zijn het enige dat beweegt.
+  var G = { brauwY:102, brauwUitL:80, brauwUitR:140, brauwLengte:17,
+            mondY:150, mondL:95, mondR:125 };
+
+  function zetBrauw(id, xUit, xBinnen, dy){
+    ["", "-halo"].forEach(function(suffix){
+      var el = document.getElementById(id + suffix);
+      el.setAttribute("x1", xUit);
+      el.setAttribute("y1", G.brauwY);
+      el.setAttribute("x2", xBinnen.toFixed(1));
+      el.setAttribute("y2", (G.brauwY + dy).toFixed(1));
+    });
+  }
+
+  function tekenGezicht(somber){
+    // Stuurpunt onder de mondhoeken is een glimlach, erboven een mond omlaag.
+    var bocht = 10 - 22 * somber;
+    var d = "M" + G.mondL + "," + G.mondY + " Q110," + (G.mondY + bocht).toFixed(1) +
+            " " + G.mondR + "," + G.mondY;
+    document.getElementById("mond").setAttribute("d", d);
+    document.getElementById("mond-halo").setAttribute("d", d);
+
+    // Binnenkant van de wenkbrauwen omhoog: dat leest als verdriet.
+    var hoek = -20 * somber * Math.PI / 180;
+    var dx = G.brauwLengte * Math.cos(hoek), dy = G.brauwLengte * Math.sin(hoek);
+    zetBrauw("brauw-l", G.brauwUitL, G.brauwUitL + dx, dy);
+    zetBrauw("brauw-r", G.brauwUitR, G.brauwUitR - dx, dy);
+  }
+
+  // Bij elke verandering van het niveau even laten zien waar het water langs
+  // gaat: erin via de pijp, eruit via de kraan.
+  var vorigNiveau = null;
+  var stroomTimers = {};
+
+  function toonStroom(verschil){
+    var klasse = verschil > 0 ? "stroomt-in" : "stroomt-uit";
+    var el = document.getElementById("ton");
+    el.classList.remove(klasse);
+    void el.offsetWidth;                 // forceer herstart van de animatie
+    el.classList.add(klasse);
+    clearTimeout(stroomTimers[klasse]);
+    stroomTimers[klasse] = setTimeout(function(){
+      el.classList.remove(klasse);
+    }, 1150);
+  }
+
+  // --- meenemen naar een ander apparaat --------------------------------
+  // Wat hierin staat is gevoelig, dus het bestand gaat er versleuteld uit:
+  // AES-GCM met een sleutel die met PBKDF2 uit het wachtwoord komt. Zonder
+  // wachtwoord valt er niets uit te lezen, ook niet half.
+  var KOP = "EMMER1";
+  var RONDEN = 250000;
+  var sleutelModus = null;     // "export" of "import"
+  var gelezenTekst = null;     // inhoud van het gekozen bestand
+
+  function heeftCrypto(){
+    return !!(window.crypto && window.crypto.subtle && window.TextEncoder);
+  }
+
+  function naarB64(bytes){
+    var s = "";
+    for (var i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+    return btoa(s);
+  }
+  function uitB64(tekst){
+    var ruw = atob(tekst), uit = new Uint8Array(ruw.length);
+    for (var i = 0; i < ruw.length; i++) uit[i] = ruw.charCodeAt(i);
+    return uit;
+  }
+
+  function maakSleutel(wachtwoord, zout){
+    return crypto.subtle.importKey("raw", new TextEncoder().encode(wachtwoord),
+      "PBKDF2", false, ["deriveKey"]).then(function(basis){
+        return crypto.subtle.deriveKey(
+          { name:"PBKDF2", salt:zout, iterations:RONDEN, hash:"SHA-256" },
+          basis, { name:"AES-GCM", length:256 }, false, ["encrypt","decrypt"]);
+      });
+  }
+
+  function versleutel(wachtwoord){
+    var zout = crypto.getRandomValues(new Uint8Array(16));
+    var iv = crypto.getRandomValues(new Uint8Array(12));
+    return maakSleutel(wachtwoord, zout).then(function(sleutel){
+      return crypto.subtle.encrypt({ name:"AES-GCM", iv:iv }, sleutel,
+        new TextEncoder().encode(JSON.stringify(state)));
+    }).then(function(cipher){
+      return [KOP, naarB64(zout), naarB64(iv), naarB64(new Uint8Array(cipher))].join(".");
+    });
+  }
+
+  function ontsleutel(tekst, wachtwoord){
+    var delen = String(tekst).trim().split(".");
+    if (delen.length !== 4 || delen[0] !== KOP) return Promise.reject(new Error("formaat"));
+    var zout, iv, cipher;
+    try {
+      zout = uitB64(delen[1]); iv = uitB64(delen[2]); cipher = uitB64(delen[3]);
+    } catch (e) {
+      return Promise.reject(new Error("formaat"));
+    }
+    return maakSleutel(wachtwoord, zout).then(function(sleutel){
+      return crypto.subtle.decrypt({ name:"AES-GCM", iv:iv }, sleutel, cipher);
+    }).then(function(plat){
+      var p = JSON.parse(new TextDecoder().decode(plat));
+      if (!p || !Array.isArray(p.vulling) || !Array.isArray(p.ordening)) {
+        throw new Error("inhoud");
+      }
+      return p;
+    });
+  }
+
+  function bewaarBestand(tekst){
+    var blob = new Blob([tekst], { type:"text/plain" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "emmer-" + new Date().toISOString().slice(0, 10) + ".txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 2000);
+  }
+
+  function sluitPanelen(){
+    document.querySelectorAll(".panel").forEach(function(p){ p.classList.remove("open"); });
+  }
+
+  function zetMelding(tekst){
+    document.getElementById("sleutel-melding").textContent = tekst || "";
+  }
+
+  function knopTekst(){
+    return sleutelModus === "export" ? "Bestand maken" : "Terugzetten";
+  }
+
+  function bezig(aan){
+    var knop = document.getElementById("btn-sleutel-ok");
+    knop.disabled = aan;
+    knop.textContent = aan ? "Even bezig…" : knopTekst();
+  }
+
+  function openSleutel(modus){
+    sleutelModus = modus;
+    document.getElementById("sleutel-kop").textContent = modus === "export"
+      ? "Kies een wachtwoord. Je hebt het nodig om het bestand op het andere apparaat te openen; het staat nergens anders opgeschreven."
+      : "Het wachtwoord van dit bestand.";
+    document.getElementById("sleutel-herhaal").style.display =
+      modus === "export" ? "" : "none";
+    document.getElementById("sleutel-1").value = "";
+    document.getElementById("sleutel-2").value = "";
+    zetMelding("");
+    sluitPanelen();
+    bezig(false);
+    document.getElementById("panel-sleutel").classList.add("open");
+    document.getElementById("sleutel-1").focus();
+  }
+
+  function doeExport(wachtwoord){
+    bezig(true);
+    versleutel(wachtwoord).then(function(tekst){
+      bewaarBestand(tekst);
+      bezig(false);
+      sluitPanelen();
+    }).catch(function(){
+      bezig(false);
+      zetMelding("Het versleutelen lukte niet.");
+    });
+  }
+
+  function doeImport(wachtwoord){
+    bezig(true);
+    ontsleutel(gelezenTekst, wachtwoord).then(function(nieuw){
+      bezig(false);
+      if (!window.confirm("Dit vervangt wat er nu in de emmer zit. Doorgaan?")) return;
+      state = nieuw;
+      closeInfo();
+      renderVullingList();
+      renderOrdeningList();
+      render();
+      save();
+      sluitPanelen();
+    }).catch(function(e){
+      bezig(false);
+      var reden = e && e.message;
+      zetMelding(reden === "formaat" ? "Dit lijkt geen emmer-bestand."
+        : reden === "inhoud" ? "Het bestand is geopend, maar de inhoud klopt niet."
+        : "Dit wachtwoord past niet op dit bestand.");
+    });
+  }
+
+  function initMeenemen(){
+    if (!heeftCrypto()){
+      document.getElementById("btn-export").disabled = true;
+      document.getElementById("btn-import").disabled = true;
+      document.getElementById("voet-uitleg").textContent =
+        "Exporteren werkt niet in deze browser: versleutelen is hier niet beschikbaar.";
+      return;
+    }
+    document.getElementById("btn-export").addEventListener("click", function(){
+      openSleutel("export");
+    });
+    document.getElementById("btn-import").addEventListener("click", function(){
+      document.getElementById("import-bestand").click();
+    });
+    document.getElementById("import-bestand").addEventListener("change", function(){
+      var bestand = this.files && this.files[0];
+      this.value = "";                  // zodat hetzelfde bestand opnieuw kan
+      if (!bestand) return;
+      var lezer = new FileReader();
+      lezer.onload = function(){
+        gelezenTekst = String(lezer.result);
+        openSleutel("import");
+      };
+      lezer.onerror = function(){ window.alert("Het bestand kon niet gelezen worden."); };
+      lezer.readAsText(bestand);
+    });
+    document.getElementById("btn-sleutel-ok").addEventListener("click", function(){
+      var een = document.getElementById("sleutel-1").value;
+      if (!een){ zetMelding("Vul een wachtwoord in."); return; }
+      if (sleutelModus === "export"){
+        if (een !== document.getElementById("sleutel-2").value){
+          zetMelding("De twee wachtwoorden zijn niet gelijk."); return;
+        }
+        doeExport(een);
+      } else {
+        doeImport(een);
+      }
+    });
+  }
+
+  function sumActive(list){
+    var t = 0;
+    list.forEach(function(i){ if (i.actief) t += (i.weight||2); });
+    return t;
+  }
+
+  function render(){
+    var vulTotal = sumActive(state.vulling);
+    var ordTotal = sumActive(state.ordening);
+    var niveau = Math.max(0, (vulTotal - ordTotal) * UNIT);
+    var oppY = BODEM_Y - Math.min(DIEPTE, niveau);
+    // De ton loopt taps toe, dus het oppervlak is smaller naarmate het lager staat.
+    var hw = HW_RAND + (HW_BODEM - HW_RAND) * (oppY - RAND_Y) / DIEPTE;
+
+    var waterEl = document.getElementById("water");
+    waterEl.style.transform = "translateY(" + oppY.toFixed(1) + "px)";
+    waterEl.style.opacity = niveau > 0 ? "1" : "0";
+    var oppEl = document.getElementById("water-opp");
+    oppEl.setAttribute("rx", hw.toFixed(1));
+    oppEl.setAttribute("ry", (hw * OPP_RY).toFixed(1));
+    tekenGezicht(Math.min(1, niveau / DIEPTE));
+
+    // Bij de eerste tekening is er nog geen vorige stand om mee te vergelijken.
+    if (vorigNiveau !== null && niveau !== vorigNiveau) toonStroom(niveau - vorigNiveau);
+    vorigNiveau = niveau;
+
+    // Het laatste stuk voor de rand loopt al op: oranje en wat bubbels.
+    var vol = niveau / DIEPTE;
+    var spanning = Math.min(1, Math.max(0, (vol - SPANNING_VANAF) / (1 - SPANNING_VANAF)));
+    // Hoe ver het eroverheen gaat, stuurt hoe hard de ton overloopt.
+    // 1 betekent: een hele ton te veel. Blijft beeld, wordt nooit een getal.
+    var over = Math.min(1, Math.max(0, (niveau - DIEPTE) / DIEPTE));
+    var tonEl = document.getElementById("ton");
+    tonEl.style.setProperty("--spanning", spanning.toFixed(3));
+    // De kleur loopt later op dan de bubbels: eerst wat bubbels, dan pas oranje.
+    tonEl.style.setProperty("--hitte", Math.pow(spanning, 2.5).toFixed(3));
+    tonEl.style.setProperty("--over", over.toFixed(3));
+    tonEl.classList.toggle("overflow", niveau > DIEPTE);
+    // bubbels alleen laten lopen als ze ook te zien zijn
+    tonEl.classList.toggle("borrelt", spanning > 0);
+
+    var eigenTotal = 0, gebodenTotal = 0;
+    state.ordening.forEach(function(o){
+      if (!o.actief) return;
+      if (o.bron === "eigen") eigenTotal += (o.weight||2);
+      else gebodenTotal += (o.weight||2);
+    });
+    var maxBar = Math.max(1, eigenTotal, gebodenTotal);
+    document.getElementById("bar-eigen").style.width = (eigenTotal/maxBar*100) + "%";
+    document.getElementById("bar-geboden").style.width = (gebodenTotal/maxBar*100) + "%";
+  }
+
+  function renderVullingList(){
+    var box = document.getElementById("vulling-rows");
+    box.innerHTML = "";
+    if (state.vulling.length === 0){
+      var e = document.createElement("div");
+      e.className = "list-empty"; e.textContent = "Nog niets toegevoegd.";
+      box.appendChild(e); return;
+    }
+    state.vulling.forEach(function(v){
+      var row = document.createElement("div");
+      row.className = "item-row" + (v.actief ? "" : " inactief");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.checked = !!v.actief;
+      cb.addEventListener("click", function(ev){ ev.stopPropagation(); });
+      cb.addEventListener("change", function(){ v.actief = cb.checked; row.classList.toggle("inactief", !v.actief); render(); save(); });
+      var dot = document.createElement("span");
+      dot.className = "dot"; dot.style.background = "var("+CAT_VAR[v.categorie]+")";
+      var lbl = document.createElement("div");
+      lbl.className = "lbl"; lbl.textContent = (v.vast?"⟳ ":"") + (v.label || "(zonder omschrijving)");
+      var tag = document.createElement("div");
+      tag.className = "tag"; tag.textContent = W_LABEL[v.weight];
+      row.appendChild(cb); row.appendChild(dot); row.appendChild(lbl); row.appendChild(tag);
+      row.addEventListener("click", function(){ selectItem("vulling", v.id); });
+      box.appendChild(row);
+    });
+  }
+
+  function renderOrdeningList(){
+    var box = document.getElementById("ordening-rows");
+    box.innerHTML = "";
+    if (state.ordening.length === 0){
+      var e = document.createElement("div");
+      e.className = "list-empty"; e.textContent = "Nog niets toegevoegd.";
+      box.appendChild(e); return;
+    }
+    state.ordening.forEach(function(o){
+      var row = document.createElement("div");
+      row.className = "item-row" + (o.actief ? "" : " inactief");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.checked = !!o.actief;
+      cb.addEventListener("click", function(ev){ ev.stopPropagation(); });
+      cb.addEventListener("change", function(){ o.actief = cb.checked; row.classList.toggle("inactief", !o.actief); render(); save(); });
+      var dot = document.createElement("span");
+      dot.className = "dot"; dot.style.background = "var(--"+o.bron+")";
+      var lbl = document.createElement("div");
+      lbl.className = "lbl"; lbl.textContent = o.label || "(zonder omschrijving)";
+      var tag = document.createElement("div");
+      tag.className = "tag"; tag.textContent = GEBIED_LABEL[o.gebied]+" · "+W_LABEL[o.weight];
+      row.appendChild(cb); row.appendChild(dot); row.appendChild(lbl); row.appendChild(tag);
+      row.addEventListener("click", function(){ selectItem("ordening", o.id); });
+      box.appendChild(row);
+    });
+  }
+
+  function selectItem(kind, id){
+    selected = { kind:kind, id:id };
+    if (kind === "vulling"){
+      var v = state.vulling.find(function(x){ return x.id===id; });
+      if (!v) return;
+      document.getElementById("info-label").textContent = v.label || "(zonder omschrijving)";
+      document.getElementById("info-sub").textContent = CAT_LABEL[v.categorie]+" · "+W_LABEL[v.weight]+(v.vast?" · terugkerend":"");
+    } else {
+      var o = state.ordening.find(function(x){ return x.id===id; });
+      if (!o) return;
+      document.getElementById("info-label").textContent = o.label || "(zonder omschrijving)";
+      document.getElementById("info-sub").textContent = (o.bron==="eigen"?"Eigen ordening":"Geboden ordening")+" · "+GEBIED_LABEL[o.gebied]+" · "+MANIER_LABEL[o.manier]+" · "+W_LABEL[o.weight];
+    }
+    document.getElementById("info-sheet").classList.add("open");
+  }
+  function closeInfo(){
+    selected = null;
+    document.getElementById("info-sheet").classList.remove("open");
+  }
+  function deleteSelected(){
+    if (!selected) return;
+    if (selected.kind === "vulling"){
+      state.vulling = state.vulling.filter(function(v){ return v.id!==selected.id; });
+      renderVullingList();
+    } else {
+      state.ordening = state.ordening.filter(function(o){ return o.id!==selected.id; });
+      renderOrdeningList();
+    }
+    closeInfo(); render(); save();
+  }
+
+  // Uitleg bij de keuzes, overgenomen uit het werkboek: hoofdstuk 7 (pagina
+  // 20-21) voor bron, gebied en manier, bijlage 2 voor de categorieen. Bij
+  // omvang staat niets: klein/gemiddeld/groot is van de tool, niet van het
+  // werkboek, dus daar valt niets uit te leggen.
+  var UITLEG = {
+    "vul-cat-row": {
+      prikkels: "Licht, geluid, drukte, geuren, beweging, maar ook interne prikkels zoals piekeren.",
+      contact: "Taal verwerken, gesprekken, groepen, oogcontact, je aanpassen aan wat anderen verwachten.",
+      veranderingen: "Aangepaste plannen, geen structuur of ritme, tijdsdruk, niet kunnen kiezen, perfectionisme.",
+      anders: "Stemming, eten, slapen, gebeurtenissen."
+    },
+    "ord-bron-row": {
+      eigen: "Wat je zelf doet om te legen: even terugtrekken, iets voor jezelf doen, je hobby, een eigen ritme.",
+      geboden: "Wat anderen doen om te legen. Het werkboek: een emmer laat zich alleen legen als je op allebei kunt rekenen."
+    },
+    "ord-gebied-row": {
+      tijd: "Overzicht in de dag- of weekinvulling: wat ga ik wanneer doen?",
+      activiteit: "Hoe een activiteit begint, hoelang die duurt, wanneer die eindigt, wat de volgorde is en welke stappen nodig zijn.",
+      ruimte: "Overzicht in de leefomgeving: wat doe ik waar, wat staat waar?",
+      prikkels: "Bepaalde zintuiglijke prikkels uitsluiten of juist versterken.",
+      persoon: "Voorspelbaarheid bij de mensen om je heen: zekerheid ontlenen aan vertrouwde personen, duidelijke afspraken en regels."
+    },
+    "ord-manier-row": {
+      verbaal: "Duidelijkheid vragen en bieden door vragen te stellen, dingen aan te kondigen of uit te leggen.",
+      vast: "Duidelijkheid door je te houden aan vaste regels, routines en dergelijke.",
+      visueel: "Duidelijkheid door op te schrijven of uit te tekenen wat er van iemand verwacht wordt."
+    }
+  };
+
+  function zetUitleg(rowId, waarde){
+    var doos = document.getElementById(rowId + "-uitleg");
+    if (!doos) return;
+    var kaart = UITLEG[rowId];
+    doos.textContent = (kaart && kaart[waarde]) || "";
+  }
+
+  function setupChoiceRow(rowId, attr, onPick){
+    document.querySelectorAll("#"+rowId+" .choice").forEach(function(c){
+      c.addEventListener("click", function(){
+        document.querySelectorAll("#"+rowId+" .choice").forEach(function(o){ o.setAttribute("aria-pressed","false"); });
+        c.setAttribute("aria-pressed","true");
+        zetUitleg(rowId, c.getAttribute(attr));
+        onPick(c.getAttribute(attr));
+      });
+    });
+    // ook meteen de uitleg bij de stand waarmee het paneel opent
+    var start = document.querySelector("#"+rowId+" .choice[aria-pressed='true']");
+    if (start) zetUitleg(rowId, start.getAttribute(attr));
+  }
+
+  function initPanels(){
+    var vulPanel = document.getElementById("panel-vulling");
+    var ordPanel = document.getElementById("panel-ordening");
+    var vCat="prikkels", vW=2, oBron="eigen", oGebied="tijd", oManier="verbaal", oW=2;
+
+    setupChoiceRow("vul-cat-row","data-cat", function(v){ vCat=v; });
+    setupChoiceRow("vul-size-row","data-w", function(v){ vW=parseInt(v,10); });
+    setupChoiceRow("ord-bron-row","data-bron", function(v){ oBron=v; });
+    setupChoiceRow("ord-gebied-row","data-gebied", function(v){ oGebied=v; });
+    setupChoiceRow("ord-manier-row","data-manier", function(v){ oManier=v; });
+    setupChoiceRow("ord-size-row","data-w", function(v){ oW=parseInt(v,10); });
+
+    document.getElementById("btn-add-vulling").addEventListener("click", function(){
+      ordPanel.classList.remove("open");
+      vulPanel.classList.add("open");
+      document.getElementById("vul-label").focus();
+    });
+    document.getElementById("btn-add-ordening").addEventListener("click", function(){
+      vulPanel.classList.remove("open");
+      ordPanel.classList.add("open");
+      document.getElementById("ord-label").focus();
+    });
+    document.querySelectorAll("[data-cancel]").forEach(function(b){
+      b.addEventListener("click", sluitPanelen);
+    });
+    document.getElementById("btn-confirm-vulling").addEventListener("click", function(){
+      var input = document.getElementById("vul-label");
+      var vast = document.getElementById("vul-vast").checked;
+      state.vulling.push({ id:uid(), label:input.value.trim(), categorie:vCat, weight:vW, actief:true, vast:vast });
+      renderVullingList(); render(); save();
+      input.value = ""; document.getElementById("vul-vast").checked = false;
+      vulPanel.classList.remove("open");
+    });
+    document.getElementById("btn-confirm-ordening").addEventListener("click", function(){
+      var input = document.getElementById("ord-label");
+      state.ordening.push({ id:uid(), label:input.value.trim(), bron:oBron, gebied:oGebied, manier:oManier, weight:oW, actief:true });
+      renderOrdeningList(); render(); save();
+      input.value = "";
+      ordPanel.classList.remove("open");
+    });
+    document.getElementById("btn-reset").addEventListener("click", function(){
+      if (state.vulling.length===0 && state.ordening.length===0) return;
+      if (window.confirm("De emmer volledig legen?")){
+        state.vulling=[]; state.ordening=[];
+        renderVullingList(); renderOrdeningList(); render(); save();
+      }
+    });
+    document.getElementById("btn-close-info").addEventListener("click", closeInfo);
+    document.getElementById("btn-delete").addEventListener("click", deleteSelected);
+  }
+
+  function init(){
+    load();
+    initPanels();
+    initMeenemen();
+    // Eerste stand zonder animatie: het water hoort er te staan, niet in te zakken.
+    var waterEl = document.getElementById("water");
+    waterEl.style.transition = "none";
+    renderVullingList();
+    renderOrdeningList();
+    render();
+    requestAnimationFrame(function(){ waterEl.style.transition = ""; });
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+</body>
+</html>
