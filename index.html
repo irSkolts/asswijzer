@@ -27,6 +27,8 @@
     --oranje-diep:rgba(110,60,20,0.94);
     --oranje-opp:#D08A4E; --oranje-opp-lijn:#EEC08C;
     --gezicht:#2E3630; --gezicht-halo:#EFF1EE;
+    --steen:#8C8A83; --steen-licht:#A5A29A; --steen-donker:#6E6C66;
+    --steen-lijn:#3F3E39;
 
     --cat-prikkels:#8A6E52;
     --cat-contact:#5C7A6D;
@@ -54,6 +56,8 @@
       --oranje-diep:rgba(104,58,22,0.95);
       --oranje-opp:#D9975E; --oranje-opp-lijn:#F0C99A;
       --gezicht:#EDF0EA; --gezicht-halo:#1B1F1D;
+      --steen:#6B6960; --steen-licht:#84806F; --steen-donker:#4E4C45;
+      --steen-lijn:#26251F;
       --eigen:#4FA98D; --eigen-ink:#12211C; --geboden:#D9A85C; --geboden-ink:#2B1F0E;
       --cat-prikkels:#C7A87E; --cat-contact:#8FB39F; --cat-veranderingen:#8FA3C7; --cat-anders:#C79AB0;
     }
@@ -74,6 +78,8 @@
     --oranje-diep:rgba(104,58,22,0.95);
     --oranje-opp:#D9975E; --oranje-opp-lijn:#F0C99A;
     --gezicht:#EDF0EA; --gezicht-halo:#1B1F1D;
+    --steen:#6B6960; --steen-licht:#84806F; --steen-donker:#4E4C45;
+    --steen-lijn:#26251F;
     --eigen:#4FA98D; --eigen-ink:#12211C; --geboden:#D9A85C; --geboden-ink:#2B1F0E;
     --cat-prikkels:#C7A87E; --cat-contact:#8FB39F; --cat-veranderingen:#8FA3C7; --cat-anders:#C79AB0;
   }
@@ -147,6 +153,13 @@
     stroke-linecap:butt;opacity:0.4;}
   .ton .beugel{fill:none;stroke:var(--ton-band);stroke-width:3.2;stroke-linecap:round;opacity:0.85;}
   .ton .grond{fill:url(#grond-grad);}
+  /* Stenen liggen onderin en nemen ruimte in; ordening haalt ze niet weg. */
+  #stenen{transition:transform 0.55s cubic-bezier(0.4,0.05,0.2,1),opacity 0.4s ease;}
+  .ton .steenmassa{fill:var(--steen-donker);}
+  .ton .steen{stroke:var(--steen-lijn);stroke-width:0.9;stroke-opacity:0.35;}
+  .ton .steen-a{fill:var(--steen);}
+  .ton .steen-b{fill:var(--steen-licht);}
+  .ton .steen-c{fill:var(--steen-donker);}
   /* In- en uitstroom: even te zien zodra het niveau verandert. */
   .ton .instroom,.ton .uitstroom{opacity:0;}
   .ton .instroom{fill:var(--water-opp);transform-origin:73px 33px;}
@@ -220,6 +233,7 @@
     stroke-linecap:round;opacity:0.5;}
   .ton .oog{fill:var(--gezicht);}
   .ton .trek{fill:none;stroke:var(--gezicht);stroke-width:3;stroke-linecap:round;}
+  .ton .schreeuw{fill:var(--gezicht);}
   .ton .tranen{opacity:0;transition:opacity 0.6s ease;}
   .ton.overflow .tranen{opacity:1;}
   .ton .traan{fill:var(--rood-opp-lijn);opacity:0.85;}
@@ -230,7 +244,7 @@
     transition:opacity 0.5s;pointer-events:none;}
   .ton.overflow .rim-note{opacity:1;}
   @media (prefers-reduced-motion:reduce){
-    #water,.ton .overloop,.ton .stralen,.ton .plas-groep,.ton .contour,
+    #water,#stenen,.ton .overloop,.ton .stralen,.ton .plas-groep,.ton .contour,
     .ton .tranen,.balans-fill{transition:none;}
     .ton .bubbel,.ton .instroom,.ton .uitstroom{animation:none;}
   }
@@ -251,6 +265,7 @@
   .item-row .lbl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .item-row .tag{font-family:var(--font-mono);font-size:0.70rem;color:var(--ink-soft);flex-shrink:0;white-space:nowrap;}
   .item-row.inactief{opacity:0.45;}
+  .item-row.steen-rij{box-shadow:inset 3px 0 0 var(--steen);padding-left:9px;}
   .list-empty{color:var(--ink-soft);font-size:0.82rem;padding:10px 4px;}
 
   .legend{display:flex;gap:12px;flex-wrap:wrap;margin:12px 2px 0;font-size:0.76rem;color:var(--ink-soft);}
@@ -310,6 +325,10 @@
       <input type="checkbox" id="vul-vast">
       <label for="vul-vast" style="margin:0;font-family:var(--font-sans);">Terugkerend probleem (steeds weer aanwezig)</label>
     </div>
+    <p class="uitleg">Dit ligt als een steen in de emmer: ordening haalt het er niet uit.
+      Het blijft onderin liggen en neemt ruimte in, dus er past minder water bij voordat
+      de ton overloopt. Denk aan een trauma dat nog vers is, of een blessure die maanden
+      geneest.</p>
     <div class="panel-actions">
       <button class="ghost" data-cancel>Annuleren</button>
       <button class="primary" id="btn-confirm-vulling">Toevoegen</button>
@@ -391,6 +410,10 @@
               <path d="M32,46 A78,13 0 0 0 188,46 L178,288 A68,11.3 0 0 1 42,288 Z"/>
             </clipPath>
             <!-- binnenkant: loopt door tot in de opening, zodat vol water de rand raakt -->
+            <clipPath id="clip-hoop">
+              <ellipse id="hoop-rand" cx="110" cy="0" rx="72" ry="12"/>
+              <rect x="20" y="0" width="180" height="320"/>
+            </clipPath>
             <clipPath id="clip-binnen">
               <path d="M38,46 A72,12 0 0 1 182,46 L172,288 A62,10.3 0 0 1 48,288 Z"/>
             </clipPath>
@@ -447,6 +470,66 @@
             </g>
           </g>
 
+          <g clip-path="url(#clip-binnen)">
+            <g id="stenen">
+              <!-- ellipsvormige bovenkant, zelfde kijkhoek als het wateroppervlak -->
+              <ellipse id="steen-opp" class="steenmassa" cx="110" cy="0" rx="72" ry="12"/>
+              <g clip-path="url(#clip-hoop)">
+                <rect class="steenmassa" x="20" y="0" width="180" height="320"/>
+                <ellipse class="steen steen-b" cx="32.6" cy="0.9" rx="15.3" ry="7.3" transform="rotate(1.4 34.0 3.0)"/>
+                <ellipse class="steen steen-a" cx="64.9" cy="0.3" rx="14.5" ry="7.1" transform="rotate(-2.7 66.0 3.0)"/>
+                <ellipse class="steen steen-c" cx="94.6" cy="0.5" rx="14.1" ry="10.3" transform="rotate(-15.0 98.0 3.0)"/>
+                <ellipse class="steen steen-b" cx="127.8" cy="3.8" rx="16.7" ry="9.3" transform="rotate(-4.1 130.0 3.0)"/>
+                <ellipse class="steen steen-a" cx="165.8" cy="0.3" rx="16.3" ry="8.2" transform="rotate(-14.2 162.0 3.0)"/>
+                <ellipse class="steen steen-b" cx="47.9" cy="27.9" rx="16.1" ry="7.7" transform="rotate(3.3 51.0 29.0)"/>
+                <ellipse class="steen steen-a" cx="84.1" cy="28.2" rx="14.7" ry="7.3" transform="rotate(-17.6 83.0 29.0)"/>
+                <ellipse class="steen steen-c" cx="112.6" cy="30.1" rx="14.1" ry="8.3" transform="rotate(3.4 115.0 29.0)"/>
+                <ellipse class="steen steen-b" cx="146.6" cy="27.8" rx="16.0" ry="9.8" transform="rotate(-10.2 147.0 29.0)"/>
+                <ellipse class="steen steen-a" cx="179.6" cy="29.2" rx="16.4" ry="9.9" transform="rotate(-8.5 179.0 29.0)"/>
+                <ellipse class="steen steen-a" cx="37.8" cy="52.7" rx="14.1" ry="10.0" transform="rotate(-13.9 34.0 55.0)"/>
+                <ellipse class="steen steen-c" cx="65.9" cy="52.2" rx="15.3" ry="10.1" transform="rotate(2.9 66.0 55.0)"/>
+                <ellipse class="steen steen-b" cx="101.0" cy="53.9" rx="15.5" ry="9.4" transform="rotate(3.2 98.0 55.0)"/>
+                <ellipse class="steen steen-a" cx="129.6" cy="57.0" rx="16.7" ry="8.9" transform="rotate(6.6 130.0 55.0)"/>
+                <ellipse class="steen steen-c" cx="158.5" cy="56.2" rx="15.2" ry="11.0" transform="rotate(12.9 162.0 55.0)"/>
+                <ellipse class="steen steen-a" cx="49.3" cy="80.3" rx="15.3" ry="7.1" transform="rotate(-1.5 51.0 81.0)"/>
+                <ellipse class="steen steen-c" cx="80.3" cy="78.7" rx="12.3" ry="10.1" transform="rotate(-14.8 83.0 81.0)"/>
+                <ellipse class="steen steen-b" cx="113.0" cy="80.3" rx="16.4" ry="7.3" transform="rotate(-2.0 115.0 81.0)"/>
+                <ellipse class="steen steen-a" cx="147.4" cy="83.3" rx="16.1" ry="10.5" transform="rotate(-8.9 147.0 81.0)"/>
+                <ellipse class="steen steen-c" cx="178.3" cy="80.2" rx="16.4" ry="10.8" transform="rotate(-14.0 179.0 81.0)"/>
+                <ellipse class="steen steen-c" cx="31.4" cy="105.4" rx="13.2" ry="8.9" transform="rotate(3.6 34.0 107.0)"/>
+                <ellipse class="steen steen-b" cx="64.1" cy="104.0" rx="14.1" ry="8.5" transform="rotate(2.7 66.0 107.0)"/>
+                <ellipse class="steen steen-a" cx="101.6" cy="108.1" rx="14.6" ry="9.5" transform="rotate(7.0 98.0 107.0)"/>
+                <ellipse class="steen steen-c" cx="126.4" cy="109.4" rx="15.9" ry="10.5" transform="rotate(11.9 130.0 107.0)"/>
+                <ellipse class="steen steen-b" cx="161.1" cy="106.4" rx="12.5" ry="9.5" transform="rotate(-17.5 162.0 107.0)"/>
+                <ellipse class="steen steen-c" cx="47.5" cy="131.3" rx="12.8" ry="8.4" transform="rotate(-17.9 51.0 133.0)"/>
+                <ellipse class="steen steen-b" cx="79.0" cy="130.9" rx="12.5" ry="8.5" transform="rotate(-19.0 83.0 133.0)"/>
+                <ellipse class="steen steen-a" cx="118.0" cy="133.7" rx="12.7" ry="8.0" transform="rotate(-6.1 115.0 133.0)"/>
+                <ellipse class="steen steen-c" cx="145.9" cy="130.7" rx="16.2" ry="11.0" transform="rotate(-1.4 147.0 133.0)"/>
+                <ellipse class="steen steen-b" cx="178.9" cy="130.5" rx="12.5" ry="8.4" transform="rotate(-9.4 179.0 133.0)"/>
+                <ellipse class="steen steen-b" cx="36.6" cy="157.0" rx="12.1" ry="10.8" transform="rotate(1.1 34.0 159.0)"/>
+                <ellipse class="steen steen-a" cx="63.2" cy="159.3" rx="12.1" ry="9.1" transform="rotate(19.1 66.0 159.0)"/>
+                <ellipse class="steen steen-c" cx="100.9" cy="160.2" rx="13.3" ry="8.5" transform="rotate(-13.3 98.0 159.0)"/>
+                <ellipse class="steen steen-b" cx="132.2" cy="159.2" rx="15.9" ry="8.3" transform="rotate(-11.1 130.0 159.0)"/>
+                <ellipse class="steen steen-a" cx="164.5" cy="161.9" rx="16.3" ry="10.2" transform="rotate(12.7 162.0 159.0)"/>
+                <ellipse class="steen steen-b" cx="52.9" cy="183.4" rx="14.6" ry="8.4" transform="rotate(-18.8 51.0 185.0)"/>
+                <ellipse class="steen steen-a" cx="79.2" cy="183.7" rx="13.3" ry="9.8" transform="rotate(18.3 83.0 185.0)"/>
+                <ellipse class="steen steen-c" cx="114.6" cy="187.6" rx="16.9" ry="10.8" transform="rotate(-5.4 115.0 185.0)"/>
+                <ellipse class="steen steen-b" cx="144.8" cy="183.4" rx="13.0" ry="7.8" transform="rotate(5.0 147.0 185.0)"/>
+                <ellipse class="steen steen-a" cx="182.2" cy="187.0" rx="14.4" ry="9.6" transform="rotate(12.0 179.0 185.0)"/>
+                <ellipse class="steen steen-a" cx="30.7" cy="212.0" rx="16.5" ry="10.1" transform="rotate(10.0 34.0 211.0)"/>
+                <ellipse class="steen steen-c" cx="65.8" cy="209.1" rx="15.9" ry="8.3" transform="rotate(12.0 66.0 211.0)"/>
+                <ellipse class="steen steen-b" cx="101.8" cy="210.4" rx="14.0" ry="10.8" transform="rotate(9.0 98.0 211.0)"/>
+                <ellipse class="steen steen-a" cx="127.4" cy="208.8" rx="12.8" ry="10.6" transform="rotate(12.3 130.0 211.0)"/>
+                <ellipse class="steen steen-c" cx="159.2" cy="213.0" rx="16.9" ry="9.6" transform="rotate(-6.0 162.0 211.0)"/>
+                <ellipse class="steen steen-a" cx="51.4" cy="234.8" rx="12.1" ry="10.9" transform="rotate(6.0 51.0 237.0)"/>
+                <ellipse class="steen steen-c" cx="83.2" cy="239.6" rx="14.2" ry="10.5" transform="rotate(13.0 83.0 237.0)"/>
+                <ellipse class="steen steen-b" cx="112.7" cy="235.5" rx="13.5" ry="8.0" transform="rotate(3.5 115.0 237.0)"/>
+                <ellipse class="steen steen-a" cx="145.1" cy="236.5" rx="12.7" ry="10.6" transform="rotate(-5.8 147.0 237.0)"/>
+                <ellipse class="steen steen-c" cx="178.7" cy="237.5" rx="16.5" ry="8.7" transform="rotate(16.7 179.0 237.0)"/>
+              </g>
+            </g>
+          </g>
+
           <path d="M32,46 A78,13 0 0 0 188,46 L178,288 A68,11.3 0 0 1 42,288 Z" fill="url(#rond-grad)"/>
 
           <path class="hoepel" d="M33.3,78 A76.7,12.8 0 0 0 186.7,78"/>
@@ -467,16 +550,18 @@
           <!-- gezicht: staat over hout en water heen, mond en wenkbrauwen
                worden vanuit render() gezet -->
           <g class="gezicht-groep">
-            <circle class="halo-vlak" cx="88"  cy="118" r="7.6"/>
-            <circle class="halo-vlak" cx="132" cy="118" r="7.6"/>
+            <circle class="halo-vlak" id="oog-l-halo" cx="88"  cy="118" r="7.6"/>
+            <circle class="halo-vlak" id="oog-r-halo" cx="132" cy="118" r="7.6"/>
             <line class="halo-lijn" id="brauw-l-halo" x1="80" y1="102" x2="97" y2="103"/>
             <line class="halo-lijn" id="brauw-r-halo" x1="140" y1="102" x2="123" y2="103"/>
             <path class="halo-lijn" id="mond-halo" d="M95,150 Q110,160 125,150"/>
-            <circle class="oog" cx="88"  cy="118" r="5.5"/>
-            <circle class="oog" cx="132" cy="118" r="5.5"/>
+            <ellipse class="halo-vlak" id="schreeuw-halo" cx="110" cy="153" rx="8" ry="9"/>
+            <circle class="oog" id="oog-l" cx="88"  cy="118" r="5.5"/>
+            <circle class="oog" id="oog-r" cx="132" cy="118" r="5.5"/>
             <line class="trek" id="brauw-l" x1="80" y1="102" x2="97" y2="103"/>
             <line class="trek" id="brauw-r" x1="140" y1="102" x2="123" y2="103"/>
             <path class="trek" id="mond" d="M95,150 Q110,160 125,150"/>
+            <ellipse class="schreeuw" id="schreeuw" cx="110" cy="153" rx="5" ry="6"/>
             <g class="tranen">
               <path class="traan" d="M88,128 C83.5,136 83.5,143 88,143 C92.5,143 92.5,136 88,128 Z"/>
               <path class="traan" d="M132,128 C127.5,136 127.5,143 132,143 C136.5,143 136.5,136 132,128 Z"/>
@@ -614,6 +699,8 @@
   var DIEPTE = BODEM_Y - RAND_Y;
   var HW_RAND = 72, HW_BODEM = 62;     // halve binnenbreedte boven en onder
   var SPANNING_VANAF = 0.72;           // vanaf hier loopt het zichtbaar op
+  var BLIJ_TOT = 0.5;                  // tot de helft blijft het gezicht blij
+  var PANIEK_VANAF = 0.85;             // vlak onder de rand slaat het om
   var OPP_RY = 1/6;                    // kijkhoek: ry van het oppervlak t.o.v. rx
 
   var state = { vulling: [], ordening: [] };
@@ -626,10 +713,23 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw){
         var p = JSON.parse(raw);
-        if (p && Array.isArray(p.vulling) && Array.isArray(p.ordening)) state = p;
+        if (p && Array.isArray(p.vulling) && Array.isArray(p.ordening)) state = maakPassend(p);
       }
     }catch(e){}
   }
+  // Stenen hadden even een eigen lijst. Nu zijn het vullingen met vast=true;
+  // opslag van die tussenversie wordt hier omgezet.
+  function maakPassend(p){
+    if (Array.isArray(p.stenen)){
+      p.stenen.forEach(function(s){
+        p.vulling.push({ id: s.id || uid(), label: s.label, categorie: "anders",
+                         weight: s.weight, actief: s.actief, vast: true });
+      });
+      delete p.stenen;
+    }
+    return p;
+  }
+
   function save(){
     try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){}
   }
@@ -639,29 +739,73 @@
   var G = { brauwY:102, brauwUitL:80, brauwUitR:140, brauwLengte:17,
             mondY:150, mondL:95, mondR:125 };
 
-  function zetBrauw(id, xUit, xBinnen, dy){
+  function zetBrauw(id, xUit, xBinnen, y, dy){
     ["", "-halo"].forEach(function(suffix){
       var el = document.getElementById(id + suffix);
       el.setAttribute("x1", xUit);
-      el.setAttribute("y1", G.brauwY);
+      el.setAttribute("y1", y.toFixed(1));
       el.setAttribute("x2", xBinnen.toFixed(1));
-      el.setAttribute("y2", (G.brauwY + dy).toFixed(1));
+      el.setAttribute("y2", (y + dy).toFixed(1));
     });
   }
 
-  function tekenGezicht(somber){
-    // Stuurpunt onder de mondhoeken is een glimlach, erboven een mond omlaag.
-    var bocht = 10 - 22 * somber;
+  function zetDekking(id, dekking){
+    document.getElementById(id).style.opacity = dekking.toFixed(3);
+  }
+
+  function klem(x){ return Math.min(1, Math.max(0, x)); }
+
+  function tekenGezicht(vol){
+    // vol: 0 = leeg, 1 = tegen de rand.
+    // Tot de helft blijft het blij; de glimlach wordt alleen wat rustiger.
+    // Daarna zakt de mond weg, en vlak onder de rand slaat het om in paniek.
+    var bocht, brauwGraden;
+    if (vol <= BLIJ_TOT){
+      var t = vol / BLIJ_TOT;
+      bocht = 13 - 9 * t;                 // 13 -> 4: blijft een glimlach
+      brauwGraden = 2 - 2 * t;
+    } else {
+      // Niet recht evenredig: net over de helft moet de glimlach al vlak zijn,
+      // anders lacht hij nog vrolijk bij een ton die duidelijk te vol loopt.
+      var u = Math.pow(klem((vol - BLIJ_TOT) / (PANIEK_VANAF - BLIJ_TOT)), 0.7);
+      bocht = 4 - 18 * u;                 // 4 -> -14
+      brauwGraden = -20 * u;
+    }
+    var paniek = klem((vol - PANIEK_VANAF) / (1 - PANIEK_VANAF));
+
     var d = "M" + G.mondL + "," + G.mondY + " Q110," + (G.mondY + bocht).toFixed(1) +
             " " + G.mondR + "," + G.mondY;
     document.getElementById("mond").setAttribute("d", d);
     document.getElementById("mond-halo").setAttribute("d", d);
 
-    // Binnenkant van de wenkbrauwen omhoog: dat leest als verdriet.
-    var hoek = -20 * somber * Math.PI / 180;
+    // Binnenkant van de wenkbrauwen omhoog leest als verdriet; bij paniek gaan
+    // ze ook nog als geheel omhoog.
+    var brauwY = G.brauwY - 6 * paniek;
+    var hoek = brauwGraden * Math.PI / 180;
     var dx = G.brauwLengte * Math.cos(hoek), dy = G.brauwLengte * Math.sin(hoek);
-    zetBrauw("brauw-l", G.brauwUitL, G.brauwUitL + dx, dy);
-    zetBrauw("brauw-r", G.brauwUitR, G.brauwUitR - dx, dy);
+    zetBrauw("brauw-l", G.brauwUitL, G.brauwUitL + dx, brauwY, dy);
+    zetBrauw("brauw-r", G.brauwUitR, G.brauwUitR - dx, brauwY, dy);
+
+    // Ogen gaan wijder open naarmate de paniek toeneemt.
+    var oogR = 5.5 + 3 * paniek;
+    ["oog-l", "oog-r"].forEach(function(id){
+      document.getElementById(id).setAttribute("r", oogR.toFixed(1));
+      document.getElementById(id + "-halo").setAttribute("r", (oogR + 2.1).toFixed(1));
+    });
+
+    // En de mond gaat open. Even overlappen de twee vormen, kort genoeg.
+    var dichteMond = klem((0.7 - paniek) / 0.3);
+    var openMond = klem((paniek - 0.4) / 0.3);
+    zetDekking("mond", dichteMond);
+    zetDekking("mond-halo", dichteMond * 0.5);
+    zetDekking("schreeuw", openMond);
+    zetDekking("schreeuw-halo", openMond * 0.5);
+    var schreeuw = document.getElementById("schreeuw");
+    schreeuw.setAttribute("rx", (5 + 3 * paniek).toFixed(1));
+    schreeuw.setAttribute("ry", (6 + 6 * paniek).toFixed(1));
+    var halo = document.getElementById("schreeuw-halo");
+    halo.setAttribute("rx", (8 + 3 * paniek).toFixed(1));
+    halo.setAttribute("ry", (9 + 6 * paniek).toFixed(1));
   }
 
   // Bij elke verandering van het niveau even laten zien waar het water langs
@@ -741,7 +885,7 @@
       if (!p || !Array.isArray(p.vulling) || !Array.isArray(p.ordening)) {
         throw new Error("inhoud");
       }
-      return p;
+      return maakPassend(p);
     });
   }
 
@@ -871,24 +1015,45 @@
   }
 
   function render(){
-    var vulTotal = sumActive(state.vulling);
+    // Vulling met vast=true is een steen: die blijft liggen. De rest is water
+    // en dat laat ordening weglopen. Stenen nemen de ruimte onderin, dus er kan
+    // minder water bij voordat het over de rand gaat.
+    var steenTotal = 0, vulTotal = 0;
+    state.vulling.forEach(function(v){
+      if (!v.actief) return;
+      if (v.vast) steenTotal += (v.weight || 2); else vulTotal += (v.weight || 2);
+    });
     var ordTotal = sumActive(state.ordening);
-    var niveau = Math.max(0, (vulTotal - ordTotal) * UNIT);
+    var water = Math.max(0, vulTotal - ordTotal);
+    var niveau = (steenTotal + water) * UNIT;
     var oppY = BODEM_Y - Math.min(DIEPTE, niveau);
+
+    var steenHoogte = Math.min(DIEPTE, steenTotal * UNIT);
+    var steenY = BODEM_Y - steenHoogte;
+    var stenenEl = document.getElementById("stenen");
+    stenenEl.style.transform = "translateY(" + steenY.toFixed(1) + "px)";
+    stenenEl.style.opacity = steenTotal > 0 ? "1" : "0";
+    // de bovenkant van de hoop krijgt dezelfde ellipsvorm als het water
+    var steenHw = HW_RAND + (HW_BODEM - HW_RAND) * (steenY - RAND_Y) / DIEPTE;
+    ["steen-opp", "hoop-rand"].forEach(function(id){
+      var el = document.getElementById(id);
+      el.setAttribute("rx", steenHw.toFixed(1));
+      el.setAttribute("ry", (steenHw * OPP_RY).toFixed(1));
+    });
     // De ton loopt taps toe, dus het oppervlak is smaller naarmate het lager staat.
     var hw = HW_RAND + (HW_BODEM - HW_RAND) * (oppY - RAND_Y) / DIEPTE;
 
     var waterEl = document.getElementById("water");
     waterEl.style.transform = "translateY(" + oppY.toFixed(1) + "px)";
-    waterEl.style.opacity = niveau > 0 ? "1" : "0";
+    waterEl.style.opacity = water > 0 ? "1" : "0";
     var oppEl = document.getElementById("water-opp");
     oppEl.setAttribute("rx", hw.toFixed(1));
     oppEl.setAttribute("ry", (hw * OPP_RY).toFixed(1));
-    tekenGezicht(Math.min(1, niveau / DIEPTE));
+    tekenGezicht(niveau / DIEPTE);
 
     // Bij de eerste tekening is er nog geen vorige stand om mee te vergelijken.
-    if (vorigNiveau !== null && niveau !== vorigNiveau) toonStroom(niveau - vorigNiveau);
-    vorigNiveau = niveau;
+    if (vorigNiveau !== null && water !== vorigNiveau) toonStroom(water - vorigNiveau);
+    vorigNiveau = water;
 
     // Het laatste stuk voor de rand loopt al op: oranje en wat bubbels.
     var vol = niveau / DIEPTE;
@@ -926,7 +1091,7 @@
     }
     state.vulling.forEach(function(v){
       var row = document.createElement("div");
-      row.className = "item-row" + (v.actief ? "" : " inactief");
+      row.className = "item-row" + (v.actief ? "" : " inactief") + (v.vast ? " steen-rij" : "");
       var cb = document.createElement("input");
       cb.type = "checkbox"; cb.checked = !!v.actief;
       cb.addEventListener("click", function(ev){ ev.stopPropagation(); });
@@ -934,9 +1099,9 @@
       var dot = document.createElement("span");
       dot.className = "dot"; dot.style.background = "var("+CAT_VAR[v.categorie]+")";
       var lbl = document.createElement("div");
-      lbl.className = "lbl"; lbl.textContent = (v.vast?"⟳ ":"") + (v.label || "(zonder omschrijving)");
+      lbl.className = "lbl"; lbl.textContent = v.label || "(zonder omschrijving)";
       var tag = document.createElement("div");
-      tag.className = "tag"; tag.textContent = W_LABEL[v.weight];
+      tag.className = "tag"; tag.textContent = (v.vast ? "Steen · " : "") + W_LABEL[v.weight];
       row.appendChild(cb); row.appendChild(dot); row.appendChild(lbl); row.appendChild(tag);
       row.addEventListener("click", function(){ selectItem("vulling", v.id); });
       box.appendChild(row);
@@ -976,7 +1141,7 @@
       var v = state.vulling.find(function(x){ return x.id===id; });
       if (!v) return;
       document.getElementById("info-label").textContent = v.label || "(zonder omschrijving)";
-      document.getElementById("info-sub").textContent = CAT_LABEL[v.categorie]+" · "+W_LABEL[v.weight]+(v.vast?" · terugkerend":"");
+      document.getElementById("info-sub").textContent = CAT_LABEL[v.categorie]+" · "+W_LABEL[v.weight]+(v.vast?" · steen, blijft liggen":"");
     } else {
       var o = state.ordening.find(function(x){ return x.id===id; });
       if (!o) return;
@@ -1064,12 +1229,12 @@
     setupChoiceRow("ord-size-row","data-w", function(v){ oW=parseInt(v,10); });
 
     document.getElementById("btn-add-vulling").addEventListener("click", function(){
-      ordPanel.classList.remove("open");
+      sluitPanelen();
       vulPanel.classList.add("open");
       document.getElementById("vul-label").focus();
     });
     document.getElementById("btn-add-ordening").addEventListener("click", function(){
-      vulPanel.classList.remove("open");
+      sluitPanelen();
       ordPanel.classList.add("open");
       document.getElementById("ord-label").focus();
     });
@@ -1108,11 +1273,16 @@
     initMeenemen();
     // Eerste stand zonder animatie: het water hoort er te staan, niet in te zakken.
     var waterEl = document.getElementById("water");
+    var stenenEl = document.getElementById("stenen");
     waterEl.style.transition = "none";
+    stenenEl.style.transition = "none";
     renderVullingList();
     renderOrdeningList();
     render();
-    requestAnimationFrame(function(){ waterEl.style.transition = ""; });
+    requestAnimationFrame(function(){
+      waterEl.style.transition = "";
+      stenenEl.style.transition = "";
+    });
   }
 
   document.addEventListener("DOMContentLoaded", init);
