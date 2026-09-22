@@ -130,6 +130,10 @@
   .uitleg{margin:8px 0 0;font-size:0.82rem;line-height:1.45;color:var(--ink-soft);
     padding-left:10px;border-left:2px solid var(--line-faint);}
   .uitleg:empty{display:none;}
+  /* Gebied en manier zijn ordeningsbegrippen; bij regulatie horen ze er niet. */
+  #panel-ordening.regulatie .alleen-ordening{display:none;}
+  .balans-bijschrift{margin:0 0 6px;font-size:0.72rem;font-family:var(--font-mono);
+    color:var(--ink-soft);}
   .checkbox-row{display:flex;align-items:center;gap:8px;font-size:0.86rem;color:var(--ink-soft);}
   .checkbox-row input{accent-color:var(--eigen);width:16px;height:16px;}
   .panel-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px;}
@@ -376,13 +380,13 @@
 <div class="wrap">
   <header>
     <h1>Emmer</h1>
-    <p class="sub">Je emmer vult van prikkels, contact, veranderingen en andere dingen. Hij wordt geleegd door <strong>ordening</strong>: wat je zelf doet (eigen ordening) en wat je omgeving je biedt (geboden ordening). Een volle of overlopende emmer betekent dat die twee samen tekortschieten.</p>
+    <p class="sub">Je emmer vult van prikkels, contact, veranderingen en andere dingen. Hij wordt geleegd door <strong>ordening en regulatie</strong>: wat je zelf doet en wat je omgeving je biedt. Een volle of overlopende emmer betekent dat die twee samen tekortschieten.</p>
     <p class="credit">Gebaseerd op de ASSwijzer-methodiek (Werkboek ASSwijzer, EvenZicht)</p>
   </header>
 
   <div class="controls">
     <button class="primary" id="btn-add-vulling">+ Wat je emmer vult</button>
-    <button class="amber" id="btn-add-ordening">+ Ordening</button>
+    <button class="amber" id="btn-add-ordening">+ Ordening &amp; regulatie</button>
     <button class="ghost" id="btn-reset">Alles legen</button>
   </div>
 
@@ -429,14 +433,22 @@
       <input type="text" id="ord-label" placeholder="bijv. vaste planning op maandag" maxlength="60">
     </div>
     <div class="field">
+      <label>Soort</label>
+      <div class="choice-row" id="ord-soort-row">
+        <div class="choice" data-soort="ordening" aria-pressed="true">Ordening</div>
+        <div class="choice" data-soort="regulatie" aria-pressed="false">Regulatie</div>
+      </div>
+      <p class="uitleg" id="ord-soort-row-uitleg"></p>
+    </div>
+    <div class="field">
       <label>Bron</label>
       <div class="choice-row" id="ord-bron-row">
-        <div class="choice" data-bron="eigen" aria-pressed="true"><span class="dot" style="background:var(--eigen)"></span>Eigen ordening</div>
-        <div class="choice" data-bron="geboden" aria-pressed="false"><span class="dot" style="background:var(--geboden)"></span>Geboden ordening</div>
+        <div class="choice" data-bron="eigen" aria-pressed="true"><span class="dot" style="background:var(--eigen)"></span>Eigen</div>
+        <div class="choice" data-bron="geboden" aria-pressed="false"><span class="dot" style="background:var(--geboden)"></span>Geboden</div>
       </div>
       <p class="uitleg" id="ord-bron-row-uitleg"></p>
     </div>
-    <div class="field">
+    <div class="field alleen-ordening">
       <label>Gebied</label>
       <div class="choice-row" id="ord-gebied-row">
         <div class="choice" data-gebied="tijd" aria-pressed="true">Tijd</div>
@@ -447,7 +459,7 @@
       </div>
       <p class="uitleg" id="ord-gebied-row-uitleg"></p>
     </div>
-    <div class="field">
+    <div class="field alleen-ordening">
       <label>Manier</label>
       <div class="choice-row" id="ord-manier-row">
         <div class="choice" data-manier="verbaal" aria-pressed="true">Verbaal</div>
@@ -714,12 +726,13 @@
         </div>
       </aside>
       <div class="balans">
+        <p class="balans-bijschrift">ordening &amp; regulatie</p>
         <div class="balans-row">
-          <span class="balans-lbl">Eigen ordening</span>
+          <span class="balans-lbl">Eigen</span>
           <div class="balans-track"><div class="balans-fill eigen" id="bar-eigen" style="width:0%"></div></div>
         </div>
         <div class="balans-row">
-          <span class="balans-lbl">Geboden ordening</span>
+          <span class="balans-lbl">Geboden</span>
           <div class="balans-track"><div class="balans-fill geboden" id="bar-geboden" style="width:0%"></div></div>
         </div>
       </div>
@@ -736,7 +749,7 @@
         <div id="vulling-rows"></div>
       </div>
       <div class="list-block">
-        <h2>Ordening</h2>
+        <h2>Ordening &amp; regulatie</h2>
         <div id="ordening-rows"></div>
       </div>
     </div>
@@ -931,6 +944,10 @@
       });
       delete p.stenen;
     }
+    // Voor de soort erbij kwam was alles ordening.
+    p.ordening.forEach(function(o){
+      if (o.soort !== "regulatie") o.soort = "ordening";
+    });
     vulPlanAan(p);
     return p;
   }
@@ -1427,7 +1444,9 @@
       var lbl = document.createElement("div");
       lbl.className = "lbl"; lbl.textContent = o.label || "(zonder omschrijving)";
       var tag = document.createElement("div");
-      tag.className = "tag"; tag.textContent = GEBIED_LABEL[o.gebied]+" · "+W_LABEL[o.weight];
+      tag.className = "tag";
+      tag.textContent = (o.soort === "regulatie" ? "Regulatie" : GEBIED_LABEL[o.gebied]) +
+        " · " + W_LABEL[o.weight];
       row.appendChild(cb); row.appendChild(dot); row.appendChild(lbl); row.appendChild(tag);
       row.addEventListener("click", function(){ selectItem("ordening", o.id); });
       box.appendChild(row);
@@ -1445,7 +1464,11 @@
       var o = state.ordening.find(function(x){ return x.id===id; });
       if (!o) return;
       document.getElementById("info-label").textContent = o.label || "(zonder omschrijving)";
-      document.getElementById("info-sub").textContent = (o.bron==="eigen"?"Eigen ordening":"Geboden ordening")+" · "+GEBIED_LABEL[o.gebied]+" · "+MANIER_LABEL[o.manier]+" · "+W_LABEL[o.weight];
+      var bronTekst = o.bron === "eigen" ? "Eigen" : "Geboden";
+      document.getElementById("info-sub").textContent = o.soort === "regulatie"
+        ? bronTekst + " · regulatie · " + W_LABEL[o.weight]
+        : bronTekst + " ordening · " + GEBIED_LABEL[o.gebied] + " · " +
+          MANIER_LABEL[o.manier] + " · " + W_LABEL[o.weight];
     }
     document.getElementById("info-sheet").classList.add("open");
   }
@@ -1476,9 +1499,13 @@
       veranderingen: "Aangepaste plannen, geen structuur of ritme, tijdsdruk, niet kunnen kiezen, perfectionisme.",
       anders: "Stemming, eten, slapen, gebeurtenissen."
     },
+    "ord-soort-row": {
+      ordening: "Duidelijkheid scheppen: overzicht in tijd, activiteit, ruimte, prikkels of persoon. Dit is wat het werkboek uitwerkt.",
+      regulatie: "Spanning kwijtraken zonder dat er iets duidelijker van wordt. Het werkboek noemt: even terugtrekken, iets voor jezelf doen, bezig zijn met je hobby, een eigen ritme hanteren."
+    },
     "ord-bron-row": {
-      eigen: "Wat je zelf doet om te legen: even terugtrekken, iets voor jezelf doen, je hobby, een eigen ritme.",
-      geboden: "Wat anderen doen om te legen. Het werkboek: een emmer laat zich alleen legen als je op allebei kunt rekenen."
+      eigen: "Wat jij zelf doet of regelt.",
+      geboden: "Wat anderen doen of aanbieden. Het werkboek: een emmer laat zich alleen legen als je op allebei kunt rekenen."
     },
     "ord-gebied-row": {
       tijd: "Overzicht in de dag- of weekinvulling: wat ga ik wanneer doen?",
@@ -1519,9 +1546,14 @@
     var vulPanel = document.getElementById("panel-vulling");
     var ordPanel = document.getElementById("panel-ordening");
     var vCat="prikkels", vW=2, oBron="eigen", oGebied="tijd", oManier="verbaal", oW=2;
+    var oSoort="ordening";
 
     setupChoiceRow("vul-cat-row","data-cat", function(v){ vCat=v; });
     setupChoiceRow("vul-size-row","data-w", function(v){ vW=parseInt(v,10); });
+    setupChoiceRow("ord-soort-row","data-soort", function(v){
+      oSoort = v;
+      ordPanel.classList.toggle("regulatie", v === "regulatie");
+    });
     setupChoiceRow("ord-bron-row","data-bron", function(v){ oBron=v; });
     setupChoiceRow("ord-gebied-row","data-gebied", function(v){ oGebied=v; });
     setupChoiceRow("ord-manier-row","data-manier", function(v){ oManier=v; });
@@ -1550,7 +1582,10 @@
     });
     document.getElementById("btn-confirm-ordening").addEventListener("click", function(){
       var input = document.getElementById("ord-label");
-      state.ordening.push({ id:uid(), label:input.value.trim(), bron:oBron, gebied:oGebied, manier:oManier, weight:oW, actief:true });
+      var isOrd = oSoort === "ordening";
+      state.ordening.push({ id:uid(), label:input.value.trim(), soort:oSoort, bron:oBron,
+        gebied: isOrd ? oGebied : null, manier: isOrd ? oManier : null,
+        weight:oW, actief:true });
       renderOrdeningList(); render(); save();
       input.value = "";
       ordPanel.classList.remove("open");
