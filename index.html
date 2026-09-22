@@ -29,6 +29,10 @@
     --gezicht:#2E3630; --gezicht-halo:#EFF1EE;
     --steen:#8C8A83; --steen-licht:#A5A29A; --steen-donker:#6E6C66;
     --steen-lijn:#3F3E39;
+    --sig-groen:#4C7A5A; --sig-oranje:#B07B33; --sig-rood:#9E5241;
+    --sig-groen-vlak:rgba(76,122,90,0.13);
+    --sig-oranje-vlak:rgba(176,123,51,0.13);
+    --sig-rood-vlak:rgba(158,82,65,0.13);
 
     --cat-prikkels:#8A6E52;
     --cat-contact:#5C7A6D;
@@ -58,6 +62,10 @@
       --gezicht:#EDF0EA; --gezicht-halo:#1B1F1D;
       --steen:#6B6960; --steen-licht:#84806F; --steen-donker:#4E4C45;
       --steen-lijn:#26251F;
+      --sig-groen:#6FA684; --sig-oranje:#D3A055; --sig-rood:#C77A64;
+      --sig-groen-vlak:rgba(111,166,132,0.16);
+      --sig-oranje-vlak:rgba(211,160,85,0.16);
+      --sig-rood-vlak:rgba(199,122,100,0.16);
       --eigen:#4FA98D; --eigen-ink:#12211C; --geboden:#D9A85C; --geboden-ink:#2B1F0E;
       --cat-prikkels:#C7A87E; --cat-contact:#8FB39F; --cat-veranderingen:#8FA3C7; --cat-anders:#C79AB0;
     }
@@ -80,6 +88,10 @@
     --gezicht:#EDF0EA; --gezicht-halo:#1B1F1D;
     --steen:#6B6960; --steen-licht:#84806F; --steen-donker:#4E4C45;
     --steen-lijn:#26251F;
+    --sig-groen:#6FA684; --sig-oranje:#D3A055; --sig-rood:#C77A64;
+    --sig-groen-vlak:rgba(111,166,132,0.16);
+    --sig-oranje-vlak:rgba(211,160,85,0.16);
+    --sig-rood-vlak:rgba(199,122,100,0.16);
     --eigen:#4FA98D; --eigen-ink:#12211C; --geboden:#D9A85C; --geboden-ink:#2B1F0E;
     --cat-prikkels:#C7A87E; --cat-contact:#8FB39F; --cat-veranderingen:#8FA3C7; --cat-anders:#C79AB0;
   }
@@ -126,6 +138,81 @@
   .melding:empty{display:none;}
   button:disabled{opacity:0.5;cursor:default;}
   button:disabled:hover{border-color:var(--line);color:var(--ink);}
+  /* Signaleringsplan (werkboek hoofdstuk 6). Rood boven, groen onder, met de
+     spanningsmeter ernaast. Met opzet zonder de cijfers 0-10 van het werkboek:
+     getallen horen hier niet, zie de beslissingen in CLAUDE.md. */
+  .sig{margin-top:26px;padding-top:16px;border-top:1px solid var(--line-faint);}
+  /* Dichtgeklapt is de kop alleen een regel; welke band nu geldt staat erin,
+     zodat je het plan niet hoeft open te doen om dat te zien. */
+  .sig-sam{cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;padding:2px 0;}
+  .sig-sam::-webkit-details-marker{display:none;}
+  .sig-sam::before{content:"\25B8";display:inline-block;font-size:0.8rem;
+    color:var(--ink-soft);transition:transform 0.2s ease;}
+  details[open] > .sig-sam::before{transform:rotate(90deg);}
+  .sig-sam:focus-visible{outline:2px solid var(--eigen);outline-offset:3px;border-radius:4px;}
+  .sig-sam-titel{font-size:1.05rem;font-weight:600;}
+  .sig-sam-band{margin-left:auto;display:flex;align-items:center;gap:6px;
+    font-size:0.78rem;color:var(--ink-soft);font-family:var(--font-mono);}
+  .sig-sam-dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--line-faint);}
+  #sig-vouw[data-band="rood"] .sig-sam-dot{background:var(--sig-rood);}
+  #sig-vouw[data-band="oranje"] .sig-sam-dot{background:var(--sig-oranje);}
+  #sig-vouw[data-band="groen"] .sig-sam-dot{background:var(--sig-groen);}
+  .sig .bron{margin-top:10px;}
+  .sig .bron{margin:0 0 12px;font-size:0.76rem;color:var(--ink-soft);font-family:var(--font-mono);}
+  .sig-kop{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px;}
+  #sig-uitleg{margin:0;font-size:0.84rem;color:var(--ink-soft);}
+  .sig-lijf{display:flex;gap:12px;align-items:stretch;}
+  .sig-banden{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px;}
+  .sig-meter{width:14px;flex-shrink:0;border-radius:7px;position:relative;
+    border:1px solid var(--line-faint);
+    background:linear-gradient(to top,var(--sig-groen) 0%,var(--sig-oranje) 58%,var(--sig-rood) 100%);}
+  #sig-wijzer{position:absolute;left:-5px;right:-5px;height:3px;border-radius:2px;
+    background:var(--ink);transition:bottom 0.55s cubic-bezier(0.4,0.05,0.2,1);}
+  .sig-band{border-radius:var(--radius-m);padding:12px 14px;background:var(--paper-panel);
+    border:1px solid var(--line-faint);opacity:0.55;transition:opacity 0.4s ease,background 0.4s ease;}
+  .sig-band.nu{opacity:1;}
+  .sig-band h3{margin:0;font-size:0.92rem;font-weight:600;}
+  .sig-band[data-band="rood"]{border-left:4px solid var(--sig-rood);}
+  .sig-band[data-band="rood"] h3{color:var(--sig-rood);}
+  .sig-band[data-band="rood"].nu{background:var(--sig-rood-vlak);}
+  .sig-band[data-band="oranje"]{border-left:4px solid var(--sig-oranje);}
+  .sig-band[data-band="oranje"] h3{color:var(--sig-oranje);}
+  .sig-band[data-band="oranje"].nu{background:var(--sig-oranje-vlak);}
+  .sig-band[data-band="groen"]{border-left:4px solid var(--sig-groen);}
+  .sig-band[data-band="groen"] h3{color:var(--sig-groen);}
+  .sig-band[data-band="groen"].nu{background:var(--sig-groen-vlak);}
+  .sig-band-kop{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .sig-nu{font-size:0.68rem;font-family:var(--font-mono);padding:2px 8px;border-radius:999px;
+    background:var(--ink);color:var(--paper);}
+  .sig-band:not(.nu) .sig-nu{display:none;}
+  .sig-kies{margin-left:auto;font-size:0.76rem;padding:5px 8px;}
+  .sig-band.nu .sig-kies{visibility:hidden;}
+  .sig-veld{margin-bottom:8px;}
+  .sig-veld:last-child{margin-bottom:0;}
+  .sig-veld label{display:block;font-size:0.78rem;color:var(--ink-soft);margin-bottom:4px;}
+  .sig-veld textarea{width:100%;font-family:var(--font-sans);font-size:0.9rem;line-height:1.45;
+    padding:8px 10px;border-radius:var(--radius-s);border:1px solid var(--line-faint);
+    background:var(--paper);color:var(--ink);resize:vertical;min-height:44px;}
+  .sig-veld textarea:focus{outline:none;border-color:var(--eigen);}
+  @media (max-width:560px){ .sig-meter{display:none;} }
+  /* Briefje naast de ton: wat je zelf had opgeschreven, op het moment dat het
+     erover gaat. Alleen je eigen woorden, geen advies van de tool. */
+  .tip{position:relative;margin:16px 0 0;padding:12px 14px;border-radius:var(--radius-m);
+    background:var(--paper-panel);border:1px solid var(--line-faint);
+    border-left:4px solid var(--line-faint);animation:tip-in 0.45s ease;}
+  .tip[data-band="oranje"]{border-left-color:var(--sig-oranje);}
+  .tip[data-band="rood"]{border-left-color:var(--sig-rood);}
+  .tip::before{content:"";position:absolute;top:-7px;left:24px;width:12px;height:12px;
+    transform:rotate(45deg);background:var(--paper-panel);
+    border-left:1px solid var(--line-faint);border-top:1px solid var(--line-faint);}
+  @keyframes tip-in{from{opacity:0;transform:translateY(-5px);}to{opacity:1;transform:none;}}
+  .tip-kop{margin:0 0 6px;font-size:0.82rem;line-height:1.4;color:var(--ink-soft);}
+  .tip-lijst{margin:0;padding-left:18px;font-size:0.9rem;line-height:1.5;}
+  .tip-lijst:empty{display:none;}
+  .tip-lijst li{margin-bottom:3px;}
+  .tip-naasten{margin-top:10px;padding-top:9px;border-top:1px solid var(--line-faint);}
+  .tip-naasten p{margin:0;}
+  .tip-naasten-tekst{font-size:0.88rem;line-height:1.5;}
   .voet{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
     margin-top:26px;padding-top:14px;border-top:1px solid var(--line-faint);}
   .voet-uitleg{margin:0;font-size:0.78rem;line-height:1.45;color:var(--ink-soft);flex:1 1 240px;}
@@ -245,7 +332,8 @@
   .ton.overflow .rim-note{opacity:1;}
   @media (prefers-reduced-motion:reduce){
     #water,#stenen,.ton .overloop,.ton .stralen,.ton .plas-groep,.ton .contour,
-    .ton .tranen,.balans-fill{transition:none;}
+    .ton .tranen,.balans-fill,#sig-wijzer{transition:none;}
+    .tip{animation:none;}
     .ton .bubbel,.ton .instroom,.ton .uitstroom{animation:none;}
   }
 
@@ -617,6 +705,14 @@
         </svg>
         <figcaption class="rim-note">loopt over</figcaption>
       </figure>
+      <aside class="tip" id="tip" hidden>
+        <p class="tip-kop" id="tip-kop"></p>
+        <ul class="tip-lijst" id="tip-lijst"></ul>
+        <div class="tip-naasten" id="tip-naasten" hidden>
+          <p class="tip-kop">Wat je naasten kunnen doen:</p>
+          <p class="tip-naasten-tekst" id="tip-naasten-tekst"></p>
+        </div>
+      </aside>
       <div class="balans">
         <div class="balans-row">
           <span class="balans-lbl">Eigen ordening</span>
@@ -645,6 +741,90 @@
       </div>
     </div>
   </div>
+
+  <section class="sig">
+    <details id="sig-vouw">
+    <summary class="sig-sam">
+      <span class="sig-sam-titel">Signaleringsplan</span>
+      <span class="sig-sam-band"><span class="sig-sam-dot"></span><span id="sig-sam-naam"></span></span>
+    </summary>
+    <p class="bron">Werkboek ASSwijzer, hoofdstuk 6</p>
+    <div class="sig-kop">
+      <p id="sig-uitleg"></p>
+      <button class="ghost" id="sig-herstel">terug naar wat de ton aanwijst</button>
+    </div>
+    <div class="sig-lijf">
+      <div class="sig-banden">
+      <section class="sig-band" data-band="rood">
+        <div class="sig-band-kop">
+          <h3>Rood</h3>
+          <span class="sig-nu">nu</span>
+          <button class="ghost sig-kies" data-kies="rood">ik zit hier nu</button>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-rood-kenmerken">Kenmerken</label>
+          <textarea class="plan-veld" id="plan-rood-kenmerken" data-band="rood" data-veld="kenmerken" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-rood-schieten">Waardoor kan ik in rood schieten?</label>
+          <textarea class="plan-veld" id="plan-rood-schieten" data-band="rood" data-veld="schieten" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-rood-terug">Wat kan ik doen om naar oranje te gaan?</label>
+          <textarea class="plan-veld" id="plan-rood-terug" data-band="rood" data-veld="terug" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-rood-naasten">Wat kunnen mijn naasten doen?</label>
+          <textarea class="plan-veld" id="plan-rood-naasten" data-band="rood" data-veld="naasten" rows="2"></textarea>
+        </div>
+      </section>
+      <section class="sig-band" data-band="oranje">
+        <div class="sig-band-kop">
+          <h3>Oranje</h3>
+          <span class="sig-nu">nu</span>
+          <button class="ghost sig-kies" data-kies="oranje">ik zit hier nu</button>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-oranje-kenmerken">Kenmerken</label>
+          <textarea class="plan-veld" id="plan-oranje-kenmerken" data-band="oranje" data-veld="kenmerken" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-oranje-schieten">Waardoor kan ik in oranje schieten?</label>
+          <textarea class="plan-veld" id="plan-oranje-schieten" data-band="oranje" data-veld="schieten" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-oranje-terug">Wat kan ik doen om naar groen te gaan?</label>
+          <textarea class="plan-veld" id="plan-oranje-terug" data-band="oranje" data-veld="terug" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-oranje-naasten">Wat kunnen mijn naasten doen?</label>
+          <textarea class="plan-veld" id="plan-oranje-naasten" data-band="oranje" data-veld="naasten" rows="2"></textarea>
+        </div>
+      </section>
+      <section class="sig-band" data-band="groen">
+        <div class="sig-band-kop">
+          <h3>Groen</h3>
+          <span class="sig-nu">nu</span>
+          <button class="ghost sig-kies" data-kies="groen">ik zit hier nu</button>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-groen-kenmerken">Kenmerken</label>
+          <textarea class="plan-veld" id="plan-groen-kenmerken" data-band="groen" data-veld="kenmerken" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-groen-blijven">Wat kan ik doen om in groen te blijven?</label>
+          <textarea class="plan-veld" id="plan-groen-blijven" data-band="groen" data-veld="blijven" rows="2"></textarea>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-groen-naasten">Wat kunnen mijn naasten doen?</label>
+          <textarea class="plan-veld" id="plan-groen-naasten" data-band="groen" data-veld="naasten" rows="2"></textarea>
+        </div>
+      </section>
+      </div>
+      <div class="sig-meter" title="Spanningsmeter"><div id="sig-wijzer"></div></div>
+    </div>
+    </details>
+  </section>
 
   <div class="voet">
     <button class="ghost" id="btn-export">Exporteren…</button>
@@ -703,7 +883,7 @@
   var PANIEK_VANAF = 0.85;             // vlak onder de rand slaat het om
   var OPP_RY = 1/6;                    // kijkhoek: ry van het oppervlak t.o.v. rx
 
-  var state = { vulling: [], ordening: [] };
+  var state = { vulling: [], ordening: [], plan: leegPlan() };
   var selected = null; // {kind:'vulling'|'ordening', id}
 
   function uid(){ return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
@@ -717,6 +897,30 @@
       }
     }catch(e){}
   }
+  var BAND_LABEL = { groen:"groen", oranje:"oranje", rood:"rood" };
+
+  function leegPlan(){
+    return {
+      rood: { kenmerken:"", schieten:"", terug:"", naasten:"" },
+      oranje: { kenmerken:"", schieten:"", terug:"", naasten:"" },
+      groen: { kenmerken:"", blijven:"", naasten:"" },
+      zelf: null            // null = volg de ton; anders een zelfgekozen band
+    };
+  }
+
+  // Het plan kan ontbreken of half gevuld zijn in oudere opslag.
+  function vulPlanAan(p){
+    var leeg = leegPlan();
+    if (!p.plan || typeof p.plan !== "object") { p.plan = leeg; return; }
+    ["groen", "oranje", "rood"].forEach(function(band){
+      if (!p.plan[band] || typeof p.plan[band] !== "object") p.plan[band] = {};
+      Object.keys(leeg[band]).forEach(function(veld){
+        if (typeof p.plan[band][veld] !== "string") p.plan[band][veld] = "";
+      });
+    });
+    if (!BAND_LABEL[p.plan.zelf]) p.plan.zelf = null;
+  }
+
   // Stenen hadden even een eigen lijst. Nu zijn het vullingen met vast=true;
   // opslag van die tussenversie wordt hier omgezet.
   function maakPassend(p){
@@ -727,6 +931,7 @@
       });
       delete p.stenen;
     }
+    vulPlanAan(p);
     return p;
   }
 
@@ -954,6 +1159,7 @@
       if (!window.confirm("Dit vervangt wat er nu in de emmer zit. Doorgaan?")) return;
       state = nieuw;
       closeInfo();
+      vulPlanVelden();
       renderVullingList();
       renderOrdeningList();
       render();
@@ -1005,6 +1211,98 @@
       } else {
         doeImport(een);
       }
+    });
+  }
+
+  // Dezelfde grenzen als het gezicht, zodat de band en de ton nooit iets
+  // anders zeggen. Het blijft een gok van de tool: hoe gespannen je je voelt is
+  // iets anders dan de som van wat er in de ton zit. Vandaar dat je hem zelf
+  // kunt overschrijven.
+  var bandNu = "groen";
+
+  function bandBijNiveau(vol){
+    if (vol >= PANIEK_VANAF) return "rood";
+    if (vol >= BLIJ_TOT) return "oranje";
+    return "groen";
+  }
+
+  // Alleen wat je zelf hebt opgeschreven, en alleen als er iets staat. Bij
+  // groen komt er niets: dan is er niets om naartoe te gaan.
+  function tekenTip(band){
+    var tip = document.getElementById("tip");
+    var naastenBlok = document.getElementById("tip-naasten");
+    var blok = state.plan[band] || {};
+    var stappen = band === "groen" ? [] : String(blok.terug || "")
+      .split("\n").map(function(r){ return r.trim(); }).filter(function(r){ return r; });
+    var naasten = band === "groen" ? "" : String(blok.naasten || "").trim();
+
+    if (!stappen.length && !naasten){ tip.hidden = true; return; }
+    tip.hidden = false;
+    tip.setAttribute("data-band", band);
+
+    var kop = document.getElementById("tip-kop");
+    var lijst = document.getElementById("tip-lijst");
+    lijst.innerHTML = "";
+    if (stappen.length){
+      kop.hidden = false;
+      kop.textContent = "Wat je zelf had bedacht om naar " +
+        (band === "rood" ? "oranje" : "groen") + " te gaan:";
+      stappen.forEach(function(stap){
+        var li = document.createElement("li");
+        li.textContent = stap;
+        lijst.appendChild(li);
+      });
+    } else {
+      kop.hidden = true;
+    }
+    naastenBlok.hidden = !naasten;
+    document.getElementById("tip-naasten-tekst").textContent = naasten;
+  }
+
+  function tekenPlan(vol){
+    var gekozen = state.plan.zelf;
+    var band = gekozen || bandBijNiveau(vol);
+    bandNu = band;
+    document.getElementById("sig-vouw").setAttribute("data-band", band);
+    document.getElementById("sig-sam-naam").textContent = BAND_LABEL[band];
+    tekenTip(band);
+    document.querySelectorAll(".sig-band").forEach(function(el){
+      el.classList.toggle("nu", el.getAttribute("data-band") === band);
+    });
+    document.getElementById("sig-wijzer").style.bottom =
+      (Math.min(1, Math.max(0, vol)) * 100).toFixed(1) + "%";
+    document.getElementById("sig-uitleg").textContent = gekozen
+      ? "Je hebt zelf " + BAND_LABEL[band] + " gekozen."
+      : "De ton wijst nu naar " + BAND_LABEL[band] + ".";
+    document.getElementById("sig-herstel").style.display = gekozen ? "" : "none";
+  }
+
+  // Na een import staan er andere teksten in state dan in de velden.
+  function vulPlanVelden(){
+    document.querySelectorAll(".plan-veld").forEach(function(el){
+      el.value = state.plan[el.getAttribute("data-band")][el.getAttribute("data-veld")] || "";
+    });
+  }
+
+  function initPlan(){
+    vulPlanVelden();
+    document.querySelectorAll(".plan-veld").forEach(function(el){
+      var band = el.getAttribute("data-band"), veld = el.getAttribute("data-veld");
+      el.addEventListener("input", function(){
+        state.plan[band][veld] = el.value;
+        tekenTip(bandNu);
+        save();
+      });
+    });
+    document.querySelectorAll("[data-kies]").forEach(function(knop){
+      knop.addEventListener("click", function(){
+        state.plan.zelf = knop.getAttribute("data-kies");
+        render(); save();
+      });
+    });
+    document.getElementById("sig-herstel").addEventListener("click", function(){
+      state.plan.zelf = null;
+      render(); save();
     });
   }
 
@@ -1069,6 +1367,7 @@
     tonEl.classList.toggle("overflow", niveau > DIEPTE);
     // bubbels alleen laten lopen als ze ook te zien zijn
     tonEl.classList.toggle("borrelt", spanning > 0);
+    tekenPlan(vol);
 
     var eigenTotal = 0, gebodenTotal = 0;
     state.ordening.forEach(function(o){
@@ -1271,6 +1570,7 @@
     load();
     initPanels();
     initMeenemen();
+    initPlan();
     // Eerste stand zonder animatie: het water hoort er te staan, niet in te zakken.
     var waterEl = document.getElementById("water");
     var stenenEl = document.getElementById("stenen");
