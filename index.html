@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Emmer — ASSwijzer</title>
+<title>ASSwijzer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -217,8 +217,10 @@
   .tip-naasten{margin-top:10px;padding-top:9px;border-top:1px solid var(--line-faint);}
   .tip-naasten p{margin:0;}
   .tip-naasten-tekst{font-size:0.88rem;line-height:1.5;}
-  .voet{display:flex;align-items:center;gap:10px;flex-wrap:wrap;
-    margin-top:26px;padding-top:14px;border-top:1px solid var(--line-faint);}
+  .voet{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:4px;}
+  .uitwissel-kop{font-size:1.1rem;font-weight:600;margin:0 0 8px;}
+  .uitwissel-noot{color:var(--ink-soft);font-size:0.86rem;line-height:1.55;
+    margin:0 0 10px;max-width:66ch;}
   .voet-uitleg{margin:0;font-size:0.78rem;line-height:1.45;color:var(--ink-soft);flex:1 1 240px;}
 
   .layout{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
@@ -364,6 +366,69 @@
   .legend .item{display:flex;align-items:center;gap:6px;}
   .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
 
+  /* --- tabbladen ------------------------------------------------------- */
+  .tabbalk{display:flex;gap:6px;flex-wrap:wrap;margin:16px 0 18px;
+    border-bottom:1px solid var(--line-faint);padding-bottom:12px;}
+  .tabknop{font-family:var(--font-sans);font-size:0.82rem;cursor:pointer;border-radius:999px;
+    border:1px solid var(--line-faint);background:transparent;color:var(--ink-soft);padding:7px 13px;}
+  .tabknop[aria-selected="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .tabknop:hover{border-color:var(--eigen);color:var(--eigen);}
+  .tabknop[aria-selected="true"]:hover{color:var(--paper);}
+  .tabpaneel{display:none;}
+  .tabpaneel.actief{display:block;}
+
+  /* --- bijlagen -------------------------------------------------------- */
+  /* De lijsten gebruiken --cat-a t/m --cat-d; hier gekoppeld aan de
+     categoriekleuren die de emmer al heeft, zodat het een geheel blijft. */
+  .bijlage{--cat-a:var(--cat-prikkels);--cat-b:var(--cat-contact);
+    --cat-c:var(--cat-veranderingen);--cat-d:var(--cat-anders);}
+  .bijlage h2{font-size:1.1rem;font-weight:600;margin:0 0 4px;}
+  .bijlage .noot{color:var(--ink-soft);font-size:0.85rem;line-height:1.5;margin:0 0 6px;max-width:68ch;}
+  .bijlage .herkomst{color:var(--ink-soft);font-size:0.74rem;font-family:var(--font-mono);
+    margin:0 0 18px;max-width:68ch;line-height:1.5;}
+  .bijlage .groep{margin-bottom:22px;}
+  .bijlage .groep-kop{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+  .bijlage .groep-kop .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .bijlage .groep-kop h3{font-size:0.95rem;font-weight:600;margin:0;}
+  .bijlage .vink{display:flex;align-items:flex-start;gap:9px;padding:6px 4px;
+    border-bottom:1px solid var(--line-faint);font-size:0.87rem;line-height:1.45;}
+  .bijlage .vink input[type=checkbox]{accent-color:var(--eigen);width:16px;height:16px;
+    margin-top:2px;flex-shrink:0;}
+  .bijlage .vink label{cursor:pointer;}
+  .bijlage .hulplijn{font-size:0.78rem;color:var(--danger);margin:4px 0 8px 25px;line-height:1.45;}
+  .bijlage .schaalrij{display:flex;align-items:center;gap:10px;padding:7px 4px;
+    border-bottom:1px solid var(--line-faint);}
+  .bijlage .schaalrij .vraag{flex:1;font-size:0.86rem;line-height:1.45;}
+  .bijlage .schaal{display:flex;gap:4px;flex-shrink:0;}
+  .bijlage .schaal label{display:flex;flex-direction:column;align-items:center;
+    font-size:0.65rem;color:var(--ink-soft);gap:2px;cursor:pointer;}
+  .bijlage .schaal input{accent-color:var(--eigen);width:15px;height:15px;}
+  .bijlage .schaaluitleg{font-size:0.74rem;color:var(--ink-soft);margin-bottom:10px;
+    font-family:var(--font-mono);line-height:1.6;}
+  .bijlage .blok{background:var(--paper-panel);border:1px solid var(--line-faint);
+    border-radius:var(--radius-m);padding:14px;margin-bottom:16px;}
+  .bijlage .blok h3{font-size:0.95rem;font-weight:600;margin:0 0 8px;}
+  .bijlage .vragen{margin:0 0 10px;padding-left:18px;font-size:0.84rem;
+    color:var(--ink-soft);line-height:1.6;}
+  .bijlage .kwaliteit{display:flex;align-items:baseline;gap:8px;padding:5px 0;
+    border-bottom:1px solid var(--line-faint);font-size:0.92rem;}
+  .bijlage .kwaliteit:last-child{border-bottom:none;}
+  .bijlage .kwaliteit .naam{font-weight:500;}
+  .bijlage .kwaliteit .cijfer{margin-left:auto;font-family:var(--font-mono);
+    font-size:0.78rem;color:var(--ink-soft);}
+  .bijlage .overig{margin:10px 0 0;font-size:0.84rem;line-height:1.55;color:var(--ink-soft);}
+  .bijlage .bijlage-voet{margin-top:22px;padding-top:14px;
+    border-top:1px solid var(--line-faint);}
+  .bijlage .blok .bron{margin:12px 0 0;font-size:0.74rem;font-family:var(--font-mono);
+    color:var(--ink-soft);line-height:1.55;}
+  .bijlage .blok label.veldkop{display:block;font-size:0.78rem;color:var(--ink-soft);margin:10px 0 4px;}
+  .bijlage textarea{width:100%;font-family:var(--font-sans);font-size:0.88rem;line-height:1.5;
+    padding:9px 10px;border-radius:var(--radius-s);border:1px solid var(--line-faint);
+    background:var(--paper);color:var(--ink);resize:vertical;min-height:60px;}
+  .bijlage textarea:focus{outline:none;border-color:var(--eigen);}
+  @media (max-width:620px){
+    .bijlage .schaalrij{flex-direction:column;align-items:flex-start;gap:6px;}
+  }
   .info-sheet{position:fixed;left:0;right:0;bottom:0;background:var(--paper-panel);border-top:1.5px solid var(--line);
     padding:14px 16px calc(14px + env(safe-area-inset-bottom));display:none;align-items:center;
     justify-content:space-between;gap:12px;z-index:20;}
@@ -379,10 +444,23 @@
 <body>
 <div class="wrap">
   <header>
-    <h1>Emmer</h1>
+    <h1>ASSwijzer</h1>
     <p class="sub">Je emmer vult van prikkels, contact, veranderingen en andere dingen. Hij wordt geleegd door <strong>ordening en regulatie</strong>: wat je zelf doet en wat je omgeving je biedt. Een volle of overlopende emmer betekent dat die twee samen tekortschieten.</p>
     <p class="credit">Gebaseerd op de ASSwijzer-methodiek (Werkboek ASSwijzer, EvenZicht)</p>
   </header>
+
+  <nav class="tabbalk" id="tabbalk">
+      <button class="tabknop" data-tab="emmer" aria-selected="true">Emmer</button>
+      <button class="tabknop" data-tab="b1" aria-selected="false">1 Eigenschappen</button>
+      <button class="tabknop" data-tab="b2" aria-selected="false">2 Last hebben van</button>
+      <button class="tabknop" data-tab="b3" aria-selected="false">3 Volle emmer</button>
+      <button class="tabknop" data-tab="b4" aria-selected="false">4 Eigen ordening</button>
+      <button class="tabknop" data-tab="b5" aria-selected="false">5 Geboden ordening</button>
+      <button class="tabknop" data-tab="b6" aria-selected="false">6 Eigen vs. geboden</button>
+      <button class="tabknop" data-tab="export" aria-selected="false">Import &amp; export</button>
+    </nav>
+
+  <div class="tabpaneel actief" id="paneel-emmer">
 
   <div class="controls">
     <button class="primary" id="btn-add-vulling">+ Wat je emmer vult</button>
@@ -839,13 +917,21 @@
     </details>
   </section>
 
+  </div>
+
+  <div class="tabpaneel" id="paneel-export">
+    <h2 class="uitwissel-kop">Meenemen naar een ander apparaat</h2>
+    <p class="uitwissel-noot">Je gegevens staan alleen in deze browser. Wil je op een
+      andere computer of tablet verder, maak dan hier een bestand aan en zet dat daar
+      terug. Het bestand is versleuteld met een wachtwoord dat je zelf kiest; zonder
+      dat wachtwoord staat er niets leesbaars in.</p>
+    <p class="uitwissel-noot">Er gaat alles in mee: je emmer, je signaleringsplan en
+      de ingevulde bijlagen.</p>
   <div class="voet">
     <button class="ghost" id="btn-export">Exporteren…</button>
     <button class="ghost" id="btn-import">Importeren…</button>
     <input type="file" id="import-bestand" accept=".txt,text/plain" hidden>
-    <p class="voet-uitleg" id="voet-uitleg">Om op een ander apparaat verder te kunnen.
-      Het bestand wordt versleuteld met een wachtwoord dat je zelf kiest; zonder dat
-      wachtwoord staat er niets leesbaars in.</p>
+    <p class="voet-uitleg" id="voet-uitleg"></p>
   </div>
 
   <div class="panel" id="panel-sleutel">
@@ -864,6 +950,15 @@
       <button class="primary" id="btn-sleutel-ok">Doorgaan</button>
     </div>
   </div>
+
+  </div>
+
+  <div class="tabpaneel bijlage" id="paneel-b1"></div>
+  <div class="tabpaneel bijlage" id="paneel-b2"></div>
+  <div class="tabpaneel bijlage" id="paneel-b3"></div>
+  <div class="tabpaneel bijlage" id="paneel-b4"></div>
+  <div class="tabpaneel bijlage" id="paneel-b5"></div>
+  <div class="tabpaneel bijlage" id="paneel-b6"></div>
 </div>
 
 <div class="info-sheet" id="info-sheet">
@@ -896,7 +991,7 @@
   var PANIEK_VANAF = 0.85;             // vlak onder de rand slaat het om
   var OPP_RY = 1/6;                    // kijkhoek: ry van het oppervlak t.o.v. rx
 
-  var state = { vulling: [], ordening: [], plan: leegPlan() };
+  var state = { vulling: [], ordening: [], plan: leegPlan(), bijlagen: leegBijlagen() };
   var selected = null; // {kind:'vulling'|'ordening', id}
 
   function uid(){ return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
@@ -949,6 +1044,7 @@
       if (o.soort !== "regulatie") o.soort = "ordening";
     });
     vulPlanAan(p);
+    vulBijlagenAan(p);
     return p;
   }
 
@@ -1177,6 +1273,7 @@
       state = nieuw;
       closeInfo();
       vulPlanVelden();
+      initBijlagen();          // anders blijven de oude vinkjes in beeld staan
       renderVullingList();
       renderOrdeningList();
       render();
@@ -1320,6 +1417,615 @@
     document.getElementById("sig-herstel").addEventListener("click", function(){
       state.plan.zelf = null;
       render(); save();
+    });
+  }
+
+
+  // ---- bijlagen uit het werkboek ----------------------------------------
+var B1_ITEMS = [
+"Ik lees veel verschillende boeken.",
+"Anderen vinden dat ik te eerlijk ben.",
+"Ik wil graag precies weten hoe iets in elkaar zit.",
+"Ik vind het prettig om naar muziek te luisteren.",
+"Anderen vinden dat ik veel over de natuur weet.",
+"Ik ben goed in het bedenken van nieuwe ideeën.",
+"Als mensen die veel voor mij betekenen problemen hebben, sta ik altijd voor ze klaar.",
+"Ik houd ervan om grapjes te maken.",
+"Ik geef niet snel op.",
+"Ik vind het fijn om dingen heel precies uit te zoeken.",
+"Als ik ergens aan begin wil ik het altijd helemaal afmaken.",
+"Ik vind het belangrijk mijn mening te laten horen, zelfs als dit negatief uitpakt.",
+"Ik ben graag buiten.",
+"Ik ben goed in het spelen van strategische spelletjes (zoals schaken).",
+"Als iemand mij één keer iets vertelt, onthoud ik dit vaak precies.",
+"Ik vind het belangrijk dat mensen mij trouw zijn.",
+"Ik denk vaak op een andere manier dan andere mensen.",
+"Ik vind een goed gevoel voor humor een belangrijke eigenschap.",
+"Anderen zien vaak dingen over het hoofd die mij wel opvallen.",
+"Ik haal er plezier uit om nieuwe dingen te leren.",
+"Anderen vinden dat ik me lang kan concentreren.",
+"Valse muzieknoten vallen mij snel op.",
+"Als ik mij ergens in verdiep, wil ik zoveel mogelijk hierover weten.",
+"Ik zie vaak patronen in informatie.",
+"Ik vind dat iedereen gelijk behandeld moet worden.",
+"Als iets niet lukt, verzin ik een nieuwe oplossing, die misschien wel werkt.",
+"Ik maak mensen vaak aan het lachen.",
+"Als ik beloofd heb iemand te helpen, zal ik dit niet afzeggen.",
+"Ik leer liever veel over één specifiek onderwerp, dan over meerdere onderwerpen een beetje.",
+"Ik ga graag naar musea of theater.",
+"Het onthouden van de geboortedatum van iemand kost mij geen moeite.",
+"Ik vind het leuk te lezen over dieren en/of planten.",
+"Als ik iets moeilijk vind, geef ik niet snel op.",
+"Ik vind het interessant om uit te zoeken hoe technische apparaten werken.",
+"Als ik een plaatje moet onthouden, kan ik dit later precies voor me zien.",
+"Ik vertel (bijna) altijd de waarheid.",
+"Ik vind het prettig om in de tuin te werken.",
+"Ik ben meerdere keren door anderen een betrouwbaar persoon genoemd.",
+"Ik vind het leuk om problemen vanuit verschillende hoeken te benaderen.",
+"Ik ben goed in het maken van woordgrapjes.",
+"Ik kan ervan genieten om te schilderen of tekenen of om naar andermans kunst te kijken.",
+"Ik vind het leuk en/of interessant om nieuwe dingen te leren.",
+"Ik ben gefascineerd door data en getallen.",
+"Ik ben pas tevreden over mijn werk als ik het af heb.",
+"Ik ben gefascineerd door de natuur.",
+"Ik zou graag een muziekinstrument bespelen of doe dit al.",
+"Anderen vinden dat ik weinig fouten maak in mijn werk.",
+"Anderen vinden mij een doorzetter.",
+"Er is altijd iets in mijn leven waar ik over wil leren.",
+"Ik ben goed in het leggen van verbanden tussen gegevens.",
+"Andere mensen vinden dat ik een goed geheugen heb.",
+"Ik kom voor anderen op, zelfs als ik in de minderheid ben.",
+"Ik houd van cabaret en/of comedyseries.",
+"Anderen vinden dat ik vaak originele ideeën heb.",
+"Als mensen mij geheimen vertellen, vertel ik deze niet door.",
+"Ik vind het fijn als er dieren om me heen zijn.",
+"Kunst kan mij erg fascineren.",
+"Ik weet veel van de natuur (dieren en/of planten).",
+"Ik ben goed in het onthouden van getallen (zoals data en telefoonnummers)."
+];
+
+var B2_GROUPS = [
+{ key:"prikkels", name:"Prikkels", cvar:"--cat-a", items:[
+ "Gevoelig voor licht, zoals zonlicht, lichtflitsen",
+ "Gevoelig voor patronen en of voor kleuren",
+ "Gevoelig voor details, merkt vaak van alles op ook als het niet belangrijk is",
+ "Gevoelig voor drukte in winkels, stations, in huis",
+ "Gevoelig voor kantoortuin/werkplek met anderen",
+ "Onvoorspelbaarheid en geluiden van kinderen",
+ "Gevoelig voor geluiden, zo ja, welke",
+ "Gevoelig voor beweging van zichzelf/om zich heen/op tv, zo ja, licht toe",
+ "Gevoelig voor rommel/verstoringen in de ruimte",
+ "Gevoelig voor asymmetrie",
+ "Meerdere dingen tegelijk doen is moeilijk",
+ "Een te vol programma",
+ "In de rij of file staan",
+ "Belangrijk hoe kleding zit of van welk materiaal het is gemaakt",
+ "Gevoelig voor aanraking",
+ "Vervelend als iemand te dichtbij staat",
+ "Ook leuke dingen kosten veel energie",
+ "Gevoelig voor geuren, zo ja welke?",
+ "Interne prikkels zoals piekeren, gedachtes niet kunnen stoppen",
+ "Gevoelig voor pijn, kou/warmte, honger/dorst, ziekte, zo ja, welke",
+ "Lichamelijke prikkels worden juist niet goed gevoeld (pijn, kou/warmte, honger/dorst, ziekte)",
+ "Vermoeidheid wordt niet op tijd gevoeld of juist heel snel",
+ "Gevoelig voor smaak/textuur van voeding, zo ja welke",
+ "Moeite om de grote lijnen te zien",
+ "Gevoelig voor sferen, zo ja, leg uit"
+]},
+{ key:"contact", name:"Contact & communicatie", cvar:"--cat-b", items:[
+ "Tijd nodig om taal te verwerken en te begrijpen",
+ "Als anderen niet duidelijk zijn in wat zij zeggen",
+ "Als anderen grapjes maken",
+ "Probeert zich aan te passen aan wat anderen verwachten",
+ "Wordt onzeker in contact/communicatie met anderen, doe ik het goed?",
+ "Zich verplicht voelen een antwoord te geven ook als je het antwoord niet weet",
+ "Groepen zijn vermoeiender dan 1-op-1",
+ "Oogcontact is niet fijn",
+ "Niet met de juiste mensen samen moeten werken",
+ "Gesprekken over koetjes en kalfjes zijn niet boeiend/moeilijk",
+ "Gesprek aangaan met onbekenden is lastig",
+ "Telefoneren geeft meer spanning dan een gewoon gesprek met iemand",
+ "Bereidt zich voor op een gesprek door vragen/scenario's te bedenken",
+ "Denkt achteraf veel na over het gesprek, hoe het ging, hoe het anders had gemoeten",
+ "Een duidelijke rol geeft houvast in contact/communicatie",
+ "Als hij/zij zich gespannen voelt is het moeilijk om zich uit te drukken",
+ "Hulp vragen",
+ "Letten op gezichtsuitdrukking/non-verbale taal is moeilijk/vermoeiend",
+ "Sociale media leiden tot onduidelijkheid en/of overprikkeling",
+ "Communicatie met officiële instanties/formulieren"
+]},
+{ key:"veranderingen", name:"Veranderingen & overzicht", cvar:"--cat-c", items:[
+ "Als plannen aangepast (moeten) worden",
+ "Als dingen in huis veranderen",
+ "Als er geen structuur is",
+ "Als er geen regelmaat/ritme is",
+ "Als een ritueel niet gevolgd kan worden",
+ "Als een vast merk/product niet te koop is",
+ "Dingen hebben een vaste plaats",
+ "Tijdsdruk",
+ "Onderbroken worden tijdens een bezigheid/handeling/gesprek geeft spanning",
+ "Zwart-wit denken, niet kunnen relativeren",
+ "Te genuanceerd denken en daardoor te veel relativeren",
+ "Niet kunnen kiezen",
+ "Bepaalde fixaties of obsessies als zij het leven bemoeilijken",
+ "Gedachtes niet los kunnen laten voordat er duidelijkheid/oplossing/antwoord is",
+ "Als er geen duidelijke planning is",
+ "Als iets niet af is",
+ "Als anderen zich niet aan afspraak/regels houden",
+ "Perfectionisme – wanneer is het goed (genoeg)?",
+ "Lege tijd/als je niet weet wat je moet doen",
+ "Altijd/vaak hetzelfde willen eten",
+ "Schakelen tussen activiteiten",
+ "In actie komen is moeilijk",
+ "Vaste overtuigingen (hard werken, geen nee mogen zeggen)",
+ "(te) Grote verantwoordelijkheid voelen",
+ "Nare ervaring leidt tot vermijding",
+ "Onvoorspelbaarheid",
+ "Alles willen/moeten lezen wat je krijgt toegestuurd",
+ "Liegen/oneerlijk zijn van zichzelf of de ander"
+]},
+{ key:"anders", name:"Anders", cvar:"--cat-d", items:[
+ "Onvoldoende slapen",
+ "Verkeerd dag/nacht ritme",
+ "Traumatische ervaringen",
+ "Overtuigingen vanuit de jeugd",
+ "Negatief zelfbeeld",
+ "Eetproblematiek",
+ "ADHD",
+ "Depressie",
+ "Verslaving (gamen, alcohol, koffie, medicatie, etc.)"
+]}
+];
+
+var B3_ITEMS = [
+"Kan minder prikkels verdragen","Kan niet goed meer nadenken","Contact aangaan wordt moeilijker",
+"Functioneert minder in werk/huishouden","Meer moeite om in gesprek te gaan",
+"Zelfzorg komt onder druk te staan (o.a. hygiëne, voeding)","Geen oplossingen kunnen bedenken",
+"Wordt inflexibel","Wordt heel bepalend, dwingend","Trekt zich terug","Gaat vermijden",
+"Hyperfocus op één ding","Vermoeidheid","Lichamelijke klachten (hoofdpijn, migraine, spierpijn, misselijk)",
+"Wordt emotioneler, bijv. huilen","Angstig, zo waarvoor","Gevoel van paniek","Verstijft of blokkeert",
+"Verbale of fysieke agressie","Dissociatie","Somberheid","Suïcidaliteit"
+];
+
+var B4_GROUPS = [
+{ key:"prikkels", name:"Prikkels", cvar:"--cat-a", items:[
+ "Natuur/bos ingaan","Vaste momenten voor zichzelf inplannen","Mindfulness oefeningen",
+ "Thuis werken i.p.v. op kantoor","Eigen kantoor op het werk",
+ "Aanpassingen geluid: oordopjes, white noise, geluidsisolatie",
+ "Aanpassingen licht: zonnebril, luiken, gordijnen, dimmers",
+ "Aanpassingen visueel: kleuren, rustige inrichting, symmetrie, geen open kasten",
+ "Tijd nemen om informatie te verwerken",
+ "Verzwaringsdeken om meer in contact te komen met je lijf",
+ "Vermijden of juist opzoeken van lichamelijk contact","Sporten",
+ "Bepaalde voeding nemen of juist vermijden","Voldoende slapen/rust nemen",
+ "Fietsen om OV te vermijden","Focus op iets wat boeit of rust geeft om andere prikkels te negeren",
+ "Activiteiten die energie/ontspanning geven"
+]},
+{ key:"contact", name:"Contact & communicatie", cvar:"--cat-b", items:[
+ "Vragen om verduidelijking","Vragen om hulp i.p.v. alles zelf oplossen",
+ "Bewust in gesprek gaan met iemand die jou goed kent/begrijpt",
+ "Afspraken maken over aanwezigheid bij vergaderingen",
+ "Bewuste keuze t.a.v. aanwezigheid in drukke omgevingen",
+ "Iemand meenemen naar een bijeenkomst/afspraak",
+ "De ander zeggen dat je iets niet weet",
+ "Sommige afspraken voorbereiden – niet te veel, kost energie",
+ "Uitleg aan anderen geven over ASS en wat nodig is",
+ "Bij voorkeur 1-op-1 gesprek aangaan","Geen oogcontact maken",
+ "Soms is een groep makkelijker (minder verwacht van je)","Plan bedenken om te belonen"
+]},
+{ key:"veranderingen", name:"Veranderingen & overzicht", cvar:"--cat-c", items:[
+ "Duidelijk programma of planning maken","Gebruik van een planbord","Lijstjes/overzichten maken",
+ "Mindmap maken","Structuur door werk","Structuur door zorg voor een dier",
+ "Houvast in hobby - gedoseerd","Gebruik van alarmmeldingen of agenda","Vaste afspraken",
+ "Volgorde in activiteiten opschrijven/met plaatjes of tekeningen",
+ "Voeding in bepaalde volgorde, van bepaald merk","Bepaalde dwanghandelingen, zo ja welke",
+ "Aan afspraken houden"
+]},
+{ key:"anders", name:"Anders", cvar:"--cat-d", items:["Medicatie"] }
+];
+
+var B5_GROUPS = [
+{ key:"tijd", name:"Tijd", cvar:"--cat-a", items:[
+ "Meedenken/afspraken maken over activiteit en rust, balans inspanning-ontspanning",
+ "Meedenken: welke activiteiten geven rust/ontspanning",
+ "Meedenken in hoe te schakelen naar een andere activiteit",
+ "Iets overnemen als het teveel wordt, zo ja, wat?",
+ "Herinneren dat iets afgemaakt/gedaan moet worden",
+ "Schakeltijd geven","Samen een plan/planning maken","Geen onregelmatige diensten",
+ "Erop wijzen als hij/zij van de planning afwijkt","Hulp bieden bij het stellen van prioriteiten"
+]},
+{ key:"activiteit", name:"Activiteit", cvar:"--cat-b", items:[
+ "Duidelijkheid bieden over begin/eind, stappen van een activiteit",
+ "Hulp bieden bij start en afronding van een activiteit"
+]},
+{ key:"ruimte", name:"Ruimte", cvar:"--cat-c", items:["Rustige werkplek regelen"] },
+{ key:"prikkels", name:"Prikkels", cvar:"--cat-a", items:[
+ "Met jou erachter komen of je bij jezelf overprikkeling kan waarnemen",
+ "Als dit niet lukt, een plan bedenken hoe hierachter te komen"
+]},
+{ key:"persoon", name:"Persoon (contact & communicatie)", cvar:"--cat-d", items:[
+ "Belangrijk als de ander rustig blijft",
+ "Belangrijk dat anderen rekening houden met de tijd die nodig is om info te verwerken",
+ "Gericht kunnen zijn op inhoud/analyse i.p.v. op communicatie",
+ "Expliciete acceptatie van hem/haar als persoon ook met ASS",
+ "Signaleringsplan bespreken"
+]}
+];
+
+var B6_DOMAINS = [
+{ key:"tijd", label:"Ordening in tijd", vragen:[
+  "Hoe weet je hoe je dag eruitziet?","Hoe weet je wat er vandaag van je verwacht wordt?",
+  "Hoe weet je wanneer iets begint of eindigt?","Hoe ga je om met veranderingen in je planning?",
+  "Wie zorgt ervoor dat afspraken worden onthouden?"],
+  reflectie:"Wat gebeurt er met je spanning als de planning verandert? Voelt de manier waarop tijd is georganiseerd helpend of beperkend?" },
+{ key:"activiteit", label:"Ordening in activiteit", vragen:[
+  "Hoe weet je wat je moet doen bij een taak of activiteit?","Hoe weet je in welke volgorde je iets moet doen?",
+  "Hoe weet je wanneer een taak \u201caf\u201d is?","Wat doe je als een taak onduidelijk is?",
+  "Wie helpt bij het opdelen van taken in stappen?"],
+  reflectie:"Welke taken kun je zelfstandig uitvoeren? Bij welke taken heb je ondersteuning nodig om overzicht te houden?" },
+{ key:"ruimte", label:"Ordening in ruimte", vragen:[
+  "Hoe weet je waar iets hoort te gebeuren?","Hoe weet je waar spullen liggen of thuishoren?",
+  "Helpt de inrichting van de ruimte je om rustig te blijven?","Wie bepaalt hoe ruimtes zijn ingericht?",
+  "Wat gebeurt er met je als ruimtes veranderen?"],
+  reflectie:"Geeft de omgeving je houvast, of juist onrust? Welke aanpassingen helpen jou echt?" },
+{ key:"prikkels", label:"Ordening in prikkels", vragen:[
+  "Hoe merk je dat prikkels (geluid, licht, geur, aanraking) te veel worden?",
+  "Hoe weet je wanneer je rust nodig hebt?","Wat doe je zelf om prikkels te reguleren?",
+  "Wat doen anderen om prikkels te reguleren?"],
+  reflectie:"Welke prikkels kosten veel energie? Welke prikkels helpen juist om tot rust te komen?" },
+{ key:"persoon", label:"Ordening in persoon", vragen:[
+  "Bij wie voel je je veilig en begrepen?","Wie helpt je om overzicht te houden in lastige situaties?",
+  "Wie neemt beslissingen als het spannend wordt?","Wat gebeurt er als die persoon er niet is?",
+  "Voel je je vrij of afhankelijk in die relatie?"],
+  reflectie:"Geeft deze relatie steun of maakt ze je afhankelijk?" }
+];
+var BIJLAGEN = [
+  { id:"b1", tab:"1 Eigenschappen",     titel:"Bijlage 1 — Vragenlijst naar eigenschappen en kwaliteiten" },
+  { id:"b2", tab:"2 Last hebben van",   titel:"Bijlage 2 — Vragenlijst 'last hebben van'" },
+  { id:"b3", tab:"3 Volle emmer",       titel:"Bijlage 3 — Een te volle emmer" },
+  { id:"b4", tab:"4 Eigen ordening",    titel:"Bijlage 4 — Eigen ordening" },
+  { id:"b5", tab:"5 Geboden ordening",  titel:"Bijlage 5 — Geboden ordening" },
+  { id:"b6", tab:"6 Eigen vs. geboden", titel:"Bijlage 6 — Onderscheid eigen en geboden ordening" }
+];
+var BIJLAGE_NOOT = {
+  b1: "Lees iedere uitspraak en kies wat het meest op je van toepassing is. Deze pagina rekent niets uit: je behandelaar heeft daar een sjabloon voor en bespreekt de uitslag met je.",
+  b2: "Vink aan wat je bij jezelf herkent. Bespreek voorbeelden met je behandelaar; wat er het meest uit springt hoort in je emmer.",
+  b3: "Welke reactie herken je bij jezelf als je emmer te vol raakt of overloopt?",
+  b4: "Wat helpt jou om zelf je emmer te legen?",
+  b5: "Wat kunnen anderen doen om jouw emmer te legen?",
+  b6: "Per gebied: wie heeft daar vooral de regie? Er zijn geen goede of foute antwoorden, het gaat om inzicht."
+};
+var B1_SCHAAL = ["past helemaal niet bij mij","past niet bij mij","neutraal",
+                 "past bij mij","past heel erg bij mij"];
+
+  // Handleiding Autisme Expertisecentrum: 59 vragen over 11 subschalen. Per
+  // subschaal het gemiddelde; 4 of hoger telt als kwaliteit, hoogste eerst.
+  var B1_SUBSCHALEN = [
+    { naam:"Doorzettingsvermogen",            items:[9,11,21,33,44,48] },
+    { naam:"Detailgericht",                   items:[10,19,29,43,47] },
+    { naam:"Geheugen",                        items:[15,31,35,51,59] },
+    { naam:"Nieuwsgierigheid/leergierigheid", items:[1,20,23,42,49] },
+    { naam:"Rechtvaardigheid/eerlijkheid",    items:[2,12,25,36,52] },
+    { naam:"Analytisch",                      items:[3,14,24,34,50] },
+    { naam:"Muziek/kunst",                    items:[4,22,30,41,46,57] },
+    { naam:"Natuur/dieren",                   items:[5,13,32,37,45,56,58] },
+    { naam:"Creativiteit",                    items:[6,17,26,39,54] },
+    { naam:"Loyaliteit",                      items:[7,16,28,38,55] },
+    { naam:"Humor",                           items:[8,18,27,40,53] }
+  ];
+  var B1_DREMPEL = 4;
+  var b1ToonCijfers = false;
+
+  function b1Uitslag(){
+    return B1_SUBSCHALEN.map(function(s){
+      var som = 0, ingevuld = 0;
+      s.items.forEach(function(n){
+        var v = state.bijlagen.b1["b1_" + (n - 1)];
+        if (typeof v === "number"){ som += v; ingevuld++; }
+      });
+      return { naam: s.naam, ingevuld: ingevuld, aantal: s.items.length,
+               // alleen een gemiddelde als de hele subschaal is ingevuld;
+               // anders zou het over minder vragen gaan dan bedoeld
+               gemiddelde: ingevuld === s.items.length ? som / s.items.length : null };
+    });
+  }
+
+  function tekenKwaliteiten(){
+    var doel = document.getElementById("b1-kwaliteiten");
+    if (!doel) return;
+    var bron = '<p class="bron">Scoring volgens de handleiding bij de vragenlijst ' +
+      '(Autisme Expertisecentrum): per subschaal het gemiddelde van de vragen, ' +
+      'een gemiddelde van 4 of hoger telt als kwaliteit. Je behandelaar bespreekt ' +
+      'de uitslag met je.</p>';
+    var af = b1Uitslag().filter(function(r){ return r.gemiddelde !== null; });
+    if (!af.length){
+      doel.innerHTML = '<div class="blok"><h3>Wat eruit springt</h3>' +
+        '<p class="noot">Zodra je alle vragen van een groep hebt ingevuld, komt hier ' +
+        'te staan welke eigenschappen eruit springen.</p>' + bron + '</div>';
+      return;
+    }
+    af.sort(function(a, b){ return b.gemiddelde - a.gemiddelde; });
+    var kwal = af.filter(function(r){ return r.gemiddelde >= B1_DREMPEL; });
+    var rest = af.filter(function(r){ return r.gemiddelde < B1_DREMPEL; });
+
+    var lijst = kwal.length
+      ? kwal.map(function(r){
+          return '<div class="kwaliteit"><span class="naam">' + esc(r.naam) + '</span>' +
+            (b1ToonCijfers ? '<span class="cijfer">' + r.gemiddelde.toFixed(1) + '</span>' : '') +
+            '</div>';
+        }).join("")
+      : '<p class="noot">Nog geen enkele groep komt op 4 of hoger uit. De handleiding ' +
+        'zegt: kijk dan naar losse vragen waar je wel hoog op scoort.</p>';
+
+    var overig = rest.length
+      ? '<p class="overig">Minder uitgesproken: ' + rest.map(function(r){
+          return esc(r.naam) + (b1ToonCijfers ? " (" + r.gemiddelde.toFixed(1) + ")" : "");
+        }).join(", ") + '.</p>'
+      : "";
+
+    var nog = af.length < B1_SUBSCHALEN.length
+      ? '<p class="overig">' + (B1_SUBSCHALEN.length - af.length) +
+        ' groepen zijn nog niet helemaal ingevuld.</p>'
+      : "";
+
+    doel.innerHTML = '<div class="blok"><h3>Wat eruit springt</h3>' + lijst + overig + nog +
+      '<button class="ghost" id="b1-cijfers" style="margin-top:10px;">' +
+      (b1ToonCijfers ? "gemiddelden verbergen" : "gemiddelden tonen") + '</button>' +
+      bron + '</div>';
+    document.getElementById("b1-cijfers").addEventListener("click", function(){
+      b1ToonCijfers = !b1ToonCijfers;
+      tekenKwaliteiten();
+    });
+  }
+
+  function leegBijlagen(){
+    return { b1:{}, b2:{}, b3:{}, b4:{}, b5:{},
+             b6:{ domains:{}, manier:{keuze:"",reflectie:""}, balans:"",
+                  totaalMijn:"", totaalAnder:"" } };
+  }
+
+  function vulBijlagenAan(p){
+    var leeg = leegBijlagen();
+    if (!p.bijlagen || typeof p.bijlagen !== "object") p.bijlagen = leeg;
+    ["b1","b2","b3","b4","b5"].forEach(function(k){
+      if (!p.bijlagen[k] || typeof p.bijlagen[k] !== "object") p.bijlagen[k] = {};
+    });
+    var b6 = p.bijlagen.b6;
+    if (!b6 || typeof b6 !== "object") b6 = p.bijlagen.b6 = leeg.b6;
+    if (!b6.domains) b6.domains = {};
+    if (!b6.manier) b6.manier = {keuze:"",reflectie:""};
+    ["balans","totaalMijn","totaalAnder"].forEach(function(k){
+      if (typeof b6[k] !== "string") b6[k] = "";
+    });
+    B6_DOMAINS.forEach(function(d){
+      if (!b6.domains[d.key]) b6.domains[d.key] = {regie:"", reflectie:""};
+    });
+  }
+
+  // De losse scoreformulieren-pagina bewaarde onder een eigen sleutel; die
+  // inhoud eenmalig overnemen zodat er niets verloren gaat.
+  function neemLosseFormulierenOver(){
+    try{
+      var raw = localStorage.getItem("scoreformulieren-v1");
+      if (!raw) return false;
+      var oud = JSON.parse(raw);
+      if (!oud) return false;
+      var leeg = true;
+      ["b1","b2","b3","b4","b5"].forEach(function(k){
+        if (oud[k] && Object.keys(oud[k]).length){ state.bijlagen[k] = oud[k]; leeg = false; }
+      });
+      if (oud.b6){ state.bijlagen.b6 = oud.b6; leeg = false; }
+      if (!leeg){ vulBijlagenAan(state); save(); }
+      return !leeg;
+    }catch(e){ return false; }
+  }
+
+  function esc(s){ var d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+
+  function tekenVinklijst(id, groepen){
+    var store = state.bijlagen[id];
+    return groepen.map(function(g){
+      var rijen = g.items.map(function(tekst, i){
+        var sleutel = g.key + "_" + i;
+        var aan = store[sleutel] ? " checked" : "";
+        var extra = /suïcidaliteit/i.test(tekst)
+          ? '<div class="hulplijn">Speelt dit voor jou: bespreek het met je behandelaar. Bij acute nood: 113 (Zelfmoordpreventie), of bel 0800-0113.</div>'
+          : "";
+        return '<div class="vink"><input type="checkbox" id="' + id + '-' + sleutel + '"' + aan +
+               ' data-vink="' + id + '" data-sleutel="' + sleutel + '">' +
+               '<label for="' + id + '-' + sleutel + '">' + esc(tekst) + '</label></div>' + extra;
+      }).join("");
+      var kop = g.name
+        ? '<div class="groep-kop"><span class="dot" style="background:var(' + g.cvar + ')"></span>' +
+          '<h3>' + esc(g.name) + '</h3></div>'
+        : "";
+      return '<div class="groep">' + kop + rijen + '</div>';
+    }).join("");
+  }
+
+  function tekenB1(){
+    var uitleg = B1_SCHAAL.map(function(t, i){ return (i + 1) + " " + t; }).join(" · ");
+    var rijen = B1_ITEMS.map(function(tekst, i){
+      var naam = "b1_" + i;
+      var schaal = [1,2,3,4,5].map(function(n){
+        var aan = state.bijlagen.b1[naam] === n ? " checked" : "";
+        return '<label title="' + esc(B1_SCHAAL[n-1]) + '">' +
+               '<input type="radio" name="' + naam + '" value="' + n + '"' + aan +
+               ' data-b1="' + naam + '">' + n + '</label>';
+      }).join("");
+      return '<div class="schaalrij"><div class="vraag">' + (i + 1) + ". " + esc(tekst) +
+             '</div><div class="schaal">' + schaal + '</div></div>';
+    }).join("");
+    return '<div id="b1-kwaliteiten"></div>' +
+           '<div class="schaaluitleg">' + esc(uitleg) + '</div>' + rijen;
+  }
+
+  function tekenB6(){
+    var b6 = state.bijlagen.b6;
+    var keuzes = [["eigen","Vooral zelf"],["anderen","Vooral anderen"],
+                  ["beide","Wisselend"],["","Nog onduidelijk"]];
+    var blokken = B6_DOMAINS.map(function(d){
+      var nu = b6.domains[d.key];
+      var rij = keuzes.map(function(o){
+        return '<div class="choice" data-gebied="' + d.key + '" data-regie="' + o[0] +
+               '" aria-pressed="' + (nu.regie === o[0] ? "true" : "false") + '">' + o[1] + '</div>';
+      }).join("");
+      return '<div class="blok"><h3>' + esc(d.label) + '</h3>' +
+        '<ul class="vragen">' + d.vragen.map(function(v){ return '<li>' + esc(v) + '</li>'; }).join("") + '</ul>' +
+        '<div class="choice-row">' + rij + '</div>' +
+        '<textarea data-b6tekst="domein:' + d.key + '" placeholder="' + esc(d.reflectie) + '">' +
+        esc(nu.reflectie || "") + '</textarea></div>';
+    }).join("");
+
+    var manier = ["vast","visueel","verbaal","combinatie"].map(function(m){
+      var lbl = m.charAt(0).toUpperCase() + m.slice(1);
+      return '<div class="choice" data-manier="' + m + '" aria-pressed="' +
+             (b6.manier.keuze === m ? "true" : "false") + '">' + lbl + '</div>';
+    }).join("");
+
+    return blokken +
+      '<div class="blok"><h3>Manier van ordenen</h3><ul class="vragen">' +
+      '<li>Helpen vaste routines jou om rustig te blijven?</li>' +
+      '<li>Helpen schema\u2019s, lijstjes of beelden jou om overzicht te krijgen?</li>' +
+      '<li>Helpt praten of uitleg om grip te houden?</li>' +
+      '<li>Wat werkt voor jou het beste als iets spannend wordt?</li>' +
+      '<li>Wat werkt juist niet?</li></ul>' +
+      '<div class="choice-row">' + manier + '</div>' +
+      '<textarea data-b6tekst="manier" placeholder="Orden je vooral vast, visueel of verbaal? Sluit de geboden ondersteuning daarbij aan?">' +
+      esc(b6.manier.reflectie || "") + '</textarea></div>' +
+      '<div class="blok"><h3>Balans en beleving</h3><ul class="vragen">' +
+      '<li>Heb je het gevoel dat je zelf grip hebt op je leven?</li>' +
+      '<li>Heb je het gevoel dat anderen te veel voor je bepalen?</li>' +
+      '<li>Zeggen anderen dat je veel zelf bepaalt?</li>' +
+      '<li>Waar mogen anderen zich in mengen, mee bemoeien? Waar niet?</li>' +
+      '<li>Zijn er gebieden waar je meer zelf zou willen doen?</li>' +
+      '<li>Zijn er gebieden waar je juist meer ondersteuning nodig hebt? Meer kaders?</li></ul>' +
+      '<textarea data-b6tekst="balans">' + esc(b6.balans || "") + '</textarea></div>' +
+      '<div class="blok"><h3>Totale reflectie \u2014 samenhang</h3><ul class="vragen">' +
+      '<li>Waar zie je vooral eigen ordening? Waar vooral geboden ordening?</li>' +
+      '<li>Waar is er een goede balans? Waar raakt die verstoord?</li></ul>' +
+      '<label class="veldkop">Mijn kijk</label>' +
+      '<textarea data-b6tekst="totaalMijn">' + esc(b6.totaalMijn || "") + '</textarea>' +
+      '<label class="veldkop">Kijk van iemand die mij goed kent (stap 2 uit het werkboek)</label>' +
+      '<textarea data-b6tekst="totaalAnder">' + esc(b6.totaalAnder || "") + '</textarea></div>';
+  }
+
+  var B1_HERKOMST = "Vragenlijst naar eigenschappen en kwaliteiten — Lisa van Impelen, " +
+    "Vivian Snouckaert, Annelies Spek (2017), Autisme Expertisecentrum. De vragenlijst, " +
+    "de handleiding en de scoringsmal staan op anneliesspek.nl; de vragen hieronder zijn " +
+    "gelijk aan die versie.";
+
+  function bijlageIsLeeg(id){
+    if (id === "b6"){
+      var b6 = state.bijlagen.b6;
+      if (b6.balans || b6.totaalMijn || b6.totaalAnder) return false;
+      if (b6.manier.keuze || b6.manier.reflectie) return false;
+      return !B6_DOMAINS.some(function(d){
+        var v = b6.domains[d.key];
+        return v && (v.regie || v.reflectie);
+      });
+    }
+    var opslag = state.bijlagen[id];
+    return !Object.keys(opslag).some(function(k){ return opslag[k]; });
+  }
+
+  function maakBijlageLeeg(id){
+    if (id === "b6") state.bijlagen.b6 = leegBijlagen().b6;
+    else state.bijlagen[id] = {};
+    vulBijlagenAan(state);
+    save();
+    initBijlagen();           // tekent alle panelen opnieuw en hangt de
+                              // luisteraars weer aan de verse elementen
+  }
+
+  function tekenBijlage(b){
+    var paneel = document.getElementById("paneel-" + b.id);
+    var binnen;
+    if (b.id === "b1") binnen = tekenB1();
+    else if (b.id === "b2") binnen = tekenVinklijst("b2", B2_GROUPS);
+    else if (b.id === "b3") binnen = tekenVinklijst("b3", [{key:"b3", name:"", cvar:"--cat-anders", items:B3_ITEMS}]);
+    else if (b.id === "b4") binnen = tekenVinklijst("b4", B4_GROUPS);
+    else if (b.id === "b5") binnen = tekenVinklijst("b5", B5_GROUPS);
+    else binnen = tekenB6();
+    paneel.innerHTML = '<h2>' + esc(b.titel) + '</h2>' +
+      '<p class="noot">' + esc(BIJLAGE_NOOT[b.id]) + '</p>' +
+      (b.id === "b1" ? '<p class="herkomst">' + esc(B1_HERKOMST) + '</p>' : "") +
+      binnen +
+      '<div class="bijlage-voet"><button class="ghost" data-leeg="' + b.id +
+      '">Deze bijlage leegmaken</button></div>';
+  }
+
+  function initBijlagen(){
+    vulBijlagenAan(state);      // ook nodig als er nog niets bewaard is
+    BIJLAGEN.forEach(tekenBijlage);
+
+    document.querySelectorAll("[data-vink]").forEach(function(el){
+      el.addEventListener("change", function(){
+        state.bijlagen[el.getAttribute("data-vink")][el.getAttribute("data-sleutel")] = el.checked;
+        save();
+      });
+    });
+    document.querySelectorAll("[data-b1]").forEach(function(el){
+      el.addEventListener("change", function(){
+        state.bijlagen.b1[el.getAttribute("data-b1")] = parseInt(el.value, 10);
+        tekenKwaliteiten();
+        save();
+      });
+    });
+    tekenKwaliteiten();
+    document.querySelectorAll("[data-b6tekst]").forEach(function(el){
+      el.addEventListener("input", function(){
+        var waar = el.getAttribute("data-b6tekst");
+        if (waar.indexOf("domein:") === 0) state.bijlagen.b6.domains[waar.slice(7)].reflectie = el.value;
+        else if (waar === "manier") state.bijlagen.b6.manier.reflectie = el.value;
+        else state.bijlagen.b6[waar] = el.value;
+        save();
+      });
+    });
+    document.querySelectorAll("[data-regie]").forEach(function(el){
+      el.addEventListener("click", function(){
+        var gebied = el.getAttribute("data-gebied");
+        state.bijlagen.b6.domains[gebied].regie = el.getAttribute("data-regie");
+        document.querySelectorAll('[data-gebied="' + gebied + '"]').forEach(function(o){
+          o.setAttribute("aria-pressed", o === el ? "true" : "false");
+        });
+        save();
+      });
+    });
+    document.querySelectorAll("[data-manier]").forEach(function(el){
+      el.addEventListener("click", function(){
+        state.bijlagen.b6.manier.keuze = el.getAttribute("data-manier");
+        document.querySelectorAll("[data-manier]").forEach(function(o){
+          o.setAttribute("aria-pressed", o === el ? "true" : "false");
+        });
+        save();
+      });
+    });
+    document.querySelectorAll("[data-leeg]").forEach(function(knop){
+      knop.addEventListener("click", function(){
+        var id = knop.getAttribute("data-leeg");
+        if (bijlageIsLeeg(id)) return;      // niets in te legen
+        var b = BIJLAGEN.filter(function(x){ return x.id === id; })[0];
+        if (!window.confirm(b.titel + "\n\nAlles wat je hier hebt ingevuld wissen? " +
+            "Dit kan niet ongedaan gemaakt worden.")) return;
+        maakBijlageLeeg(id);
+      });
+    });
+  }
+
+  function kiesTab(id){
+    document.querySelectorAll(".tabknop").forEach(function(b){
+      b.setAttribute("aria-selected", b.getAttribute("data-tab") === id ? "true" : "false");
+    });
+    document.querySelectorAll(".tabpaneel").forEach(function(p){
+      p.classList.toggle("actief", p.id === "paneel-" + id);
+    });
+    window.scrollTo(0, 0);
+  }
+
+  function initTabs(){
+    document.querySelectorAll(".tabknop").forEach(function(b){
+      b.addEventListener("click", function(){ kiesTab(b.getAttribute("data-tab")); });
     });
   }
 
@@ -1606,6 +2312,9 @@
     initPanels();
     initMeenemen();
     initPlan();
+    if (neemLosseFormulierenOver()) { /* overgenomen uit de losse pagina */ }
+    initBijlagen();
+    initTabs();
     // Eerste stand zonder animatie: het water hoort er te staan, niet in te zakken.
     var waterEl = document.getElementById("water");
     var stenenEl = document.getElementById("stenen");
