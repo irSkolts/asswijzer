@@ -222,7 +222,81 @@
   .uitwissel-noot{color:var(--ink-soft);font-size:0.86rem;line-height:1.55;
     margin:0 0 10px;max-width:66ch;}
   .voet-uitleg{margin:0;font-size:0.78rem;line-height:1.45;color:var(--ink-soft);flex:1 1 240px;}
-  .wis-voet{margin-top:34px;padding-top:16px;border-top:1px solid var(--line-faint);}
+  .uitwissel-blok{margin-top:34px;padding-top:16px;border-top:1px solid var(--line-faint);}
+
+  /* De afdruk. Op het scherm staat dit blok buiten beeld (niet op
+     display:none, want dan is de hoogte niet te meten); bij printen gaat de
+     rest uit en blijft alleen dit over. Alle maten hangen aan de basismaat
+     van #afdruk, zodat passendMaken() alles in één keer kan verkleinen.
+     Kleuren staan hier hard: een donkere weergave op het scherm mag geen
+     lichtgrijze letters op papier geven. */
+  @page{size:A4;margin:14mm;}
+  #afdruk{position:fixed;left:-10000px;top:0;width:182mm;  /* A4 min de marges */
+    color:#1A1F1B;background:#fff;
+    font-family:var(--font-sans);font-size:9.5pt;line-height:1.4;}
+  #afdruk h1{font-size:1.58em;margin:0;font-weight:600;line-height:1.2;}
+  #afdruk .ak-datum{font-family:var(--font-mono);font-size:0.84em;color:#5A635C;
+    margin:0.2em 0 0;}
+  #afdruk .ak-rand{margin:0.6em 0 0;}
+  #afdruk .ak-kop{display:flex;justify-content:space-between;
+    align-items:flex-start;gap:8mm;}
+  #afdruk .ak-titel{min-width:0;}
+  #afdruk .ak-kolommen{display:flex;gap:10mm;margin-top:0.85em;}
+  #afdruk .ak-kolom{flex:1 1 0;min-width:0;}
+  #afdruk .ak-tekening{flex:0 0 26mm;}
+  /* De kopie van de ton. De kleuren staan hier hard op de lichte versie:
+     wie op het scherm donker werkt, wil geen zwart vel papier. */
+  #afdruk .ak-tekening .ton{max-width:none;margin:0;
+    --ton-hout:#AD8D64; --ton-hout-rand:#C6A87E; --ton-binnen:#343A34;
+    --ton-band:#7C8880; --ton-band-licht:#A8B2A8; --ton-lijn:#4B564F;
+    --ton-pijp:#8A958C; --ton-grond:rgba(38,43,39,0.26);
+    --water-top:rgba(74,140,175,0.86); --water-mid:rgba(46,108,145,0.89);
+    --water-diep:rgba(20,58,84,0.94);
+    --water-opp:#7FB4D1; --water-opp-lijn:#A9D2E8;
+    --rood-top:rgba(170,72,54,0.88); --rood-mid:rgba(142,54,40,0.90);
+    --rood-diep:rgba(88,26,18,0.94);
+    --rood-opp:#BE6A54; --rood-opp-lijn:#E2A491; --rood-bubbel:#F0C3B2;
+    --oranje-top:rgba(196,124,52,0.88); --oranje-mid:rgba(170,100,40,0.90);
+    --oranje-diep:rgba(110,60,20,0.94);
+    --oranje-opp:#D08A4E; --oranje-opp-lijn:#EEC08C;
+    --gezicht:#2E3630; --gezicht-halo:#EFF1EE;
+    --steen:#8C8A83; --steen-licht:#A5A29A; --steen-donker:#6E6C66;
+    --steen-lijn:#3F3E39;}
+  #afdruk .ak-tekening .ton svg{max-height:none;}
+  #afdruk h2{font-size:1.11em;margin:0 0 0.3em;font-weight:600;
+    border-bottom:0.6pt solid #9AA39C;padding-bottom:0.2em;}
+  #afdruk h3{font-size:1.11em;margin:0 0 0.3em;font-weight:600;}
+  #afdruk .ak-groep{margin-top:0.5em;}
+  #afdruk .ak-groep-kop{font-size:0.84em;text-transform:uppercase;
+    letter-spacing:0.06em;color:#5A635C;margin-bottom:0.1em;}
+  #afdruk ul{margin:0;padding-left:1.5em;}
+  #afdruk li{margin:0 0 0.1em;break-inside:avoid;}
+  #afdruk li .ak-bij{color:#5A635C;font-size:0.84em;}
+  #afdruk .ak-niets{color:#5A635C;font-size:0.9em;margin:0.2em 0 0;}
+  #afdruk .ak-plan{margin-top:0.95em;}
+  #afdruk .ak-banden{display:flex;gap:10mm;align-items:flex-start;}
+  #afdruk .ak-banden > *{flex:1 1 0;min-width:0;}
+  #afdruk .ak-band{border-left:2.5pt solid #9AA39C;padding-left:3mm;
+    margin-top:0.6em;break-inside:avoid;}
+  #afdruk .ak-band[data-band="rood"]{border-left-color:#9E5241;}
+  #afdruk .ak-band[data-band="oranje"]{border-left-color:#B07B33;}
+  #afdruk .ak-band[data-band="groen"]{border-left-color:#4C7A5A;}
+  #afdruk .ak-toel{font-weight:400;font-size:0.82em;color:#5A635C;}
+  #afdruk .ak-veld{margin-top:0.3em;}
+  #afdruk .ak-label{display:block;font-size:0.84em;color:#5A635C;}
+  #afdruk .ak-tekst{white-space:pre-line;}
+  #afdruk .ak-leeg{border-bottom:0.4pt solid #C7CEC5;height:0.95em;}
+  #afdruk .ak-rij .ak-kop{font-size:0.84em;color:#5A635C;
+    text-transform:uppercase;letter-spacing:0.06em;}
+  #afdruk .ak-voet{margin-top:1em;padding-top:0.3em;
+    border-top:0.4pt solid #C7CEC5;font-family:var(--font-mono);
+    font-size:0.79em;color:#5A635C;}
+  @media print{
+    .wrap, .info-sheet{display:none !important;}
+    /* de marge van het vel komt van @page, niet van de body */
+    html, body{background:#fff;margin:0;padding:0;min-height:0;}
+    #afdruk{position:static;left:auto;width:auto;}
+  }
 
   .layout{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
   .ton-col{flex:1 1 260px;max-width:340px;}
@@ -893,10 +967,6 @@
           <div class="kenmerken-uit-signalen" id="kenmerken-rood"></div>
         </div>
         <div class="sig-veld">
-          <label for="plan-rood-schieten">Waardoor kan ik in rood schieten?</label>
-          <textarea class="plan-veld" id="plan-rood-schieten" data-band="rood" data-veld="schieten" rows="2"></textarea>
-        </div>
-        <div class="sig-veld">
           <label for="plan-rood-terug">Wat kan ik doen om naar oranje te gaan?</label>
           <textarea class="plan-veld" id="plan-rood-terug" data-band="rood" data-veld="terug" rows="2"></textarea>
         </div>
@@ -916,7 +986,7 @@
           <div class="kenmerken-uit-signalen" id="kenmerken-oranje"></div>
         </div>
         <div class="sig-veld">
-          <label for="plan-oranje-schieten">Waardoor kan ik in oranje schieten?</label>
+          <label for="plan-oranje-schieten">Waardoor kan ik in rood schieten?</label>
           <textarea class="plan-veld" id="plan-oranje-schieten" data-band="oranje" data-veld="schieten" rows="2"></textarea>
         </div>
         <div class="sig-veld">
@@ -937,6 +1007,10 @@
         <div class="sig-veld">
           <label>Kenmerken</label>
           <div class="kenmerken-uit-signalen" id="kenmerken-groen"></div>
+        </div>
+        <div class="sig-veld">
+          <label for="plan-groen-schieten">Waardoor kan ik in oranje schieten?</label>
+          <textarea class="plan-veld" id="plan-groen-schieten" data-band="groen" data-veld="schieten" rows="2"></textarea>
         </div>
         <div class="sig-veld">
           <label for="plan-groen-blijven">Wat kan ik doen om in groen te blijven?</label>
@@ -987,7 +1061,16 @@
     </div>
   </div>
 
-  <div class="wis-voet">
+  <div class="uitwissel-blok">
+    <h2 class="uitwissel-kop">Meenemen op papier</h2>
+    <p class="uitwissel-noot">Eén A4 met hoe het er nu voor staat: wat er aangevinkt
+      in de emmer zit, wat hem leegt, en de trede van je signaleringsplan die daarbij
+      hoort. Handig om mee te nemen naar een gesprek. Er gaat niets naar buiten; het
+      blad wordt in deze browser gemaakt.</p>
+    <button class="ghost" id="btn-afdruk">Afdrukken…</button>
+  </div>
+
+  <div class="uitwissel-blok">
     <h2 class="uitwissel-kop">Opnieuw beginnen</h2>
     <p class="uitwissel-noot">Hiermee gaat in één keer alles weg wat in deze browser
       staat: de emmer, het signaleringsplan, je signalen en alle zes de bijlagen. Wil
@@ -1006,6 +1089,8 @@
   <div class="tabpaneel bijlage" id="paneel-b5"></div>
   <div class="tabpaneel bijlage" id="paneel-b6"></div>
 </div>
+
+<div id="afdruk" aria-hidden="true"></div>
 
 <div class="info-sheet" id="info-sheet">
   <div class="meta">
@@ -1056,9 +1141,9 @@
 
   function leegPlan(){
     return {
-      rood: { kenmerken:"", schieten:"", terug:"", naasten:"" },
+      rood: { kenmerken:"", terug:"", naasten:"" },
       oranje: { kenmerken:"", schieten:"", terug:"", naasten:"" },
-      groen: { kenmerken:"", blijven:"", naasten:"" },
+      groen: { kenmerken:"", schieten:"", blijven:"", naasten:"" },
       zelf: null            // null = volg de ton; anders een zelfgekozen band
     };
   }
@@ -1067,11 +1152,28 @@
   function vulPlanAan(p){
     var leeg = leegPlan();
     if (!p.plan || typeof p.plan !== "object") { p.plan = leeg; return; }
+    // "Waardoor kan ik in rood schieten?" stond eerst bij rood en staat nu bij
+    // oranje. Wat bij rood was ingevuld is het antwoord op diezelfde vraag, dus
+    // dat schuift mee, boven wat er bij oranje al stond. Weggooien doen we niet.
+    var oudRood = String(p.plan.rood && p.plan.rood.schieten || "").trim();
+    if (oudRood){
+      if (!p.plan.oranje || typeof p.plan.oranje !== "object") p.plan.oranje = {};
+      p.plan.oranje.schieten =
+        [oudRood, String(p.plan.oranje.schieten || "").trim()]
+          .filter(function(t){ return t; }).join("\n");
+    }
+    // Opnieuw opbouwen in de volgorde van leegPlan(), niet alleen aanvullen:
+    // zo vallen velden die er niet meer zijn af (rood.schieten), en houdt het
+    // afdrukblad - dat de sleutels langsloopt - dezelfde volgorde als het
+    // scherm, ook bij opslag van voor een nieuw veld.
     ["groen", "oranje", "rood"].forEach(function(band){
-      if (!p.plan[band] || typeof p.plan[band] !== "object") p.plan[band] = {};
+      var oud = p.plan[band];
+      if (!oud || typeof oud !== "object") oud = {};
+      var nieuw = {};
       Object.keys(leeg[band]).forEach(function(veld){
-        if (typeof p.plan[band][veld] !== "string") p.plan[band][veld] = "";
+        nieuw[veld] = typeof oud[veld] === "string" ? oud[veld] : "";
       });
+      p.plan[band] = nieuw;
     });
     if (!BAND_LABEL[p.plan.zelf]) p.plan.zelf = null;
   }
@@ -1374,7 +1476,199 @@
     });
   }
 
+  // ---- de afdruk ---------------------------------------------------------
+
+  // De vraagteksten komen uit het plan zelf, zodat ze nooit uit elkaar lopen.
+  function planVraag(band, veld){
+    var lab = document.querySelector('label[for="plan-' + band + '-' + veld + '"]');
+    return lab ? lab.textContent : veld;
+  }
+
+  function afdrukItems(lijst){
+    if (!lijst.length) return '<p class="ak-niets">Niets aangevinkt.</p>';
+    return '<ul>' + lijst.map(function(x){
+      return '<li>' + esc(x.label || "(zonder omschrijving)") +
+        ' <span class="ak-bij">' + esc(x.bij) + '</span></li>';
+    }).join("") + '</ul>';
+  }
+
+  function afdrukVulling(){
+    var per = {};
+    Object.keys(CAT_LABEL).forEach(function(k){ per[k] = []; });
+    state.vulling.forEach(function(v){
+      if (!v.actief) return;
+      var bak = per[v.categorie] || per.anders;
+      bak.push({ label: v.label, bij: (v.vast ? "steen, " : "") +
+                 W_LABEL[v.weight || 2].toLowerCase() });
+    });
+    var iets = Object.keys(per).some(function(k){ return per[k].length; });
+    if (!iets) return '<p class="ak-niets">Niets aangevinkt.</p>';
+    return Object.keys(CAT_LABEL).filter(function(k){ return per[k].length; })
+      .map(function(k){
+        return '<div class="ak-groep"><div class="ak-groep-kop">' + esc(CAT_LABEL[k]) +
+               '</div>' + afdrukItems(per[k]) + '</div>';
+      }).join("");
+  }
+
+  function afdrukOrdening(){
+    var per = { eigen: [], geboden: [] };
+    state.ordening.forEach(function(o){
+      if (!o.actief) return;
+      var bij = (o.soort === "regulatie" ? "regulatie"
+                 : "ordening in " + GEBIED_LABEL[o.gebied].toLowerCase() +
+                   (o.manier ? ", " + MANIER_LABEL[o.manier].toLowerCase() : "")) +
+                ", " + W_LABEL[o.weight || 2].toLowerCase();
+      (per[o.bron] || per.eigen).push({ label: o.label, bij: bij });
+    });
+    if (!per.eigen.length && !per.geboden.length)
+      return '<p class="ak-niets">Niets aangevinkt.</p>';
+    return [["eigen", "Eigen"], ["geboden", "Geboden"]]
+      .filter(function(p){ return per[p[0]].length; })
+      .map(function(p){
+        return '<div class="ak-groep"><div class="ak-groep-kop">' + p[1] +
+               '</div>' + afdrukItems(per[p[0]]) + '</div>';
+      }).join("");
+  }
+
+  function afdrukBand(band, toelichting){
+    var per = kenmerkenPerBand(band);
+    var kenmerken = [];
+    SIGNAALGROEPEN.forEach(function(g){
+      var lijst = per[g.id];
+      if (!lijst.length) return;
+      kenmerken.push('<div class="ak-rij"><span class="ak-kop">' + esc(g.naam) +
+        '</span> ' + lijst.map(function(x){ return esc(x.w); }).join(", ") + '</div>');
+    });
+    var eigen = (state.plan[band].kenmerken || "").trim();
+    if (eigen) kenmerken.push('<div class="ak-rij">' + esc(eigen) + '</div>');
+    var naam = BAND_LABEL[band];
+    return '<section class="ak-band" data-band="' + band + '">' +
+      '<h3>' + naam.charAt(0).toUpperCase() + naam.slice(1) +
+      ' <span class="ak-toel">' + esc(toelichting) + '</span></h3>' +
+      (kenmerken.length ? '<div class="ak-veld"><span class="ak-label">Kenmerken</span>' +
+         kenmerken.join("") + '</div>' : "") +
+      Object.keys(state.plan[band]).filter(function(v){ return v !== "kenmerken"; })
+        .map(function(v){
+          var tekst = (state.plan[band][v] || "").trim();
+          return '<div class="ak-veld"><span class="ak-label">' +
+            esc(planVraag(band, v)) + '</span>' +
+            (tekst ? '<div class="ak-tekst">' + esc(tekst) + '</div>'
+                   : '<div class="ak-leeg"></div>') + '</div>';
+        }).join("") +
+      '</section>';
+  }
+
+  function bouwAfdruk(){
+    var stand = standNu();
+    var tonBand = bandBijNiveau(stand.vol);
+    var gekozen = state.plan.zelf;
+    var banden = [afdrukBand(gekozen || tonBand,
+      gekozen ? "ik zit hier nu" : "de emmer wijst hier naar")];
+    // Zelf gekozen en de ton wijst ergens anders: dan horen ze er beide bij.
+    if (gekozen && gekozen !== tonBand)
+      banden.push(afdrukBand(tonBand, "de emmer wijst hier naar"));
+    var datum = new Date().toLocaleDateString("nl-NL",
+      { day: "numeric", month: "long", year: "numeric" });
+    document.getElementById("afdruk").innerHTML =
+      '<div class="ak-kop"><div class="ak-titel">' +
+        '<h1>Mijn emmer</h1>' +
+        '<p class="ak-datum">' + esc(datum) + '</p>' +
+        (stand.niveau > DIEPTE
+          ? '<p class="ak-rand">De emmer staat over de rand.</p>' : "") +
+      '</div><div class="ak-tekening" id="ak-tekening"></div></div>' +
+      '<div class="ak-kolommen">' +
+        '<div class="ak-kolom"><h2>Wat er nu in zit</h2>' + afdrukVulling() + '</div>' +
+        '<div class="ak-kolom"><h2>Wat hem nu leegt</h2>' + afdrukOrdening() + '</div>' +
+      '</div>' +
+      '<div class="ak-plan"><h2>Signaleringsplan</h2>' +
+        '<div class="ak-banden">' + banden.join("") + '</div></div>' +
+      '<p class="ak-voet">Gebaseerd op de ASSwijzer-methodiek ' +
+        '(Werkboek ASSwijzer, EvenZicht)</p>';
+    zetTekening();
+  }
+
+  // Een kopie van de ton zoals hij er nu bij staat.
+  //
+  // De meeste ids blijven staan, met opzet: de css stuurt het waterpeil en de
+  // kleuren via #water, #stenen en #wgrad-*, en zulke regels gelden voor elk
+  // element met die id, dus ook voor de kopie. Een verloop uit de defs van het
+  // origineel werkt ook gewoon vanuit de kopie.
+  //
+  // Voor alles uit de defs geldt dat niet: bij het printen staat de rest van
+  // de pagina op display:none, en dan levert url(#...) niets meer op. Zonder
+  // de clipPaths vielen de stenen buiten de ton, zonder de verlopen bleef het
+  // water onzichtbaar en stond de ton plat op het papier. De kopie krijgt die
+  // zes dus op eigen naam.
+  //
+  // De id van de figure gaat eraf, zodat getElementById("ton") de echte blijft
+  // vinden en render() niet per ongeluk de kopie bijwerkt. De ids van de stops
+  // (#wgrad-top en zo) blijven juist staan: die worden door de css gezet, en
+  // zo'n regel geldt voor elk element met die id, dus ook in de kopie.
+  var AK_DEFS = ["clip-romp", "clip-hoop", "clip-binnen",
+                 "water-grad", "grond-grad", "rond-grad"];
+  var AK_VERWIJST = ["fill", "stroke", "clip-path", "mask", "filter"];
+
+  function zetTekening(){
+    var kopie = document.getElementById("ton").cloneNode(true);
+    kopie.removeAttribute("id");
+    kopie.setAttribute("aria-hidden", "true");
+    AK_DEFS.forEach(function(naam){
+      var def = kopie.querySelector("[id='" + naam + "']");
+      if (def) def.setAttribute("id", "ak-" + naam);
+    });
+    kopie.querySelectorAll("*").forEach(function(el){
+      AK_VERWIJST.forEach(function(attr){
+        var w = el.getAttribute(attr);
+        if (!w) return;
+        AK_DEFS.forEach(function(naam){
+          if (w === "url(#" + naam + ")") el.setAttribute(attr, "url(#ak-" + naam + ")");
+        });
+      });
+    });
+    // De schaduw onder de ton krijgt zijn verloop uit de stylesheet; die wijst
+    // naar de oude naam, dus hier zetten we hem er rechtstreeks op.
+    kopie.querySelectorAll(".grond").forEach(function(el){
+      el.setAttribute("fill", "url(#ak-grond-grad)");
+    });
+    // geen dubbele ids voor wat de kopie verder niet nodig heeft
+    ["hoop-rand", "ton-titel"].forEach(function(naam){
+      var el = kopie.querySelector("[id='" + naam + "']");
+      if (el) el.setAttribute("id", "ak-" + naam);
+    });
+    var svg = kopie.querySelector("svg");
+    if (svg) svg.setAttribute("aria-labelledby", "ak-ton-titel");
+    document.getElementById("ak-tekening").appendChild(kopie);
+  }
+
+  // Een A4 is 297mm hoog, met 14mm marge boven en onder blijft 269mm over.
+  // Past het niet, dan gaat de letter omlaag; onder de 7pt houdt het op, want
+  // dan is het niet meer te lezen en is twee bladen beter dan een vergrootglas.
+  function passendMaken(){
+    var blad = document.getElementById("afdruk");
+    var meetlat = document.createElement("div");
+    meetlat.style.cssText = "position:fixed;left:-10000px;top:0;height:269mm;";
+    document.body.appendChild(meetlat);
+    var ruimte = meetlat.offsetHeight;
+    document.body.removeChild(meetlat);
+    var maat = 9.5;
+    blad.style.fontSize = maat + "pt";
+    while (blad.scrollHeight > ruimte && maat > 7){
+      maat -= 0.25;
+      blad.style.fontSize = maat + "pt";
+    }
+  }
+
   function initMeenemen(){
+    document.getElementById("btn-afdruk").addEventListener("click", function(){
+      bouwAfdruk();
+      // De maten kloppen pas als het lettertype binnen is.
+      if (document.fonts && document.fonts.status !== "loaded"){
+        document.fonts.ready.then(function(){ passendMaken(); window.print(); });
+      } else {
+        passendMaken();
+        window.print();
+      }
+    });
     document.getElementById("btn-wis-alles").addEventListener("click", function(){
       if (allesIsLeeg()) return;
       if (!window.confirm("Alles wissen?\n\n" +
@@ -2419,18 +2713,24 @@ var SIGNAALGROEPEN = [
     return t;
   }
 
-  function render(){
-    // Vulling met vast=true is een steen: die blijft liggen. De rest is water
-    // en dat laat ordening weglopen. Stenen nemen de ruimte onderin, dus er kan
-    // minder water bij voordat het over de rand gaat.
-    var steenTotal = 0, vulTotal = 0;
+  // Vulling met vast=true is een steen: die blijft liggen. De rest is water
+  // en dat laat ordening weglopen. Stenen nemen de ruimte onderin, dus er kan
+  // minder water bij voordat het over de rand gaat.
+  // Apart van render(), want de afdruk moet met precies dezelfde som rekenen.
+  function standNu(){
+    var steen = 0, los = 0;
     state.vulling.forEach(function(v){
       if (!v.actief) return;
-      if (v.vast) steenTotal += (v.weight || 2); else vulTotal += (v.weight || 2);
+      if (v.vast) steen += (v.weight || 2); else los += (v.weight || 2);
     });
-    var ordTotal = sumActive(state.ordening);
-    var water = Math.max(0, vulTotal - ordTotal);
-    var niveau = (steenTotal + water) * UNIT;
+    var water = Math.max(0, los - sumActive(state.ordening));
+    var niveau = (steen + water) * UNIT;
+    return { steen: steen, water: water, niveau: niveau, vol: niveau / DIEPTE };
+  }
+
+  function render(){
+    var stand = standNu();
+    var steenTotal = stand.steen, water = stand.water, niveau = stand.niveau;
     var oppY = BODEM_Y - Math.min(DIEPTE, niveau);
 
     var steenHoogte = Math.min(DIEPTE, steenTotal * UNIT);
