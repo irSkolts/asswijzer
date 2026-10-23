@@ -222,6 +222,7 @@
   .uitwissel-noot{color:var(--ink-soft);font-size:0.86rem;line-height:1.55;
     margin:0 0 10px;max-width:66ch;}
   .voet-uitleg{margin:0;font-size:0.78rem;line-height:1.45;color:var(--ink-soft);flex:1 1 240px;}
+  .wis-voet{margin-top:34px;padding-top:16px;border-top:1px solid var(--line-faint);}
 
   .layout{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;}
   .ton-col{flex:1 1 260px;max-width:340px;}
@@ -986,6 +987,14 @@
     </div>
   </div>
 
+  <div class="wis-voet">
+    <h2 class="uitwissel-kop">Opnieuw beginnen</h2>
+    <p class="uitwissel-noot">Hiermee gaat in één keer alles weg wat in deze browser
+      staat: de emmer, het signaleringsplan, je signalen en alle zes de bijlagen. Wil
+      je het bewaren, maak dan eerst hierboven een bestand aan.</p>
+    <button class="ghost" id="btn-wis-alles">Alles wissen</button>
+  </div>
+
   </div>
 
   <div class="tabpaneel bijlage" id="paneel-signalen"></div>
@@ -1304,23 +1313,58 @@
     });
   }
 
+  // Precies zoals de tool er bij de eerste keer openen uitziet: de voorbeelden
+  // bij de signalen worden door vulSignalenAan() opnieuw gezaaid.
+  function verseState(){
+    var s = { vulling: [], ordening: [], plan: leegPlan(), bijlagen: leegBijlagen(),
+              signalen: leegSignalen() };
+    vulBijlagenAan(s);
+    vulSignalenAan(s);
+    return s;
+  }
+
+  // Na het in één keer vervangen van `state` moet alles opnieuw getekend worden,
+  // anders blijven de oude vinkjes en bolletjes in beeld staan.
+  function tekenAllesOpnieuw(){
+    closeInfo();
+    vulPlanVelden();
+    initBijlagen();
+    vulSignalenAan(state);
+    startMeting();
+    tekenPlanKenmerken();
+    renderVullingList();
+    renderOrdeningList();
+    render();
+    save();
+    sluitPanelen();
+  }
+
+  // Niets ingevuld? Dan is er ook niets te wissen, en wordt er niets gevraagd.
+  function allesIsLeeg(){
+    if (state.vulling.length || state.ordening.length) return false;
+    var p = state.plan;
+    if (p.zelf) return false;
+    var inPlan = ["groen", "oranje", "rood"].some(function(band){
+      return Object.keys(p[band]).some(function(veld){ return p[band][veld]; });
+    });
+    if (inPlan) return false;
+    if (BIJLAGEN.some(function(b){ return !bijlageIsLeeg(b.id); })) return false;
+    if (state.signalen.metingen.length) return false;
+    // Zelf getypte woorden, of een voorbeeld dat je hebt weggegooid.
+    return !SIGNAALGROEPEN.some(function(g){
+      var nu = state.signalen.woorden[g.id] || [];
+      return nu.length !== g.woorden.length ||
+        g.woorden.some(function(w){ return nu.indexOf(w) < 0; });
+    });
+  }
+
   function doeImport(wachtwoord){
     bezig(true);
     ontsleutel(gelezenTekst, wachtwoord).then(function(nieuw){
       bezig(false);
       if (!window.confirm("Dit vervangt wat er nu in de emmer zit. Doorgaan?")) return;
       state = nieuw;
-      closeInfo();
-      vulPlanVelden();
-      initBijlagen();          // anders blijven de oude vinkjes in beeld staan
-      vulSignalenAan(state);
-      startMeting();
-      tekenPlanKenmerken();
-      renderVullingList();
-      renderOrdeningList();
-      render();
-      save();
-      sluitPanelen();
+      tekenAllesOpnieuw();
     }).catch(function(e){
       bezig(false);
       var reden = e && e.message;
@@ -1331,6 +1375,17 @@
   }
 
   function initMeenemen(){
+    document.getElementById("btn-wis-alles").addEventListener("click", function(){
+      if (allesIsLeeg()) return;
+      if (!window.confirm("Alles wissen?\n\n" +
+          "De emmer, het signaleringsplan, je signalen en alle bijlagen gaan weg. " +
+          "Dit kan niet ongedaan gemaakt worden.")) return;
+      state = verseState();
+      // De losse scoreformulieren-pagina bewaarde onder een eigen sleutel; die
+      // zou bij de volgende keer openen weer overgenomen worden.
+      try{ localStorage.removeItem("scoreformulieren-v1"); }catch(e){}
+      tekenAllesOpnieuw();
+    });
     if (!heeftCrypto()){
       document.getElementById("btn-export").disabled = true;
       document.getElementById("btn-import").disabled = true;
