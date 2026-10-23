@@ -377,6 +377,40 @@
   .tabpaneel{display:none;}
   .tabpaneel.actief{display:block;}
 
+  /* --- signalen -------------------------------------------------------- */
+  .schaalbalk{display:flex;align-items:center;gap:12px;margin:4px 0 10px;}
+  .schaalbalk input[type=range]{flex:1;min-width:0;accent-color:var(--sig-oranje);}
+  .schaalpunt{font-size:0.8rem;color:var(--ink-soft);font-family:var(--font-mono);
+    white-space:nowrap;}
+  .schaalband{margin:0 0 4px;font-size:0.9rem;}
+  .vraagregel{margin:0 0 10px;font-size:0.86rem;color:var(--ink-soft);line-height:1.5;}
+  .nieuw-signaal{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  .nieuw-signaal input{flex:1 1 200px;font-family:var(--font-sans);font-size:0.9rem;
+    padding:8px 10px;border-radius:var(--radius-s);border:1px solid var(--line-faint);
+    background:var(--paper);color:var(--ink);}
+  .nieuw-signaal input:focus{outline:none;border-color:var(--eigen);}
+  .sig-knoppen{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;}
+  .sig-voortgang{margin:10px 0 0;font-size:0.76rem;color:var(--ink-soft);
+    font-family:var(--font-mono);letter-spacing:0.14em;}
+  .kenmerk-groep{font-size:0.88rem;line-height:1.55;margin-bottom:5px;}
+  .kenmerk-kop{font-family:var(--font-mono);font-size:0.74rem;color:var(--ink-soft);
+    display:inline-block;min-width:92px;}
+  .kenmerk-leeg{margin:0;font-size:0.84rem;color:var(--ink-soft);}
+  .kenmerk-item{display:inline-flex;align-items:center;gap:3px;margin-right:8px;
+    white-space:nowrap;}
+  button.weg{font-family:var(--font-sans);font-size:0.9rem;line-height:1;cursor:pointer;
+    border:none;background:none;color:var(--ink-soft);padding:0 2px;border-radius:3px;}
+  button.weg:hover{color:var(--danger);border-color:transparent;}
+  button.weg:focus-visible{outline:2px solid var(--eigen);outline-offset:1px;}
+  .choice button.weg{margin-left:2px;}
+  .kenmerk-bron{margin:8px 0 0;font-size:0.76rem;color:var(--ink-soft);
+    font-family:var(--font-mono);line-height:1.5;}
+  .sig-verzameld{margin-top:20px;padding-top:14px;border-top:1px solid var(--line-faint);}
+  .sig-bandblok{margin:10px 0 14px;padding-left:12px;border-left:4px solid var(--line-faint);}
+  .sig-bandblok h3{margin:0 0 6px;font-size:0.9rem;font-weight:600;text-transform:capitalize;}
+  .sig-bandblok[data-band="rood"]{border-left-color:var(--sig-rood);}
+  .sig-bandblok[data-band="oranje"]{border-left-color:var(--sig-oranje);}
+  .sig-bandblok[data-band="groen"]{border-left-color:var(--sig-groen);}
   /* --- bijlagen -------------------------------------------------------- */
   /* De lijsten gebruiken --cat-a t/m --cat-d; hier gekoppeld aan de
      categoriekleuren die de emmer al heeft, zodat het een geheel blijft. */
@@ -451,6 +485,7 @@
 
   <nav class="tabbalk" id="tabbalk">
       <button class="tabknop" data-tab="emmer" aria-selected="true">Emmer</button>
+      <button class="tabknop" data-tab="signalen" aria-selected="false">Signalen</button>
       <button class="tabknop" data-tab="b1" aria-selected="false">1 Eigenschappen</button>
       <button class="tabknop" data-tab="b2" aria-selected="false">2 Last hebben van</button>
       <button class="tabknop" data-tab="b3" aria-selected="false">3 Volle emmer</button>
@@ -853,8 +888,8 @@
           <button class="ghost sig-kies" data-kies="rood">ik zit hier nu</button>
         </div>
         <div class="sig-veld">
-          <label for="plan-rood-kenmerken">Kenmerken</label>
-          <textarea class="plan-veld" id="plan-rood-kenmerken" data-band="rood" data-veld="kenmerken" rows="2"></textarea>
+          <label>Kenmerken</label>
+          <div class="kenmerken-uit-signalen" id="kenmerken-rood"></div>
         </div>
         <div class="sig-veld">
           <label for="plan-rood-schieten">Waardoor kan ik in rood schieten?</label>
@@ -876,8 +911,8 @@
           <button class="ghost sig-kies" data-kies="oranje">ik zit hier nu</button>
         </div>
         <div class="sig-veld">
-          <label for="plan-oranje-kenmerken">Kenmerken</label>
-          <textarea class="plan-veld" id="plan-oranje-kenmerken" data-band="oranje" data-veld="kenmerken" rows="2"></textarea>
+          <label>Kenmerken</label>
+          <div class="kenmerken-uit-signalen" id="kenmerken-oranje"></div>
         </div>
         <div class="sig-veld">
           <label for="plan-oranje-schieten">Waardoor kan ik in oranje schieten?</label>
@@ -899,8 +934,8 @@
           <button class="ghost sig-kies" data-kies="groen">ik zit hier nu</button>
         </div>
         <div class="sig-veld">
-          <label for="plan-groen-kenmerken">Kenmerken</label>
-          <textarea class="plan-veld" id="plan-groen-kenmerken" data-band="groen" data-veld="kenmerken" rows="2"></textarea>
+          <label>Kenmerken</label>
+          <div class="kenmerken-uit-signalen" id="kenmerken-groen"></div>
         </div>
         <div class="sig-veld">
           <label for="plan-groen-blijven">Wat kan ik doen om in groen te blijven?</label>
@@ -953,6 +988,8 @@
 
   </div>
 
+  <div class="tabpaneel bijlage" id="paneel-signalen"></div>
+
   <div class="tabpaneel bijlage" id="paneel-b1"></div>
   <div class="tabpaneel bijlage" id="paneel-b2"></div>
   <div class="tabpaneel bijlage" id="paneel-b3"></div>
@@ -991,7 +1028,8 @@
   var PANIEK_VANAF = 0.85;             // vlak onder de rand slaat het om
   var OPP_RY = 1/6;                    // kijkhoek: ry van het oppervlak t.o.v. rx
 
-  var state = { vulling: [], ordening: [], plan: leegPlan(), bijlagen: leegBijlagen() };
+  var state = { vulling: [], ordening: [], plan: leegPlan(), bijlagen: leegBijlagen(),
+                signalen: leegSignalen() };
   var selected = null; // {kind:'vulling'|'ordening', id}
 
   function uid(){ return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
@@ -1045,6 +1083,7 @@
     });
     vulPlanAan(p);
     vulBijlagenAan(p);
+    vulSignalenAan(p);
     return p;
   }
 
@@ -1274,6 +1313,9 @@
       closeInfo();
       vulPlanVelden();
       initBijlagen();          // anders blijven de oude vinkjes in beeld staan
+      vulSignalenAan(state);
+      startMeting();
+      tekenPlanKenmerken();
       renderVullingList();
       renderOrdeningList();
       render();
@@ -2029,6 +2071,293 @@ var B1_SCHAAL = ["past helemaal niet bij mij","past niet bij mij","neutraal",
     });
   }
 
+
+  // ---- signalen: de stress-schaal uit de tekening, maar interactief --------
+var SIGNAALGROEPEN = [
+  { id:"gedrag", naam:"Gedrag", vraag:"Wat doe ik anders?", woorden:[
+      "Trekt zich terug", "Gaat vermijden", "Hyperfocus op \u00e9\u00e9n ding",
+      "Zelfzorg komt onder druk te staan", "Functioneert minder in werk of huishouden"
+    ] },
+  { id:"gevoel", naam:"Gevoel", vraag:"Wat voel ik? En hoe intens?", woorden:[
+      "Gevoel van paniek", "Angstig", "Somberheid",
+      "Emotioneler, bijvoorbeeld huilen", "Verstijft of blokkeert", "Dissociatie"
+    ] },
+  { id:"gedachten", naam:"Gedachtes", vraag:"Wat gaat er door mijn hoofd?", woorden:[
+      "Kan niet goed meer nadenken", "Geen oplossingen kunnen bedenken", "Wordt inflexibel"
+    ] },
+  { id:"fysiek", naam:"Fysiologisch", vraag:"Wat vertelt mijn lichaam (of horloge) mij?", woorden:[
+      "Vermoeidheid", "Lichamelijke klachten (hoofdpijn, spierpijn, misselijk)",
+      "Kan minder prikkels verdragen"
+    ] },
+  { id:"sociaal", naam:"Sociaal", vraag:"Wat gebeurt er tussen mij en anderen?", woorden:[
+      "Contact aangaan wordt moeilijker", "Meer moeite om in gesprek te gaan",
+      "Wordt bepalend of dwingend", "Verbale of fysieke agressie"
+    ] },
+  { id:"existentieel", naam:"Existentieel", vraag:"Wat staat er voor mij op het spel?", woorden:[
+      "Twijfel over de richting", "Het gevoel er alleen voor te staan"
+    ] }
+];
+
+  // 0 = Ik ben OK, 1 = Ik verdrink. Dezelfde grenzen als het gezicht en het
+  // plan, zodat alles in de tool hetzelfde bedoelt.
+  function bandBijStand(n){
+    if (n >= PANIEK_VANAF) return "rood";
+    if (n >= BLIJ_TOT) return "oranje";
+    return "groen";
+  }
+
+  function leegSignalen(){
+    return { woorden:{}, metingen:[], gezaaid:false };
+  }
+
+  function vulSignalenAan(p){
+    var s = p.signalen;
+    if (!s || typeof s !== "object") s = p.signalen = leegSignalen();
+    if (!s.woorden || typeof s.woorden !== "object") s.woorden = {};
+    if (!Array.isArray(s.metingen)) s.metingen = [];
+    SIGNAALGROEPEN.forEach(function(g){
+      if (!Array.isArray(s.woorden[g.id])) s.woorden[g.id] = [];
+    });
+    // De woordenschat uit de tekening eenmalig overnemen. Daarna is de lijst
+    // van jou: wat je zelf toevoegt blijft, en wissen blijft gewist.
+    if (!s.gezaaid){
+      SIGNAALGROEPEN.forEach(function(g){
+        g.woorden.forEach(function(w){
+          if (s.woorden[g.id].indexOf(w) < 0) s.woorden[g.id].push(w);
+        });
+      });
+      s.gezaaid = true;
+    }
+  }
+
+  var sigStap = 0;                 // 0 = de schaal, 1..7 = de categorieen
+  var sigStand = 0.3;
+  var sigKeuze = {};
+
+  function startMeting(){
+    sigStap = 0;
+    sigStand = 0.3;
+    sigKeuze = {};
+    SIGNAALGROEPEN.forEach(function(g){ sigKeuze[g.id] = []; });
+    tekenSignalen();
+  }
+
+  function bewaarMeting(){
+    var iets = SIGNAALGROEPEN.some(function(g){ return sigKeuze[g.id].length; });
+    if (!iets){ startMeting(); return; }
+    state.signalen.metingen.push({
+      t: new Date().toISOString().slice(0, 10),
+      n: Math.round(sigStand * 1000) / 1000,
+      keuzes: sigKeuze
+    });
+    save();
+    startMeting();
+    tekenPlanKenmerken();
+  }
+
+  // Per band: welke signalen heb je daar aangekruist, vaakst eerst. Zonder
+  // aantallen in beeld — alleen de volgorde zegt iets.
+  function kenmerkenPerBand(band){
+    var tel = {};
+    state.signalen.metingen.forEach(function(m){
+      if (bandBijStand(m.n) !== band) return;
+      SIGNAALGROEPEN.forEach(function(g){
+        (m.keuzes[g.id] || []).forEach(function(w){
+          var sleutel = g.id + "|" + w;
+          tel[sleutel] = (tel[sleutel] || 0) + 1;
+        });
+      });
+    });
+    var uit = {};
+    SIGNAALGROEPEN.forEach(function(g){ uit[g.id] = []; });
+    Object.keys(tel).forEach(function(sleutel){
+      var i = sleutel.indexOf("|");
+      var groep = sleutel.slice(0, i);
+      if (uit[groep]) uit[groep].push({ w: sleutel.slice(i + 1), aantal: tel[sleutel] });
+    });
+    SIGNAALGROEPEN.forEach(function(g){
+      uit[g.id].sort(function(a, b){ return b.aantal - a.aantal; });
+    });
+    return uit;
+  }
+
+  function tekenPlanKenmerken(){
+    ["groen", "oranje", "rood"].forEach(function(band){
+      var doel = document.getElementById("kenmerken-" + band);
+      if (!doel) return;
+      var perGroep = kenmerkenPerBand(band);
+      var stukken = [];
+      SIGNAALGROEPEN.forEach(function(g){
+        var lijst = perGroep[g.id];
+        if (!lijst.length) return;
+        stukken.push('<div class="kenmerk-groep"><span class="kenmerk-kop">' + esc(g.naam) +
+          '</span> ' + lijst.map(function(x){
+            return '<span class="kenmerk-item">' + esc(x.w) +
+              '<button class="weg" title="Haal dit weg uit ' + band + '" data-kenmerk-weg="' +
+              band + '|' + g.id + '|' + esc(x.w) + '">\u00d7</button></span>';
+          }).join(" ") + '</div>');
+      });
+      var oud = (state.plan[band] && state.plan[band].kenmerken || "").trim();
+      doel.innerHTML = (stukken.length
+          ? stukken.join("")
+          : '<p class="kenmerk-leeg">Nog niets verzameld. Vul het tabblad Signalen een paar keer in.</p>') +
+        (oud ? '<p class="kenmerk-bron">Eerder zelf opgeschreven: ' + esc(oud) + '</p>' : '');
+    });
+    document.querySelectorAll("[data-kenmerk-weg]").forEach(function(knop){
+      knop.addEventListener("click", function(){
+        var d = knop.getAttribute("data-kenmerk-weg").split("|");
+        var band = d[0], groep = d[1], woord = d.slice(2).join("|");
+        if (!window.confirm("\u201c" + woord + "\u201d weghalen uit " + band + "?\n\n" +
+            "De keren dat je dit in deze band hebt aangekruist worden gewist.")) return;
+        state.signalen.metingen.forEach(function(m){
+          if (bandBijStand(m.n) !== band) return;
+          var lijst = m.keuzes[groep];
+          if (!lijst) return;
+          var i = lijst.indexOf(woord);
+          if (i >= 0) lijst.splice(i, 1);
+        });
+        save();
+        tekenPlanKenmerken();
+      });
+    });
+  }
+
+  function tekenSignalen(){
+    var paneel = document.getElementById("paneel-signalen");
+    if (!paneel) return;
+    var h = '<h2>Signalen ordenen</h2>' +
+      '<p class="noot">Zet eerst waar je nu ongeveer zit. Loop daarna de zes ' +
+      'categorie\u00ebn langs en vink aan wat je herkent, of typ iets nieuws. ' +
+      'Hoe vaker je dit doet, hoe scherper je signaleringsplan wordt.</p>';
+
+    if (sigStap === 0){
+      var band = bandBijStand(sigStand);
+      h += '<div class="blok"><h3>Hoe sta je er nu voor?</h3>' +
+        '<div class="schaalbalk">' +
+        '<span class="schaalpunt">Ik ben OK</span>' +
+        '<input type="range" id="sig-stand" min="0" max="100" value="' +
+        Math.round(sigStand * 100) + '" aria-label="Waar sta je nu, van Ik ben OK tot Ik verdrink">' +
+        '<span class="schaalpunt">Ik verdrink</span></div>' +
+        '<p class="schaalband">Dat is <strong>' + band + '</strong>.</p>' +
+        '<div class="sig-knoppen"><button class="primary" id="sig-verder">Verder</button></div>' +
+        '</div>';
+    } else if (sigStap <= SIGNAALGROEPEN.length){
+      var g = SIGNAALGROEPEN[sigStap - 1];
+      var gekozen = sigKeuze[g.id];
+      var woorden = state.signalen.woorden[g.id] || [];
+      h += '<div class="blok"><h3>' + esc(g.naam) + '</h3>' +
+        '<p class="vraagregel">' + esc(g.vraag) + '</p>' +
+        '<div class="choice-row">' + woorden.map(function(w){
+          return '<div class="choice" data-signaal="' + esc(w) + '" aria-pressed="' +
+                 (gekozen.indexOf(w) >= 0 ? "true" : "false") + '">' + esc(w) +
+                 '<button class="weg" title="Haal dit uit je lijst" data-woord-weg="' +
+                 esc(w) + '">\u00d7</button></div>';
+        }).join("") + '</div>' +
+        '<div class="nieuw-signaal"><input type="text" id="sig-nieuw" maxlength="60" ' +
+        'placeholder="Iets anders? Typ het hier"><button class="ghost" id="sig-toevoegen">Toevoegen</button></div>' +
+        '<div class="sig-knoppen">' +
+        '<button class="ghost" id="sig-terug">Terug</button>' +
+        '<button class="primary" id="sig-verder">' +
+        (sigStap === SIGNAALGROEPEN.length ? "Klaar" : "Verder") + '</button></div>' +
+        '<p class="sig-voortgang">' + esc(g.naam) + ' \u2014 ' +
+        SIGNAALGROEPEN.map(function(x, i){
+          return i === sigStap - 1 ? "\u25cf" : "\u25cb";
+        }).join(" ") + '</p></div>';
+    } else {
+      var samen = SIGNAALGROEPEN.filter(function(g2){ return sigKeuze[g2.id].length; });
+      h += '<div class="blok"><h3>Dit leg je vast</h3>' +
+        '<p class="vraagregel">Stand: <strong>' + bandBijStand(sigStand) + '</strong></p>' +
+        (samen.length
+          ? samen.map(function(g2){
+              return '<div class="kenmerk-groep"><span class="kenmerk-kop">' + esc(g2.naam) +
+                '</span> ' + sigKeuze[g2.id].map(esc).join(", ") + '</div>';
+            }).join("")
+          : '<p class="kenmerk-leeg">Je hebt nog niets aangevinkt.</p>') +
+        '<div class="sig-knoppen"><button class="ghost" id="sig-terug">Terug</button>' +
+        '<button class="primary" id="sig-bewaar">Vastleggen</button></div></div>';
+    }
+
+    h += '<details class="sig-verzameld"><summary class="sig-sam">' +
+      '<span class="sig-sam-titel">Wat je tot nu toe verzameld hebt</span></summary>' +
+      ["rood", "oranje", "groen"].map(function(band){
+        var perGroep = kenmerkenPerBand(band);
+        var stukken = [];
+        SIGNAALGROEPEN.forEach(function(g2){
+          if (perGroep[g2.id].length){
+            stukken.push('<div class="kenmerk-groep"><span class="kenmerk-kop">' + esc(g2.naam) +
+              '</span> ' + perGroep[g2.id].map(function(x){ return esc(x.w); }).join(", ") + '</div>');
+          }
+        });
+        return '<div class="sig-bandblok" data-band="' + band + '"><h3>' + band + '</h3>' +
+          (stukken.join("") || '<p class="kenmerk-leeg">Nog niets.</p>') + '</div>';
+      }).join("") +
+      '<p class="kenmerk-bron">' + state.signalen.metingen.length +
+      ' keer ingevuld.</p></details>';
+
+    paneel.innerHTML = h;
+    hangSignaalKnoppenAan();
+  }
+
+  function hangSignaalKnoppenAan(){
+    var schuif = document.getElementById("sig-stand");
+    if (schuif){
+      schuif.addEventListener("input", function(){
+        sigStand = parseInt(schuif.value, 10) / 100;
+        var b = document.querySelector(".schaalband strong");
+        if (b) b.textContent = bandBijStand(sigStand);
+      });
+    }
+    var verder = document.getElementById("sig-verder");
+    if (verder) verder.addEventListener("click", function(){ sigStap++; tekenSignalen(); });
+    var terug = document.getElementById("sig-terug");
+    if (terug) terug.addEventListener("click", function(){ sigStap--; tekenSignalen(); });
+    var bewaar = document.getElementById("sig-bewaar");
+    if (bewaar) bewaar.addEventListener("click", bewaarMeting);
+
+    document.querySelectorAll("[data-woord-weg]").forEach(function(knop){
+      knop.addEventListener("click", function(ev){
+        ev.stopPropagation();           // niet ook aan- of uitvinken
+        var g = SIGNAALGROEPEN[sigStap - 1];
+        var w = knop.getAttribute("data-woord-weg");
+        var lijst = state.signalen.woorden[g.id];
+        var i = lijst.indexOf(w);
+        if (i >= 0) lijst.splice(i, 1);
+        var j = sigKeuze[g.id].indexOf(w);
+        if (j >= 0) sigKeuze[g.id].splice(j, 1);
+        save();
+        tekenSignalen();
+      });
+    });
+    document.querySelectorAll("[data-signaal]").forEach(function(el){
+      el.addEventListener("click", function(){
+        var g = SIGNAALGROEPEN[sigStap - 1];
+        var w = el.getAttribute("data-signaal");
+        var i = sigKeuze[g.id].indexOf(w);
+        if (i >= 0) sigKeuze[g.id].splice(i, 1); else sigKeuze[g.id].push(w);
+        el.setAttribute("aria-pressed", i >= 0 ? "false" : "true");
+      });
+    });
+
+    var toevoegen = document.getElementById("sig-toevoegen");
+    if (toevoegen){
+      var veld = document.getElementById("sig-nieuw");
+      var doeToevoegen = function(){
+        var w = veld.value.trim();
+        if (!w) return;
+        var g = SIGNAALGROEPEN[sigStap - 1];
+        if (state.signalen.woorden[g.id].indexOf(w) < 0) state.signalen.woorden[g.id].push(w);
+        if (sigKeuze[g.id].indexOf(w) < 0) sigKeuze[g.id].push(w);
+        veld.value = "";
+        save();
+        tekenSignalen();
+      };
+      toevoegen.addEventListener("click", doeToevoegen);
+      veld.addEventListener("keydown", function(ev){
+        if (ev.key === "Enter"){ ev.preventDefault(); doeToevoegen(); }
+      });
+    }
+  }
+
   function sumActive(list){
     var t = 0;
     list.forEach(function(i){ if (i.actief) t += (i.weight||2); });
@@ -2314,6 +2643,9 @@ var B1_SCHAAL = ["past helemaal niet bij mij","past niet bij mij","neutraal",
     initPlan();
     if (neemLosseFormulierenOver()) { /* overgenomen uit de losse pagina */ }
     initBijlagen();
+    vulSignalenAan(state);
+    startMeting();
+    tekenPlanKenmerken();
     initTabs();
     // Eerste stand zonder animatie: het water hoort er te staan, niet in te zakken.
     var waterEl = document.getElementById("water");
