@@ -609,6 +609,14 @@
       Het blijft onderin liggen en neemt ruimte in, dus er past minder water bij voordat
       de ton overloopt. Denk aan een trauma dat nog vers is, of een blessure die maanden
       geneest.</p>
+    <div class="checkbox-row">
+      <input type="checkbox" id="vul-belangrijk">
+      <label for="vul-belangrijk" style="margin:0;font-family:var(--font-sans);">Belangrijk voor mij (ook al kost het energie)</label>
+    </div>
+    <p class="uitleg">Niet alles wat je emmer vult hoeft weg. Sommige dingen kosten energie,
+      maar zijn ook belangrijk voor je: contact met mensen die je graag ziet, een activiteit
+      waar je plezier aan beleeft, iets nieuws leren. Dit vinkje verandert niets aan het
+      water — het staat er alleen bij, in de lijst en op papier.</p>
     <div class="panel-actions">
       <button class="ghost" data-cancel>Annuleren</button>
       <button class="primary" id="btn-confirm-vulling">Toevoegen</button>
@@ -639,7 +647,8 @@
     <div class="field alleen-ordening">
       <label>Gebied</label>
       <div class="choice-row" id="ord-gebied-row">
-        <div class="choice" data-gebied="tijd" aria-pressed="true">Tijd</div>
+        <div class="choice" data-gebied="" aria-pressed="true">Nog niet ingedeeld</div>
+        <div class="choice" data-gebied="tijd" aria-pressed="false">Tijd</div>
         <div class="choice" data-gebied="activiteit" aria-pressed="false">Activiteit</div>
         <div class="choice" data-gebied="ruimte" aria-pressed="false">Ruimte</div>
         <div class="choice" data-gebied="prikkels" aria-pressed="false">Prikkels</div>
@@ -650,7 +659,8 @@
     <div class="field alleen-ordening">
       <label>Manier</label>
       <div class="choice-row" id="ord-manier-row">
-        <div class="choice" data-manier="verbaal" aria-pressed="true">Verbaal</div>
+        <div class="choice" data-manier="" aria-pressed="true">Nog niet ingedeeld</div>
+        <div class="choice" data-manier="verbaal" aria-pressed="false">Verbaal</div>
         <div class="choice" data-manier="vast" aria-pressed="false">Vast</div>
         <div class="choice" data-manier="visueel" aria-pressed="false">Visueel</div>
       </div>
@@ -1112,6 +1122,20 @@
   var GEBIED_LABEL = { tijd:"Tijd", activiteit:"Activiteit", ruimte:"Ruimte", prikkels:"Prikkels", persoon:"Persoon" };
   var MANIER_LABEL = { verbaal:"Verbaal", vast:"Vast", visueel:"Visueel" };
   var W_LABEL = { 1:"Klein", 2:"Gemiddeld", 3:"Groot" };
+
+  // Gebied en manier mogen leeg blijven. De werkbladen zeggen er zelf bij dat
+  // indelen werk is voor een behandelaar, dus de tool kiest hier niets voor je.
+  // Wat niet is ingedeeld wordt ook zo opgeschreven: op papier hoort daar een
+  // open plek te staan, geen bewering.
+  function indelingTekst(o){
+    if (o.soort === "regulatie") return "regulatie";
+    var g = o.gebied ? GEBIED_LABEL[o.gebied].toLowerCase() : "";
+    var m = o.manier ? MANIER_LABEL[o.manier].toLowerCase() : "";
+    if (g && m) return "ordening in " + g + ", " + m;
+    if (g) return "ordening in " + g + ", manier nog niet ingedeeld";
+    if (m) return "ordening, gebied nog niet ingedeeld, " + m;
+    return "ordening, nog niet ingedeeld";
+  }
   // Maatvoering van de regenton, in de svg-coordinaten van de viewBox.
   var UNIT = 15;                       // svg-eenheden per stap omvang
   var RAND_Y = 46, BODEM_Y = 288;      // binnenkant: waterlijn bij vol en bij leeg
@@ -1499,6 +1523,7 @@
       if (!v.actief) return;
       var bak = per[v.categorie] || per.anders;
       bak.push({ label: v.label, bij: (v.vast ? "steen, " : "") +
+                 (v.belangrijk ? "belangrijk, " : "") +
                  W_LABEL[v.weight || 2].toLowerCase() });
     });
     var iets = Object.keys(per).some(function(k){ return per[k].length; });
@@ -1514,10 +1539,7 @@
     var per = { eigen: [], geboden: [] };
     state.ordening.forEach(function(o){
       if (!o.actief) return;
-      var bij = (o.soort === "regulatie" ? "regulatie"
-                 : "ordening in " + GEBIED_LABEL[o.gebied].toLowerCase() +
-                   (o.manier ? ", " + MANIER_LABEL[o.manier].toLowerCase() : "")) +
-                ", " + W_LABEL[o.weight || 2].toLowerCase();
+      var bij = indelingTekst(o) + ", " + W_LABEL[o.weight || 2].toLowerCase();
       (per[o.bron] || per.eigen).push({ label: o.label, bij: bij });
     });
     if (!per.eigen.length && !per.geboden.length)
@@ -2807,7 +2829,9 @@ var SIGNAALGROEPEN = [
       var lbl = document.createElement("div");
       lbl.className = "lbl"; lbl.textContent = v.label || "(zonder omschrijving)";
       var tag = document.createElement("div");
-      tag.className = "tag"; tag.textContent = (v.vast ? "Steen · " : "") + W_LABEL[v.weight];
+      tag.className = "tag";
+      tag.textContent = (v.vast ? "Steen · " : "") +
+                        (v.belangrijk ? "Belangrijk · " : "") + W_LABEL[v.weight];
       row.appendChild(cb); row.appendChild(dot); row.appendChild(lbl); row.appendChild(tag);
       row.addEventListener("click", function(){ selectItem("vulling", v.id); });
       box.appendChild(row);
@@ -2835,7 +2859,8 @@ var SIGNAALGROEPEN = [
       lbl.className = "lbl"; lbl.textContent = o.label || "(zonder omschrijving)";
       var tag = document.createElement("div");
       tag.className = "tag";
-      tag.textContent = (o.soort === "regulatie" ? "Regulatie" : GEBIED_LABEL[o.gebied]) +
+      tag.textContent = (o.soort === "regulatie" ? "Regulatie"
+                         : GEBIED_LABEL[o.gebied] || "Ordening") +
         " · " + W_LABEL[o.weight];
       row.appendChild(cb); row.appendChild(dot); row.appendChild(lbl); row.appendChild(tag);
       row.addEventListener("click", function(){ selectItem("ordening", o.id); });
@@ -2849,16 +2874,15 @@ var SIGNAALGROEPEN = [
       var v = state.vulling.find(function(x){ return x.id===id; });
       if (!v) return;
       document.getElementById("info-label").textContent = v.label || "(zonder omschrijving)";
-      document.getElementById("info-sub").textContent = CAT_LABEL[v.categorie]+" · "+W_LABEL[v.weight]+(v.vast?" · steen, blijft liggen":"");
+      document.getElementById("info-sub").textContent = CAT_LABEL[v.categorie]+" · "+W_LABEL[v.weight]+
+        (v.vast?" · steen, blijft liggen":"")+(v.belangrijk?" · belangrijk voor mij":"");
     } else {
       var o = state.ordening.find(function(x){ return x.id===id; });
       if (!o) return;
       document.getElementById("info-label").textContent = o.label || "(zonder omschrijving)";
       var bronTekst = o.bron === "eigen" ? "Eigen" : "Geboden";
-      document.getElementById("info-sub").textContent = o.soort === "regulatie"
-        ? bronTekst + " · regulatie · " + W_LABEL[o.weight]
-        : bronTekst + " ordening · " + GEBIED_LABEL[o.gebied] + " · " +
-          MANIER_LABEL[o.manier] + " · " + W_LABEL[o.weight];
+      document.getElementById("info-sub").textContent =
+        bronTekst + " " + indelingTekst(o) + " · " + W_LABEL[o.weight];
     }
     document.getElementById("info-sheet").classList.add("open");
   }
@@ -2898,16 +2922,18 @@ var SIGNAALGROEPEN = [
       geboden: "Wat anderen doen of aanbieden. Het werkboek: een emmer laat zich alleen legen als je op allebei kunt rekenen."
     },
     "ord-gebied-row": {
-      tijd: "Overzicht in de dag- of weekinvulling: wat ga ik wanneer doen?",
-      activiteit: "Hoe een activiteit begint, hoelang die duurt, wanneer die eindigt, wat de volgorde is en welke stappen nodig zijn.",
-      ruimte: "Overzicht in de leefomgeving: wat doe ik waar, wat staat waar?",
-      prikkels: "Bepaalde zintuiglijke prikkels uitsluiten of juist versterken.",
-      persoon: "Voorspelbaarheid bij de mensen om je heen: zekerheid ontlenen aan vertrouwde personen, duidelijke afspraken en regels."
+      "": "Laat dit gerust open. Het werkblad zegt er zelf bij: gebruik het samen met een professional die geschoold is in de ASSwijzer, of laat je indeling nakijken. Het is niet de bedoeling dat jij de indeling zelf moet leren.",
+      tijd: "Overzicht in de tijd. Wat komt er, in welke volgorde? Het gaat hierbij niet per se om tijdstippen. Bijvoorbeeld: weten wat er vandaag of later gaat gebeuren; weten wat eerst komt en wat daarna; een volgorde in de dag of week hebben.",
+      activiteit: "Overzicht binnen een activiteit. Wat moet ik doen, hoe pak ik dat aan, hoelang duurt een activiteit en wanneer is iets klaar of voldoende? Bijvoorbeeld: weten welke stappen erbij horen; weten hoelang een activiteit duurt; weten wanneer iets klaar of voldoende is.",
+      ruimte: "Overzicht in de ruimte. Waar gebeurt iets, waar ligt wat, wat doe ik waar, waar hoort iets? Bijvoorbeeld: weten waar een activiteit plaatsvindt; weten waar spullen liggen of horen; een ruimte zo indelen dat duidelijk is wat waar gebeurt.",
+      prikkels: "Reguleren van prikkels. Hoe worden prikkels gedoseerd, verminderd, afgeschermd of juist opgezocht? Bijvoorbeeld: geluid verminderen of juist opzoeken; licht aanpassen of een bepaalde plek kiezen; prikkels doseren, afschermen of bewust opzoeken.",
+      persoon: "Duidelijkheid en voorspelbaarheid in relatie tot andere mensen. Bijvoorbeeld: weten bij wie ik terechtkan; weten wat ik aan iemand heb; duidelijke afspraken hebben over wie wat doet."
     },
     "ord-manier-row": {
-      verbaal: "Duidelijkheid vragen en bieden door vragen te stellen, dingen aan te kondigen of uit te leggen.",
-      vast: "Duidelijkheid door je te houden aan vaste regels, routines en dergelijke.",
-      visueel: "Duidelijkheid door op te schrijven of uit te tekenen wat er van iemand verwacht wordt."
+      "": "Laat dit gerust open. Ook hier geldt: de indeling in visueel, vast of verbaal hoort bij een professional die geschoold is in de ASSwijzer, niet bij jou.",
+      verbaal: "Ordening die wordt gegeven of verkregen via gesproken taal. Bijvoorbeeld: iemand vertelt wat er gaat gebeuren; iemand legt uit wat de bedoeling is; iemand benoemt wat eerst komt en wat daarna; mondeling vragen stellen om duidelijkheid te krijgen.",
+      vast: "Ordening doordat iets vast of hetzelfde is. Bijvoorbeeld: iets steeds in dezelfde volgorde doen; een vaste plek voor spullen gebruiken; een terugkerend ritme of dezelfde werkwijze hebben; een afspraak, regel of routine die hetzelfde blijft.",
+      visueel: "Ordening waarbij informatie zichtbaar wordt aangeboden en beschikbaar blijft om opnieuw te bekijken. Bijvoorbeeld: een planning, agenda of kalender; een stappenplan of geschreven lijst; een plattegrond, foto, pictogram of afbeelding; iets opschrijven zodat het later opnieuw bekeken kan worden."
     }
   };
 
@@ -2935,7 +2961,7 @@ var SIGNAALGROEPEN = [
   function initPanels(){
     var vulPanel = document.getElementById("panel-vulling");
     var ordPanel = document.getElementById("panel-ordening");
-    var vCat="prikkels", vW=2, oBron="eigen", oGebied="tijd", oManier="verbaal", oW=2;
+    var vCat="prikkels", vW=2, oBron="eigen", oGebied="", oManier="", oW=2;
     var oSoort="ordening";
 
     setupChoiceRow("vul-cat-row","data-cat", function(v){ vCat=v; });
@@ -2965,16 +2991,21 @@ var SIGNAALGROEPEN = [
     document.getElementById("btn-confirm-vulling").addEventListener("click", function(){
       var input = document.getElementById("vul-label");
       var vast = document.getElementById("vul-vast").checked;
-      state.vulling.push({ id:uid(), label:input.value.trim(), categorie:vCat, weight:vW, actief:true, vast:vast });
+      var belangrijk = document.getElementById("vul-belangrijk").checked;
+      state.vulling.push({ id:uid(), label:input.value.trim(), categorie:vCat, weight:vW,
+                           actief:true, vast:vast, belangrijk:belangrijk });
       renderVullingList(); render(); save();
-      input.value = ""; document.getElementById("vul-vast").checked = false;
+      input.value = "";
+      document.getElementById("vul-vast").checked = false;
+      document.getElementById("vul-belangrijk").checked = false;
       vulPanel.classList.remove("open");
     });
     document.getElementById("btn-confirm-ordening").addEventListener("click", function(){
       var input = document.getElementById("ord-label");
       var isOrd = oSoort === "ordening";
       state.ordening.push({ id:uid(), label:input.value.trim(), soort:oSoort, bron:oBron,
-        gebied: isOrd ? oGebied : null, manier: isOrd ? oManier : null,
+        gebied: isOrd && oGebied ? oGebied : null,
+        manier: isOrd && oManier ? oManier : null,
         weight:oW, actief:true });
       renderOrdeningList(); render(); save();
       input.value = "";
