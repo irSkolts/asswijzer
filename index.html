@@ -191,6 +191,11 @@
   .sig-band:not(.nu) .sig-nu{display:none;}
   .sig-kies{margin-left:auto;font-size:0.76rem;padding:5px 8px;}
   .sig-band.nu .sig-kies{visibility:hidden;}
+  .ruimte-uitleg{margin:0 0 14px;font-size:0.82rem;line-height:1.5;
+    color:var(--ink-soft);border-left:2px solid var(--line-faint);padding-left:10px;}
+  .ruimte-vraag{margin-bottom:12px;}
+  .ruimte-vraag p{margin:0 0 6px;font-size:0.88rem;}
+  .ruimte-vraag .choice{font-size:0.8rem;padding:5px 9px;}
   .sig-veld{margin-bottom:8px;}
   .sig-veld:last-child{margin-bottom:0;}
   .sig-veld label{display:block;font-size:0.78rem;color:var(--ink-soft);margin-bottom:4px;}
@@ -238,7 +243,7 @@
   #afdruk .ak-datum{font-family:var(--font-mono);font-size:0.84em;color:#5A635C;
     margin:0.2em 0 0;}
   #afdruk .ak-rand{margin:0.6em 0 0;}
-  #afdruk .ak-kop{display:flex;justify-content:space-between;
+  #afdruk .ak-blad-kop{display:flex;justify-content:space-between;
     align-items:flex-start;gap:8mm;}
   #afdruk .ak-titel{min-width:0;}
   #afdruk .ak-kolommen{display:flex;gap:10mm;margin-top:0.85em;}
@@ -287,7 +292,19 @@
   #afdruk .ak-tekst{white-space:pre-line;}
   #afdruk .ak-leeg{border-bottom:0.4pt solid #C7CEC5;height:0.95em;}
   #afdruk .ak-rij .ak-kop{font-size:0.84em;color:#5A635C;
-    text-transform:uppercase;letter-spacing:0.06em;}
+    text-transform:uppercase;letter-spacing:0.06em;margin-right:0.3em;}
+  /* Eén trede over de volle breedte is een sliert met een halve pagina wit
+     ernaast. Twee kolommen vullen het blad, en een schrijfregel van zo'n 8 cm
+     is nog ruim genoeg om met de hand iets in te vullen. Bij twee treden staan
+     die al naast elkaar en blijft alles zoals het was. */
+  #afdruk .ak-banden.een .ak-band{column-count:2;column-gap:10mm;}
+  #afdruk .ak-banden.een .ak-band > h3{column-span:all;}
+  #afdruk .ak-veld{break-inside:avoid;}
+  #afdruk .ak-ruimte{margin-top:0.95em;}
+  #afdruk .ak-ruimte .ak-rij{margin:0 0 0.15em;}
+  #afdruk .ak-ruimte .vr{color:#5A635C;}
+  #afdruk .ak-ruimte .leeg{display:inline-block;width:26mm;
+    border-bottom:0.4pt solid #C7CEC5;}
   #afdruk .ak-voet{margin-top:1em;padding-top:0.3em;
     border-top:0.4pt solid #C7CEC5;font-family:var(--font-mono);
     font-size:0.79em;color:#5A635C;}
@@ -1037,6 +1054,28 @@
     </details>
   </section>
 
+  <section class="sig">
+    <details id="ruimte-vouw">
+    <summary class="sig-sam">
+      <span class="sig-sam-titel">Ruimte voor ontplooiing en ontwikkeling</span>
+    </summary>
+    <p class="bron">Werkboek ASSwijzer (pilotversie najaar 2026), hoofdstuk 9</p>
+    <p class="ruimte-uitleg">Als er signalen van overbelasting zijn en/of onvoldoende
+      ruimte is voor ontplooiing en ontwikkeling, is dat een aanwijzing dat eigen en
+      geboden ordening niet voldoende in balans zijn. Dat zegt nog niet waar de
+      disbalans zit.</p>
+    <div id="ruimte-vragen"></div>
+    <div class="sig-veld">
+      <label for="ruimte-oordeel">Is er voldoende ruimte voor ontplooiing en ontwikkeling?</label>
+      <textarea class="ruimte-tekstveld" id="ruimte-oordeel" data-ruimte-veld="oordeel" rows="2"></textarea>
+    </div>
+    <div class="sig-veld">
+      <label for="ruimte-meer">Waar zou ik meer ruimte voor willen hebben?</label>
+      <textarea class="ruimte-tekstveld" id="ruimte-meer" data-ruimte-veld="meer" rows="2"></textarea>
+    </div>
+    </details>
+  </section>
+
   </div>
 
   <div class="tabpaneel" id="paneel-export">
@@ -1123,6 +1162,39 @@
   var MANIER_LABEL = { verbaal:"Verbaal", vast:"Vast", visueel:"Visueel" };
   var W_LABEL = { 1:"Klein", 2:"Gemiddeld", 3:"Groot" };
 
+  // Hoofdstuk 9, woord voor woord. De zes antwoorden staan daar ook zo; wat
+  // niet is aangeklikt is onbeantwoord, en nog een keer op hetzelfde antwoord
+  // klikken haalt het weer weg.
+  var RUIMTE_ANTWOORD = ["ja, voldoende", "meestal wel", "wisselend",
+                         "meestal niet", "nee", "weet ik niet"];
+  var RUIMTE_VRAAG = [
+    ["belangrijk", "Heb ik op dit moment voldoende ruimte voor dingen die belangrijk voor mij zijn?"],
+    ["keuzes",     "Heb ik ruimte om zelf keuzes te maken?"],
+    ["plezier",    "Heb ik ruimte om dingen te doen waar ik plezier aan beleef of die betekenis voor mij hebben?"],
+    ["nieuw",      "Heb ik ruimte om iets nieuws te proberen, te leren, voor mijn ontplooiing en ontwikkeling?"],
+    ["gewoon",     "Heb ik voldoende ruimte om gewoon te zijn, zonder steeds iets te moeten?"]
+  ];
+  var RUIMTE_OPEN = [
+    ["oordeel", "Is er voldoende ruimte voor ontplooiing en ontwikkeling?"],
+    ["meer",    "Waar zou ik meer ruimte voor willen hebben?"]
+  ];
+
+  function leegRuimte(){
+    var r = {};
+    RUIMTE_VRAAG.forEach(function(v){ r[v[0]] = ""; });
+    RUIMTE_OPEN.forEach(function(v){ r[v[0]] = ""; });
+    return r;
+  }
+
+  function vulRuimteAan(p){
+    var leeg = leegRuimte();
+    var oud = (p.ruimte && typeof p.ruimte === "object") ? p.ruimte : {};
+    Object.keys(leeg).forEach(function(k){
+      if (typeof oud[k] === "string") leeg[k] = oud[k];
+    });
+    p.ruimte = leeg;
+  }
+
   // Gebied en manier mogen leeg blijven. De werkbladen zeggen er zelf bij dat
   // indelen werk is voor een behandelaar, dus de tool kiest hier niets voor je.
   // Wat niet is ingedeeld wordt ook zo opgeschreven: op papier hoort daar een
@@ -1147,7 +1219,7 @@
   var OPP_RY = 1/6;                    // kijkhoek: ry van het oppervlak t.o.v. rx
 
   var state = { vulling: [], ordening: [], plan: leegPlan(), bijlagen: leegBijlagen(),
-                signalen: leegSignalen() };
+                signalen: leegSignalen(), ruimte: leegRuimte() };
   var selected = null; // {kind:'vulling'|'ordening', id}
 
   function uid(){ return "i"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
@@ -1219,6 +1291,7 @@
     vulPlanAan(p);
     vulBijlagenAan(p);
     vulSignalenAan(p);
+    vulRuimteAan(p);
     return p;
   }
 
@@ -1443,7 +1516,7 @@
   // bij de signalen worden door vulSignalenAan() opnieuw gezaaid.
   function verseState(){
     var s = { vulling: [], ordening: [], plan: leegPlan(), bijlagen: leegBijlagen(),
-              signalen: leegSignalen() };
+              signalen: leegSignalen(), ruimte: leegRuimte() };
     vulBijlagenAan(s);
     vulSignalenAan(s);
     return s;
@@ -1454,6 +1527,7 @@
   function tekenAllesOpnieuw(){
     closeInfo();
     vulPlanVelden();
+    vulRuimteVelden();
     initBijlagen();
     vulSignalenAan(state);
     startMeting();
@@ -1475,6 +1549,7 @@
     });
     if (inPlan) return false;
     if (BIJLAGEN.some(function(b){ return !bijlageIsLeeg(b.id); })) return false;
+    if (Object.keys(state.ruimte).some(function(k){ return state.ruimte[k]; })) return false;
     if (state.signalen.metingen.length) return false;
     // Zelf getypte woorden, of een voorbeeld dat je hebt weggegooid.
     return !SIGNAALGROEPEN.some(function(g){
@@ -1580,6 +1655,27 @@
       '</section>';
   }
 
+  // Staat er helemaal niets, dan komt het blok er niet op: een leeg blad hoort
+  // geen lege afdeling te krijgen. Staat er wel iets, dan staan de vragen er
+  // allemaal, met een streepje waar nog niets is ingevuld - net als in het plan.
+  function afdrukRuimte(){
+    var r = state.ruimte;
+    if (!Object.keys(r).some(function(k){ return (r[k] || "").trim(); })) return "";
+    var rijen = RUIMTE_VRAAG.map(function(v){
+      var a = (r[v[0]] || "").trim();
+      return '<div class="ak-rij"><span class="vr">' + esc(v[1]) + '</span> ' +
+        (a ? esc(a) : '<span class="leeg"></span>') + '</div>';
+    }).join("");
+    var open = RUIMTE_OPEN.map(function(v){
+      var t = (r[v[0]] || "").trim();
+      return '<div class="ak-veld"><span class="ak-label">' + esc(v[1]) + '</span>' +
+        (t ? '<div class="ak-tekst">' + esc(t) + '</div>'
+           : '<div class="ak-leeg"></div>') + '</div>';
+    }).join("");
+    return '<div class="ak-ruimte"><h2>Ruimte voor ontplooiing en ontwikkeling</h2>' +
+      rijen + open + '</div>';
+  }
+
   function bouwAfdruk(){
     var stand = standNu();
     var tonBand = bandBijNiveau(stand.vol);
@@ -1592,7 +1688,7 @@
     var datum = new Date().toLocaleDateString("nl-NL",
       { day: "numeric", month: "long", year: "numeric" });
     document.getElementById("afdruk").innerHTML =
-      '<div class="ak-kop"><div class="ak-titel">' +
+      '<div class="ak-blad-kop"><div class="ak-titel">' +
         '<h1>Mijn emmer</h1>' +
         '<p class="ak-datum">' + esc(datum) + '</p>' +
         (stand.niveau > DIEPTE
@@ -1603,7 +1699,9 @@
         '<div class="ak-kolom"><h2>Wat hem nu leegt</h2>' + afdrukOrdening() + '</div>' +
       '</div>' +
       '<div class="ak-plan"><h2>Signaleringsplan</h2>' +
-        '<div class="ak-banden">' + banden.join("") + '</div></div>' +
+        '<div class="ak-banden' + (banden.length === 1 ? " een" : "") + '">' +
+          banden.join("") + '</div></div>' +
+      afdrukRuimte() +
       '<p class="ak-voet">Gebaseerd op de ASSwijzer-methodiek ' +
         '(Werkboek ASSwijzer, EvenZicht)</p>';
     zetTekening();
@@ -1802,6 +1900,57 @@
       ? "Je hebt zelf " + BAND_LABEL[band] + " gekozen."
       : "De ton wijst nu naar " + BAND_LABEL[band] + ".";
     document.getElementById("sig-herstel").style.display = gekozen ? "" : "none";
+  }
+
+  // De vijf vragen worden hier gebouwd en niet in de html uitgeschreven: zo
+  // staan de teksten op één plek, naast de antwoorden waar ze bij horen.
+  function initRuimte(){
+    var doos = document.getElementById("ruimte-vragen");
+    RUIMTE_VRAAG.forEach(function(v){
+      var blok = document.createElement("div");
+      blok.className = "ruimte-vraag";
+      var vraag = document.createElement("p");
+      vraag.textContent = v[1];
+      var rij = document.createElement("div");
+      rij.className = "choice-row";
+      rij.setAttribute("data-ruimte", v[0]);
+      RUIMTE_ANTWOORD.forEach(function(a){
+        var keuze = document.createElement("div");
+        keuze.className = "choice";
+        keuze.setAttribute("data-antwoord", a);
+        keuze.setAttribute("aria-pressed", "false");
+        keuze.textContent = a;
+        keuze.addEventListener("click", function(){
+          // nog een keer op hetzelfde antwoord: dan staat de vraag weer open
+          state.ruimte[v[0]] = state.ruimte[v[0]] === a ? "" : a;
+          vulRuimteVelden();
+          save();
+        });
+        rij.appendChild(keuze);
+      });
+      blok.appendChild(vraag);
+      blok.appendChild(rij);
+      doos.appendChild(blok);
+    });
+    document.querySelectorAll(".ruimte-tekstveld").forEach(function(el){
+      el.addEventListener("input", function(){
+        state.ruimte[el.getAttribute("data-ruimte-veld")] = el.value;
+        save();
+      });
+    });
+    vulRuimteVelden();
+  }
+
+  function vulRuimteVelden(){
+    RUIMTE_VRAAG.forEach(function(v){
+      document.querySelectorAll('[data-ruimte="' + v[0] + '"] .choice').forEach(function(c){
+        c.setAttribute("aria-pressed",
+          c.getAttribute("data-antwoord") === state.ruimte[v[0]] ? "true" : "false");
+      });
+    });
+    document.querySelectorAll(".ruimte-tekstveld").forEach(function(el){
+      el.value = state.ruimte[el.getAttribute("data-ruimte-veld")] || "";
+    });
   }
 
   // Na een import staan er andere teksten in state dan in de velden.
@@ -3027,6 +3176,7 @@ var SIGNAALGROEPEN = [
     initPanels();
     initMeenemen();
     initPlan();
+    initRuimte();
     if (neemLosseFormulierenOver()) { /* overgenomen uit de losse pagina */ }
     initBijlagen();
     vulSignalenAan(state);
